@@ -10,6 +10,7 @@ import { CourseSingleComponent } from './front/course-single/course-single.compo
 import { TeachersComponent } from './front/teachers/teachers.component';
 import { EventsComponent } from './front/events/events.component';
 import { ContactComponent } from './front/contact/contact.component';
+import { ProjetsComponent } from './front/Gestion-Projets/projets/projets.component';
 
 const routes: Routes = [
   {
@@ -26,7 +27,7 @@ const routes: Routes = [
       { path: 'home', component: HomeComponent },
       { path: 'courses', component: CoursesComponent },
       { path: 'about', component: AboutComponent },
-      { path: 'teachers', component: TeachersComponent },
+      { path: 'projets', component: ProjetsComponent },
       { path: 'course-single', component: CourseSingleComponent },
       { path: 'events', component: EventsComponent },
       { path: 'contact', component: ContactComponent }

@@ -1,0 +1,41 @@
+<h2 mat-dialog-title>{{ isEditMode ? 'Modifier un projet' : 'Ajouter un projet' }}</h2>
+<div mat-dialog-content>
+  <form [formGroup]="projetForm">
+    <mat-form-field appearance="outline" class="w-100 mb-3">
+      <mat-label>Titre</mat-label>
+      <input matInput formControlName="titre">
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="w-100 mb-3">
+      <mat-label>Description</mat-label>
+      <textarea matInput formControlName="description" rows="3"></textarea>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="w-100 mb-3">
+      <mat-label>Catégorie</mat-label>
+      <input matInput formControlName="categorie">
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="w-100 mb-3">
+      <mat-label>Date fin prévue</mat-label>
+      <input matInput type="date" formControlName="dateFinPrevue">
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="w-100 mb-3">
+      <mat-label>Nombre max de collaborateurs</mat-label>
+      <input matInput type="number" formControlName="nombreMaxCollaborateurs">
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="w-100 mb-3">
+      <mat-label>Compétences requises (séparées par virgules)</mat-label>
+      <input matInput formControlName="competencesRequises">
+    </mat-form-field>
+  </form>
+</div>
+
+<div mat-dialog-actions align="end">
+  <button mat-stroked-button color="warn" (click)="onCancel()">Annuler</button>
+  <button mat-flat-button color="primary" [disabled]="!projetForm.valid" (click)="onSubmit()">
+    {{ isEditMode ? 'Modifier' : 'Ajouter' }}
+  </button>
+</div>

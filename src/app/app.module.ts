@@ -20,6 +20,20 @@ import { EventsComponent } from './front/events/events.component';
 import { CourseSingleComponent } from './front/course-single/course-single.component';
 import { TeachersComponent } from './front/teachers/teachers.component';
 import { ContactComponent } from './front/contact/contact.component';
+import { ProjetsComponent } from './front/Gestion-Projets/projets/projets.component';
+import { AjouterCollaborationComponent } from './front/Gestion-Projets/ajouter-collaboration/ajouter-collaboration.component';
+import { AjouterProjetComponent } from './front/Gestion-Projets/ajouter-projet/ajouter-projet.component';
+import { CollaborationsComponent } from './front/Gestion-Projets/collaborations/collaborations.component';
+import { FilterPipe } from './front/Gestion-Projets/shared/filter.pipe';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { HttpClientModule } from '@angular/common/http';
+import { MatDialogModule } from '@angular/material/dialog';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { MatSelectModule } from '@angular/material/select';
+import { MatFormFieldModule } from '@angular/material/form-field'; 
+import { MatInputModule } from '@angular/material/input';
+import { MatButtonModule } from '@angular/material/button';
 
 @NgModule({
   declarations: [
@@ -40,11 +54,26 @@ import { ContactComponent } from './front/contact/contact.component';
     EventsComponent,
     CourseSingleComponent,
     TeachersComponent,
-    ContactComponent
+    ContactComponent,
+    ProjetsComponent,
+    FilterPipe,
+    AjouterCollaborationComponent,
+    AjouterProjetComponent,
+    CollaborationsComponent
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule
+    AppRoutingModule,
+    BrowserAnimationsModule,
+    HttpClientModule,
+    FormsModule, 
+    ReactiveFormsModule,
+    NgbModule,
+    MatDialogModule, 
+    MatFormFieldModule, 
+    MatInputModule,
+    MatButtonModule,
+    MatSelectModule
   ],
   providers: [],
   bootstrap: [AppComponent]

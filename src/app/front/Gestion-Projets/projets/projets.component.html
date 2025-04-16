@@ -1,0 +1,91 @@
+<section class="slider-area slider-area2">
+    <div class="slider-active">
+      <div class="single-slider slider-height2">
+        <div class="container">
+          <div class="row">
+            <div class="col-xl-8 col-lg-11 col-md-12">
+              <div class="hero__caption hero__caption2">
+                <h1>Nos Projets</h1>
+                <nav aria-label="breadcrumb">
+                 
+                  
+                </nav>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <button class="btn btn-outline-primary ajouter-btn" (click)="openModal()">
+    <i class="bi bi-plus-circle"></i> Ajouter un projet
+  </button>
+ <div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center flex-wrap mb-3">
+      <input
+        type="text"
+        [(ngModel)]="searchTerm"
+        class="form-control search-bar-custom"
+        placeholder="🔍 Rechercher un projet...">
+     
+    </div>
+  
+    <div class="filter-bar filter-bar-large px-4 py-2 rounded-pill shadow-sm">
+        <button class="filter-btn" [class.active]="selectedCategory === ''" (click)="filterBy('')">Tous</button>
+        <button
+          class="filter-btn"
+          *ngFor="let cat of categories"
+          [class.active]="selectedCategory === cat"
+          (click)="filterBy(cat)">
+          {{ cat }}
+        </button>
+      </div>
+      
+  
+    <div
+      class="projet-wrapper mb-4"
+      *ngFor="let projet of projets | filter: searchTerm"
+      [hidden]="selectedCategory && projet.categorie !== selectedCategory">
+      
+      <div class="image-outer">
+        <img src="/src/assets/img/about3.png" alt="Projet">
+      </div>
+  
+      <div class="projet-card border border-light border-2">
+        <div class="content-container">
+          <div class="d-flex justify-content-between">
+            <div class="projet-categorie">{{ projet.categorie }}</div>
+            <span class="badge" [ngClass]="getBadgeClass(getStatut(projet))">
+              {{ getStatut(projet) }}
+            </span>
+          </div>
+  
+          <h4 class="projet-title">{{ projet.titre }}</h4>
+          <div class="projet-info">
+            <span><strong>Date :</strong> {{ projet.dateCreation | date:'dd MMM yyyy' }}</span>
+            <span><strong>Fin prévue :</strong> {{ projet.dateFinPrevue | date:'dd MMM yyyy' }}</span>
+            <span><strong>Collab :</strong> {{ getCollaborateursActuels(projet) }} / {{ projet.nombreMaxCollaborateurs }}</span>
+          </div>
+  
+          <div class="projet-actions d-flex justify-content-end mt-3 gap-2">
+            <button class="btn btn-sm btn-outline-custom-secondary" (click)="openModal(projet)" title="Modifier">
+              ✏️
+            </button>
+            <button class="btn btn-sm btn-outline-custom-danger" (click)="supprimerProjet(projet.id)" title="Supprimer">
+              🗑️
+            </button>
+            <button class="btn btn-sm btn-outline-custom-success" (click)="onCollaborer(projet.id)" title="Collaborer">
+              🤝
+            </button>
+          </div>
+          
+        </div>
+  
+        <div class="arrow-container">
+          <div class="arrow-circle">
+            <span class="arrow">&gt;</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>

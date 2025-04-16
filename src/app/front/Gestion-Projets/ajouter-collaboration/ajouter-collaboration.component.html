@@ -1,0 +1,14 @@
+<h2 mat-dialog-title>{{ isEditMode ? 'Modifier' : 'Nouvelle' }} collaboration</h2>
+<div mat-dialog-content>
+  <form [formGroup]="collaborationForm">
+    <mat-form-field appearance="outline" class="w-100 mb-3">
+      <mat-label>Rôle</mat-label>
+      <input matInput formControlName="role" />
+    </mat-form-field>
+  </form>
+</div>
+
+<div mat-dialog-actions align="end">
+  <button mat-stroked-button color="warn" (click)="onCancel()">Annuler</button>
+  <button mat-flat-button color="primary" [disabled]="!collaborationForm.valid" (click)="onSubmit()">Soumettre</button>
+</div>
