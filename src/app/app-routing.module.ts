@@ -11,6 +11,8 @@ import { TeachersComponent } from './front/teachers/teachers.component';
 import { EventsComponent } from './front/events/events.component';
 import { ContactComponent } from './front/contact/contact.component';
 import { ProjetsComponent } from './front/Gestion-Projets/projets/projets.component';
+import { CollaborationsComponent } from './front/Gestion-Projets/collaborations/collaborations.component';
+import { DashboardKanbanComponent } from './front/Gestion-Projets/dashboard-kanban/dashboard-kanban.component';
 
 const routes: Routes = [
   {
@@ -21,25 +23,24 @@ const routes: Routes = [
     ]
   },
   {
-    path: 'front',
-    component: FrontLayoutComponent,
+    path: '',
+    component: FrontLayoutComponent,  // Removed 'front' path
     children: [
-      { path: 'home', component: HomeComponent },
+      { path: '', component: HomeComponent },
       { path: 'courses', component: CoursesComponent },
       { path: 'about', component: AboutComponent },
       { path: 'projets', component: ProjetsComponent },
       { path: 'course-single', component: CourseSingleComponent },
       { path: 'events', component: EventsComponent },
-      { path: 'contact', component: ContactComponent }
-
-
+      { path: 'collaborations', component: CollaborationsComponent },
+      { path: 'contact', component: ContactComponent },
+      { path: 'kanban', component: DashboardKanbanComponent }
 
     ]
   },
-  { path: '', redirectTo: 'front/home', pathMatch: 'full' },
-  { path: '**', redirectTo: 'front/home' }
+  { path: '', redirectTo: 'home', pathMatch: 'full' },  // Updated redirect
+  { path: '**', redirectTo: 'home' }  // Updated wildcard
 ];
-
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],

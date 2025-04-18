@@ -18,10 +18,17 @@ export class ProjetsComponent {
   selectedCategory: string = '';
   categories: string[] = [];
   
+// Pagination
+currentPage: number = 1;
+itemsPerPage: number = 3;
+totalPages: number = 1;
+projetsFiltres: Projet[] = [];
 
-  filterBy(category: string) {
-    this.selectedCategory = category;
-  }
+filterBy(category: string) {
+  this.selectedCategory = category;
+  this.applyFilters();
+}
+
   
   constructor(private projetService: ProjetService, private dialog: MatDialog,private router: Router) {}
 
@@ -30,12 +37,67 @@ export class ProjetsComponent {
   }
 
   // Méthode pour charger les projets depuis le service
-  chargerProjets(): void {
-    this.projetService.getProjets().subscribe(data => {
-      this.projets = data;
-      this.categories = Array.from(new Set(data.map(p => p.categorie))).sort(); // 🟣 Catégories uniques triées
-    });
+ chargerProjets(): void {
+  this.projetService.getProjets().subscribe(data => {
+    this.projets = data;
+    this.categories = Array.from(new Set(data.map(p => p.categorie))).sort();
+    this.applyFilters(); // appliquer filtre + pagination dès le début
+  });
+}
+applyFilters(): void {
+  let result = this.projets;
+
+  if (this.searchTerm) {
+    result = result.filter(p =>
+      p.titre.toLowerCase().includes(this.searchTerm.toLowerCase())
+    );
   }
+
+  if (this.selectedCategory) {
+    result = result.filter(p => p.categorie === this.selectedCategory);
+  }
+
+  this.totalPages = Math.ceil(result.length / this.itemsPerPage);
+  this.currentPage = 1;
+  this.projetsFiltres = this.paginate(result);
+}
+
+paginate(array: Projet[]): Projet[] {
+  const start = (this.currentPage - 1) * this.itemsPerPage;
+  return array.slice(start, start + this.itemsPerPage);
+}
+
+nextPage(): void {
+  if (this.currentPage < this.totalPages) {
+    this.currentPage++;
+    this.projetsFiltres = this.paginate(this.getFilteredData());
+  }
+}
+
+prevPage(): void {
+  if (this.currentPage > 1) {
+    this.currentPage--;
+    this.projetsFiltres = this.paginate(this.getFilteredData());
+  }
+}
+
+// utile pour paginer après un filtre
+getFilteredData(): Projet[] {
+  let result = this.projets;
+
+  if (this.searchTerm) {
+    result = result.filter(p =>
+      p.titre.toLowerCase().includes(this.searchTerm.toLowerCase())
+    );
+  }
+
+  if (this.selectedCategory) {
+    result = result.filter(p => p.categorie === this.selectedCategory);
+  }
+
+  return result;
+}
+
   // Cette méthode permet de récupérer le statut d'un projet en fonction de la date de fin
   getStatut(projet: Projet): string {
     const now = new Date();

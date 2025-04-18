@@ -34,6 +34,11 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatFormFieldModule } from '@angular/material/form-field'; 
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
+import { LocationStrategy, HashLocationStrategy } from '@angular/common';
+import {  MatPaginatorModule } from '@angular/material/paginator';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { KanbanModule } from '@syncfusion/ej2-angular-kanban';
+import { DashboardKanbanComponent } from './front/Gestion-Projets/dashboard-kanban/dashboard-kanban.component';
 
 @NgModule({
   declarations: [
@@ -59,7 +64,8 @@ import { MatButtonModule } from '@angular/material/button';
     FilterPipe,
     AjouterCollaborationComponent,
     AjouterProjetComponent,
-    CollaborationsComponent
+    CollaborationsComponent,
+    DashboardKanbanComponent
   ],
   imports: [
     BrowserModule,
@@ -73,9 +79,13 @@ import { MatButtonModule } from '@angular/material/button';
     MatFormFieldModule, 
     MatInputModule,
     MatButtonModule,
-    MatSelectModule
+    MatSelectModule,
+    MatPaginatorModule,
+    MatSnackBarModule,
+    KanbanModule
+
   ],
-  providers: [],
+  providers: [{ provide: LocationStrategy, useClass: HashLocationStrategy }],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -1,5 +1,46 @@
-.full-width {
-    width: 100%;
-    margin-bottom: 12px;
-  }
-  
+/* Style global du contenu du modal */
+.mat-dialog-container {
+  border-radius: 16px;
+  padding: 32px !important;
+  background: #fff;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+  max-width: 600px;
+  width: 100%;
+}
+
+/* Titre du modal */
+.mat-dialog-title {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 16px;
+  color: #1f2937;
+}
+
+/* Champs de formulaire bien espacés */
+mat-form-field {
+  width: 100%;
+  margin-bottom: 16px;
+}
+
+/* Apparence propre et cohérente des champs */
+mat-form-field.mat-form-field {
+  background-color: #f9f9f9;
+  border-radius: 6px;
+}
+
+/* Actions du bas alignées proprement */
+[mat-dialog-actions] {
+  margin-top: 16px;
+  padding-top: 12px;
+  border-top: 1px solid #e5e7eb;
+}
+
+/* Boutons */
+button[mat-stroked-button] {
+  margin-right: 10px;
+  font-weight: 500;
+}
+
+button[mat-flat-button] {
+  font-weight: 600;
+}

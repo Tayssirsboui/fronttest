@@ -1,0 +1,66 @@
+
+<div class="probootstrap-search" id="probootstrap-search">
+    <a href="#" class="probootstrap-close js-probootstrap-close"><i class="icon-cross"></i></a>
+    <form action="#">
+      <input type="search" name="s" id="search" placeholder="Search a keyword and hit enter...">
+    </form>
+  </div>
+  
+  <div class="probootstrap-page-wrapper">
+   
+  <section class="probootstrap-section probootstrap-section-colored">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-12 text-left section-heading probootstrap-animate">
+            <h1>Mes Tâches</h1>
+          </div>
+        </div>
+      </div>
+    </section>
+  
+    <section class="probootstrap-section">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-12">
+            <div class="probootstrap-flex-block">
+              <div class="probootstrap-text probootstrap-animate">
+                <div class="text-uppercase probootstrap-uppercase">Nos Projets</div>
+                <h3>Découvrez et Collaborez sur des Projets Innovants</h3>
+                <p>Bienvenue dans l’espace dédié à nos projets. Vous y trouverez une variété d’initiatives éducatives, technologiques et communautaires portées par nos étudiants et partenaires. N’hésitez pas à explorer, contribuer ou même proposer votre propre projet !</p>
+              </div>
+              
+              <div class="probootstrap-image probootstrap-animate" style="background-image: url(../../../assets/img/slider_4.jpg)">
+                <a href="https://vimeo.com/45830194" class="btn-video popup-vimeo"><i class="icon-play3"></i></a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+<ejs-kanban [dataSource]="localData" keyField="Status" [swimlaneSettings]='swimlaneSettings'
+ [cardSettings]="cardSettings" height="100%" width="100%">
+  <e-columns>
+    <e-column *ngFor="let column of columns;" headerText={{column.headerText}}
+     keyField='{{column.keyField}}'>
+    <ng-template #template let-data>
+      <div class="header-template-wrap">
+        <span class="header-icon e-icons {{data.keyField}}"></span>
+        <span class="header-text">{{data.headerText}}</span>
+      </div>
+    </ng-template>
+    <ng-template #swimlaneSettingsTemplate let-data>
+      <div class="e-swimlane-header">
+        <img src="./assets/kanban/image/{{data.keyField}}.png" alt="{{data.keyField}}"/>
+        <span class="e-swimlane-text">{{data.keyField}}</span>
+      </div>
+    </ng-template>
+    <ng-template #cardSettingsTemplate let-data>
+      <div class="e-card-wrapper">
+        <span class="e-card-header">{{data.Title}}</span>
+        <span class="e-card-content">{{data.Summary}}</span>
+        <span class="e-priority">Priority: {{data.Priority}}</span>
+      </div>
+    </ng-template>
+  </e-column>
+  </e-columns>
+</ejs-kanban>
