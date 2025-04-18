@@ -1,0 +1,106 @@
+<h2 mat-dialog-title>Ajouter un Événement</h2>
+
+<div mat-dialog-content>
+  <form [formGroup]="form" (ngSubmit)="submit()">
+    <div class="row">
+
+      <!-- Titre -->
+      <div class="col-md-6">
+        <mat-form-field appearance="outline" class="w-100">
+          <mat-label>Titre</mat-label>
+          <input matInput formControlName="titre" placeholder="Titre de l'événement" />
+          <mat-error *ngIf="form.get('titre')?.invalid && form.get('titre')?.touched">
+            Le titre est obligatoire
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <!-- Date début avec heure -->
+      <div class="col-md-6">
+        <mat-form-field appearance="outline" class="w-100">
+          <mat-label>Date de début</mat-label>
+          <input matInput [ngxMatDatetimePicker]="pickerDebut" formControlName="dateDebut" placeholder="jj/mm/aaaa hh:mm">
+          <ngx-mat-datetime-picker #pickerDebut></ngx-mat-datetime-picker>
+          <mat-datepicker-toggle matSuffix [for]="pickerDebut"></mat-datepicker-toggle>
+          <mat-error *ngIf="form.get('dateDebut')?.invalid && form.get('dateDebut')?.touched">
+            La date de début est obligatoire
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <!-- Lieu -->
+      <div class="col-md-6">
+        <mat-form-field appearance="outline" class="w-100">
+          <mat-label>Lieu</mat-label>
+          <input matInput formControlName="lieu" placeholder="Lieu de l'événement" />
+          <mat-error *ngIf="form.get('lieu')?.invalid && form.get('lieu')?.touched">
+            Le lieu est obligatoire
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <!-- Date fin avec heure -->
+      <div class="col-md-6">
+        <mat-form-field appearance="outline" class="w-100">
+          <mat-label>Date de fin</mat-label>
+          <input matInput [ngxMatDatetimePicker]="pickerFin" formControlName="dateFin" placeholder="jj/mm/aaaa hh:mm">
+          <ngx-mat-datetime-picker #pickerFin></ngx-mat-datetime-picker>
+          <mat-datepicker-toggle matSuffix [for]="pickerFin"></mat-datepicker-toggle>
+          <mat-error *ngIf="form.get('dateFin')?.invalid && form.get('dateFin')?.touched">
+            La date de fin est obligatoire
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <!-- Catégorie -->
+      <div class="col-md-6">
+        <mat-form-field appearance="outline" class="w-100">
+          <mat-label>Catégorie</mat-label>
+          <input matInput formControlName="categorie" placeholder="Ex: Web, IA..." />
+          <mat-error *ngIf="form.get('categorie')?.invalid && form.get('categorie')?.touched">
+            La catégorie est obligatoire
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <!-- Description -->
+      <div class="col-md-6">
+        <mat-form-field appearance="outline" class="w-100">
+          <mat-label>Description</mat-label>
+          <textarea matInput formControlName="description" placeholder="Décrivez l'événement"></textarea>
+          <mat-error *ngIf="form.get('description')?.invalid && form.get('description')?.touched">
+            La description est obligatoire
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <!-- Nb participants -->
+      <div class="col-md-6">
+        <mat-form-field appearance="outline" class="w-100">
+          <mat-label>Nombre max de participants</mat-label>
+          <input matInput type="number" formControlName="nbMaxParticipants" />
+          <mat-error *ngIf="form.get('nbMaxParticipants')?.invalid && form.get('nbMaxParticipants')?.touched">
+            Valeur requise (> 0)
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <!-- Image -->
+      <div class="col-md-6 mt-3">
+        <label class="form-label fw-semibold d-block">Image</label>
+        <input type="file" (change)="onFileSelected($event)" />
+        <div *ngIf="imagePreview" class="mt-2">
+          <img [src]="imagePreview" alt="Aperçu" class="img-thumbnail" style="max-height: 150px;" />
+        </div>
+      </div>
+    </div>
+
+    <!-- Actions -->
+    <mat-dialog-actions align="end" class="mt-4">
+      <button mat-button mat-dialog-close>Annuler</button>
+      <button mat-flat-button color="primary" [disabled]="form.invalid" type="submit">
+        Enregistrer
+      </button>
+    </mat-dialog-actions>
+  </form>
+</div>

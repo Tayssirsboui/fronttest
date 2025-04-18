@@ -1,0 +1,12 @@
+<h2 mat-dialog-title class="text-center text-primary">
+  Confirmation de participation
+</h2>
+
+<mat-dialog-content class="text-center py-3">
+  <p>Souhaitez-vous participer à l'événement <strong>{{ evenement.titre }}</strong> ?</p>
+</mat-dialog-content>
+
+<mat-dialog-actions align="center" class="mt-4">
+  <button mat-stroked-button color="warn" (click)="dialogRef.close()">Annuler</button>
+  <button mat-flat-button color="primary" (click)="confirmerParticipation()">Confirmer</button>
+</mat-dialog-actions>

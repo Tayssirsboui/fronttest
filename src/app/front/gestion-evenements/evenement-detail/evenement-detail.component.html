@@ -1,0 +1,15 @@
+<h2 mat-dialog-title class="text-center text-primary">{{ evenement.titre }}</h2>
+<mat-divider class="mb-3"></mat-divider>
+
+<mat-dialog-content class="px-3 pt-0">
+  <mat-card class="bg-light p-3 shadow-sm">
+    <h6 class="text-secondary fw-semibold mb-2">✨ Description</h6>
+    <p class="text-muted fs-6" style="line-height: 1.7;">
+      {{ evenement.description }}
+    </p>
+  </mat-card>
+</mat-dialog-content>
+
+<mat-dialog-actions align="center" class="mt-4 pb-2">
+  <button mat-flat-button color="primary" (click)="close()">Fermer</button>
+</mat-dialog-actions>

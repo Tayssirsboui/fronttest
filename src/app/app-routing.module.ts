@@ -8,8 +8,10 @@ import { BackLayoutComponent } from './back/back-layout/back-layout.component';
 import { DashboardComponent } from './back/dashboard/dashboard.component';
 import { CourseSingleComponent } from './front/course-single/course-single.component';
 import { TeachersComponent } from './front/teachers/teachers.component';
-import { EventsComponent } from './front/events/events.component';
+
 import { ContactComponent } from './front/contact/contact.component';
+import { EvenementListComponent } from './front/gestion-evenements/evenement-list/evenement-list.component';
+import { CalendrierUtilisateurComponent } from './front/gestion-evenements/calendrier-utilisateur/calendrier-utilisateur.component';
 
 const routes: Routes = [
   {
@@ -20,23 +22,23 @@ const routes: Routes = [
     ]
   },
   {
-    path: 'front',
+    path: '',
     component: FrontLayoutComponent,
     children: [
-      { path: 'home', component: HomeComponent },
+      { path: '', component: HomeComponent },
       { path: 'courses', component: CoursesComponent },
       { path: 'about', component: AboutComponent },
       { path: 'teachers', component: TeachersComponent },
       { path: 'course-single', component: CourseSingleComponent },
-      { path: 'events', component: EventsComponent },
-      { path: 'contact', component: ContactComponent }
-
-
+     
+      { path: 'contact', component: ContactComponent },
+      { path: 'evenement', component: EvenementListComponent },
+      { path: 'calendrier', component: CalendrierUtilisateurComponent },
 
     ]
   },
-  { path: '', redirectTo: 'front/home', pathMatch: 'full' },
-  { path: '**', redirectTo: 'front/home' }
+  { path: '', redirectTo: 'home', pathMatch: 'full' },
+  { path: '**', redirectTo: 'home' }
 ];
 
 

@@ -1,0 +1,19 @@
+<h2 mat-dialog-title class="text-primary text-center">
+  📅 Détails de l’événement
+</h2>
+
+<mat-divider class="my-2"></mat-divider>
+
+<mat-dialog-content class="mt-3">
+  <p><strong>🧾 Titre :</strong> {{ data.titre }}</p>
+  <p><strong>📍 Lieu :</strong> {{ data.lieu }}</p>
+  <p><strong>🕒 Début :</strong> {{ data.start }}</p>
+  <p><strong>⏳ Fin :</strong> {{ data.end }}</p>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end" class="mt-4">
+  <button mat-button (click)="fermer()">Fermer</button>
+  <button mat-raised-button color="warn" (click)="supprimerParticipation()">
+    <mat-icon>delete</mat-icon> Supprimer la participation
+  </button>
+</mat-dialog-actions>
