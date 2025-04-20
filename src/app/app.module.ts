@@ -1,7 +1,9 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
+import { FormsModule } from '@angular/forms';
 
+import { HTTP_INTERCEPTORS,HttpClient, HttpClientModule } from '@angular/common/http';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { FooterComponent } from './front/footer/footer.component';
@@ -21,6 +23,17 @@ import { EventsComponent } from './front/events/events.component';
 import { CourseSingleComponent } from './front/course-single/course-single.component';
 import { TeachersComponent } from './front/teachers/teachers.component';
 import { ContactComponent } from './front/contact/contact.component';
+import { LoginFrontComponent } from './front/login-front/login-front.component';
+import { RegisterFrontComponent } from './front/register-front/register-front.component';
+import { ActivateAcountComponent } from './activate-acount/activate-acount.component';
+import { CodeInputModule } from 'angular-code-input';
+import { HashLocationStrategy, LocationStrategy } from '@angular/common';
+import { UserListComponent } from './back/user-list/user-list.component';
+import { ProfilComponent } from './front/profil/profil.component';
+import { WebcamComponent } from './front/webcam/webcam.component';
+import { WebcamModule } from 'ngx-webcam'; // Import WebcamModule
+
+
 
 @NgModule({
   declarations: [
@@ -41,14 +54,28 @@ import { ContactComponent } from './front/contact/contact.component';
     EventsComponent,
     CourseSingleComponent,
     TeachersComponent,
-    ContactComponent
+    ContactComponent,
+    LoginFrontComponent,
+    RegisterFrontComponent,
+    ActivateAcountComponent,
+    UserListComponent,
+    ProfilComponent,
+    WebcamComponent,
+
   ],
   imports: [
+    HttpClientModule,
     BrowserModule,
-    AppRoutingModule, 
-  
-  ],
-  providers: [],
+    AppRoutingModule,
+    FormsModule,
+    WebcamModule, 
+    CodeInputModule
+
+    
+   ],
+  providers: [ {provide: LocationStrategy,useClass:HashLocationStrategy},
+    HttpClient,
+   ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -1,0 +1,193 @@
+<section class="form-section">
+    <style>
+      .form-section {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 100vh;
+        background: linear-gradient(135deg, #fdfcfb, #e2d1c3);
+        font-family: 'Segoe UI', sans-serif;
+        padding: 1rem;
+      }
+  
+      .login-card {
+        background-color: #ffffff;
+        padding: 2rem;
+        border-radius: 12px;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+        width: 100%;
+        max-width: 400px;
+      }
+  
+      .login-card h2 {
+        margin-bottom: 1.5rem;
+        text-align: center;
+        color: #2d2d2d;
+      }
+  
+      .form-input {
+        margin-bottom: 1.2rem;
+        position: relative;
+      }
+  
+      .form-input label {
+        display: block;
+        margin-bottom: 0.4rem;
+        font-weight: 600;
+        color: #444;
+      }
+  
+      .form-input input {
+        width: 100%;
+        padding: 0.7rem;
+        padding-right: 40px;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        font-size: 1rem;
+        transition: border-color 0.3s ease;
+      }
+  
+      .form-input input:focus {
+        border-color: #6610f2;
+        outline: none;
+      }
+  
+      .toggle-password {
+        position: absolute;
+        top: 50%;
+        right: 12px;
+        transform: translateY(-50%);
+        cursor: pointer;
+        color: #888;
+      }
+  
+      .btn-submit {
+        width: 100%;
+        padding: 0.8rem;
+        border: none;
+        background: #6610f2;
+        color: white;
+        font-size: 1rem;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: background 0.3s ease;
+      }
+  
+      .btn-submit:hover {
+        background: #6610f2;
+      }
+  
+      .login-links {
+        display: flex;
+        justify-content: space-between;
+        font-size: 0.9rem;
+        margin-top: 1rem;
+      }
+  
+      .login-links a {
+        color: #6610f2;
+        text-decoration: none;
+        font-weight: 600;
+      }
+  
+      .logo-login img {
+        max-height: 60px;
+        margin-bottom: 1rem;
+      }
+  
+      .alert {
+        margin-bottom: 1rem;
+        background: #ffe6e6;
+        color: #d8000c;
+        padding: 0.8rem;
+        border-radius: 6px;
+      }
+      .password-field {
+  position: relative;
+}
+
+.password-wrapper {
+  position: relative;
+}
+
+.password-wrapper input {
+  width: 100%;
+  padding-right: 2.5rem; /* espace pour l'icône */
+  box-sizing: border-box;
+}
+
+.toggle-password {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  font-size: 1rem;
+  color: #888;
+}
+.toggle-password {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  font-size: 1.2rem;
+  color: #888;
+  transition: color 0.3s ease, transform 0.2s ease;
+}
+
+.toggle-password:hover {
+  color: #aa8bd1;
+  transform: translateY(-50%) scale(1.2);
+}
+
+
+    </style>
+  
+    <div class="login-card">
+      <form #loginForm="ngForm">
+        <!-- Error Message -->
+        <div class="alert" *ngIf="errorMsg.length">
+          <p *ngFor="let msg of errorMsg">{{ msg }}</p>
+        </div>
+  
+        <!-- Logo -->
+        <div class="logo-login text-center">
+          <a routerLink="/"><img src="assets/img/logo/loder.png" alt="logo" /></a>
+        </div>
+  
+        <h2 class="text-center">Login Here</h2>
+  
+        <!-- Email -->
+        <div class="form-input">
+          <label for="email">Email</label>
+          <input [(ngModel)]="authRequest.email" name="email" type="email" id="email" required />
+        </div>
+  
+        <!-- Password -->
+     <!-- Password -->
+<div class="form-input password-field">
+    <label for="password">Password</label>
+    <div class="password-wrapper">
+      <input [(ngModel)]="authRequest.motDePasse" [type]="showPassword ? 'text' : 'password'" name="password" id="password" required />
+      <span class="toggle-password" (click)="togglePasswordVisibility()">
+        <i class="fas" [ngClass]="showPassword ? 'fa-eye-slash' : 'fa-eye'"></i>
+      </span>
+    </div>
+  </div>
+  
+  
+        <!-- Submit -->
+        <button (click)="login()" type="button" class="btn-submit">
+          <i class="fas fa-sign-in-alt"></i> Login
+        </button>
+  
+        <!-- Links -->
+        <div class="login-links">
+          <a routerLink="/forgot-password">Forgot Password?</a>
+          <a routerLink="/register">Register</a>
+        </div>
+      </form>
+    </div>
+  </section>
+  

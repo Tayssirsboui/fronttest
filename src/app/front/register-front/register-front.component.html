@@ -1,0 +1,161 @@
+<section class="form-section">
+    <style>
+      .form-section {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 100vh;
+        background: linear-gradient(135deg, #fdfcfb, #e2d1c3); /* Peach to cream */
+        font-family: 'Segoe UI', sans-serif;
+        padding: 1rem;
+      }
+  
+      .register-card {
+        background-color: #ffffff;
+        padding: 2rem;
+        border-radius: 12px;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+        width: 100%;
+        max-width: 420px;
+      }
+  
+      .register-card h2 {
+        margin-bottom: 1.5rem;
+        text-align: center;
+        color: #2d2d2d;
+      }
+  
+      .form-input {
+        margin-bottom: 1.2rem;
+      }
+  
+      .form-input label {
+        display: block;
+        margin-bottom: 0.4rem;
+        font-weight: 600;
+        color: #444;
+      }
+  
+      .form-input input {
+        width: 100%;
+        padding: 0.7rem;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        font-size: 1rem;
+        transition: border-color 0.3s ease;
+      }
+  
+      .form-input input:focus {
+        border-color: #6610f2;
+        outline: none;
+      }
+  
+      .btn-submit {
+        width: 100%;
+        padding: 0.8rem;
+        border: none;
+        background: #6610f2;
+        color: white;
+        font-size: 1rem;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: background 0.3s ease;
+      }
+  
+      .btn-submit:hover {
+        background: #6610f2;
+      }
+  
+      .login-link {
+        margin-top: 1rem;
+        text-align: center;
+        font-size: 0.9rem;
+      }
+  
+      .login-link span {
+        color: #6610f2;
+        cursor: pointer;
+        font-weight: 600;
+      }
+  
+      .alert {
+        margin-bottom: 1rem;
+        background: #ffe6e6;
+        color: #d8000c;
+        padding: 0.8rem;
+        border-radius: 6px;
+      }
+  
+      .password-container {
+        position: relative;
+      }
+  
+      .toggle-visibility {
+        position: absolute;
+        right: 12px; /* Adjusted to bring it closer to the right edge */
+        top: 50%;
+        transform: translateY(-50%);
+        cursor: pointer;
+        color: #6610f2;
+      }
+    </style>
+  
+    <div class="register-card">
+      <h2>Create Account</h2>
+  
+      <!-- Error messages -->
+      <div class="alert" *ngIf="errorMsg.length">
+        <p *ngFor="let msg of errorMsg">{{ msg }}</p>
+      </div>
+  
+      <form (ngSubmit)="register()" #registrationForm="ngForm">
+  
+        <div class="form-input">
+          <label for="nom">Full Name</label>
+          <input type="text" id="nom" name="nom" [(ngModel)]="registerRequest.nom" required>
+        </div>
+  
+        <div class="form-input">
+          <label for="prenom">Last Name</label>
+          <input type="text" id="prenom" name="prenom" [(ngModel)]="registerRequest.prenom" required>
+        </div>
+  
+        <div class="form-input">
+          <label for="email">Email</label>
+          <input type="email" id="email" name="email" [(ngModel)]="registerRequest.email" required>
+        </div>
+  
+        <div class="form-input">
+          <label for="phoneNumber">Phone Number</label>
+          <input type="text" id="phoneNumber" name="phoneNumber" [(ngModel)]="registerRequest.phoneNumber" required>
+        </div>
+  
+        <!-- Password input with visibility toggle -->
+        <div class="form-input password-container">
+          <label for="motDePasse">Password</label>
+          <input [type]="passwordVisible ? 'text' : 'password'" id="motDePasse" name="motDePasse" [(ngModel)]="registerRequest.motDePasse" required>
+          <i class="toggle-visibility" (click)="togglePasswordVisibility()">
+            <i *ngIf="passwordVisible" class="fa fa-eye-slash"></i>
+            <i *ngIf="!passwordVisible" class="fa fa-eye"></i>
+          </i>
+        </div>
+        <div class="form-group">
+            <label for="image">Image de profil</label>
+            <input type="file" id="image" (change)="onFileSelected($event)" />
+          </div>
+          
+          <!-- Affichage du nom de l'image sélectionnée, seulement si elle existe -->
+          <p *ngIf="image && image.length > 0">
+            Image sélectionnée : {{ image }}
+          </p>
+  
+        <button type="submit" class="btn-submit">Register</button>
+  
+      </form>
+  
+      <div class="login-link">
+        Already have an account? <span (click)="login()">Log In</span>
+      </div>
+    </div>
+  </section>
+  
