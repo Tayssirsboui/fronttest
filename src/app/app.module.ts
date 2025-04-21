@@ -49,6 +49,8 @@ import { NgxMatMomentModule } from '@angular-material-components/moment-adapter'
 import { MatCardModule } from '@angular/material/card';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatIconModule } from '@angular/material/icon';
+import { GoogleMapsModule } from '@angular/google-maps';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 @NgModule({
   declarations: [
@@ -100,7 +102,6 @@ import { MatIconModule } from '@angular/material/icon';
     BrowserAnimationsModule,
     MatDatepickerModule,
     MatNativeDateModule,
-    
     NgxMatDatetimePickerModule,
     NgxMatTimepickerModule,
     NgxMatMomentModule,
@@ -110,8 +111,8 @@ import { MatIconModule } from '@angular/material/icon';
     MatCardModule,
     MatButtonModule,
     MatIconModule,
-
-
+    GoogleMapsModule,
+    MatSnackBarModule,
     ToastrModule.forRoot({
       positionClass: 'toast-top-right',
       timeOut: 3000,

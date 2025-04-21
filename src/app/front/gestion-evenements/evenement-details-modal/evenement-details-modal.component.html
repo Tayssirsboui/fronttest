@@ -1,19 +1,21 @@
-<h2 mat-dialog-title class="text-primary text-center">
-  📅 Détails de l’événement
-</h2>
+<h2 mat-dialog-title>📅 Détails de l’événement</h2>
 
-<mat-divider class="my-2"></mat-divider>
-
-<mat-dialog-content class="mt-3">
+<mat-dialog-content>
   <p><strong>🧾 Titre :</strong> {{ data.titre }}</p>
   <p><strong>📍 Lieu :</strong> {{ data.lieu }}</p>
   <p><strong>🕒 Début :</strong> {{ data.start }}</p>
   <p><strong>⏳ Fin :</strong> {{ data.end }}</p>
+
+  <button mat-stroked-button color="primary" (click)="afficherMap()">📌 Voir la localisation</button>
+
+  <div *ngIf="showMap" class="mt-3">
+    <iframe [src]="mapUrl" width="100%" height="300" style="border:0;" allowfullscreen loading="lazy"></iframe>
+  </div>
 </mat-dialog-content>
 
-<mat-dialog-actions align="end" class="mt-4">
-  <button mat-button (click)="fermer()">Fermer</button>
+<mat-dialog-actions align="end">
+  <button mat-button (click)="dialogRef.close()">Fermer</button>
   <button mat-raised-button color="warn" (click)="supprimerParticipation()">
-    <mat-icon>delete</mat-icon> Supprimer la participation
+    <mat-icon>delete</mat-icon> Supprimer
   </button>
 </mat-dialog-actions>

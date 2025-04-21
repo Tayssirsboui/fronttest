@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
 import { EvenementService } from 'src/app/services/evenement.service';
-import { StatutEvenement } from 'src/app/models/statut-evenement.enum';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-evenement-modal',
@@ -13,22 +13,12 @@ export class EvenementModalComponent implements OnInit {
   form!: FormGroup;
   imageFile!: File;
   imagePreview: string | null = null;
-  showToast: boolean = false;
-
-  fields = [
-    { name: 'titre', label: 'Titre', type: 'text', placeholder: 'Titre de l\'événement', required: true, error: 'Le titre est obligatoire' },
-    { name: 'dateDebut', label: 'Date de début', type: 'datetime-local', required: true, error: 'La date de début est obligatoire' },
-    { name: 'lieu', label: 'Lieu', type: 'text', placeholder: 'Lieu de l\'événement', required: true, error: 'Le lieu est obligatoire' },
-    { name: 'dateFin', label: 'Date de fin', type: 'datetime-local', required: true, error: 'La date de fin est obligatoire' },
-    { name: 'categorie', label: 'Catégorie', type: 'text', placeholder: 'Catégorie', required: true, error: 'La catégorie est obligatoire' },
-    { name: 'description', label: 'Description', type: 'text', placeholder: 'Description', required: true, error: 'La description est obligatoire' },
-    { name: 'nbMaxParticipants', label: 'Nombre max de participants', type: 'number', placeholder: 'Ex : 100', required: true, error: 'Ce champ est requis et doit être > 0' },
-  ];
 
   constructor(
     private dialogRef: MatDialogRef<EvenementModalComponent>,
     private fb: FormBuilder,
-    private evenementService: EvenementService
+    private evenementService: EvenementService,
+    private snackBar: MatSnackBar
   ) {}
 
   ngOnInit(): void {
@@ -55,37 +45,46 @@ export class EvenementModalComponent implements OnInit {
     }
   }
 
-  private formatLocalDateTime(date: Date): string {
-    const pad = (n: number) => n.toString().padStart(2, '0');
-    return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}T${pad(date.getHours())}:${pad(date.getMinutes())}`;
+  formatDate(date: string): string {
+    return new Date(date).toISOString().slice(0, 16);
   }
 
   submit(): void {
     if (this.form.invalid) return;
 
     const formData = new FormData();
-    Object.entries(this.form.value).forEach(([key, value]) => {
-      formData.append(key, value as string);
-    });
-
-    formData.append('statut', StatutEvenement.A_VENIR);
-    formData.append('dateCreation', this.formatLocalDateTime(new Date()));
+    formData.append('titre', this.form.value.titre);
+    formData.append('description', this.form.value.description);
+    formData.append('lieu', this.form.value.lieu);
+    formData.append('categorie', this.form.value.categorie);
+    formData.append('nbMaxParticipants', this.form.value.nbMaxParticipants.toString());
+    formData.append('dateDebut', this.formatDate(this.form.value.dateDebut));
+    formData.append('dateFin', this.formatDate(this.form.value.dateFin));
+    formData.append('statut', 'A_VENIR');
+    formData.append('dateCreation', new Date().toISOString().slice(0, 16));
 
     if (this.imageFile) {
-      formData.append('image', this.imageFile);
+      formData.append('image', this.imageFile, this.imageFile.name);
     }
 
     this.evenementService.createWithFormData(formData).subscribe({
       next: (data) => {
-        this.showToast = true;
-        setTimeout(() => {
-          this.showToast = false;
-          this.dialogRef.close(data);
-        }, 2000);
+        this.snackBar.open('✅ Événement ajouté avec succès', 'Fermer', {
+          duration: 3000,
+          horizontalPosition: 'end',
+          verticalPosition: 'bottom',
+          panelClass: ['snackbar-success']
+        });
+        this.dialogRef.close(data);
       },
       error: err => {
         console.error('Erreur:', err);
-        alert('Une erreur est survenue.');
+        this.snackBar.open('❌ Une erreur est survenue.', 'Fermer', {
+          duration: 3000,
+          horizontalPosition: 'end',
+          verticalPosition: 'bottom',
+          panelClass: ['snackbar-error']
+        });
       }
     });
   }

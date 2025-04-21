@@ -4,3 +4,120 @@
     padding: 0;
   }
   
+
+/* css calendar */
+
+/* 🌐 Container réduit et centré */
+.calendrier-container {
+    max-width: 850px;
+    margin: 0 auto;
+    padding: 1rem;
+  }
+  
+  /* 📏 Réduction hauteur calendrier */
+  .fc {
+    max-height: 600px;
+    overflow-y: auto;
+    padding-bottom: 1rem;
+  }
+  
+  /* 📦 Hauteur des cellules */
+  .fc-daygrid-day-frame {
+    min-height: 80px !important;
+  }
+  .fc-scrollgrid-sync-inner {
+    min-height: 40px !important;
+  }
+  
+  /* 🟦 Style des événements */
+  .fc-event {
+    background-color: #7c3aed !important;
+    color: white !important;
+    font-size: 1.05rem !important;
+    font-weight: 600 !important;
+    padding: 6px 10px !important;
+    border-radius: 8px !important;
+    border: none !important;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  
+  /* ⏰ Heure + titre */
+  .fc-event-time,
+  .fc-event-title {
+    font-size: 1rem !important;
+    display: inline-block;
+    vertical-align: middle;
+  }
+  
+  /* 🧭 Header */
+  .fc-toolbar-title {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: #333;
+  }
+  
+  /* 🧭 Boutons */
+  .fc-button {
+    background-color: #f8f9fa;
+    color: #333;
+    border-radius: 6px;
+    border: none;
+    padding: 6px 12px;
+    margin: 0 2px;
+    transition: background-color 0.2s ease-in-out;
+  }
+  .fc-button:hover {
+    background-color: #e2e6ea;
+  }
+  .fc-button-active {
+    background-color: #935eee !important;
+    color: white !important;
+  }
+  
+  /* 🟨 Cases de jour */
+  .fc-daygrid-day {
+    background-color: #f9fafb;
+  }
+  
+  /* ✅ Jour actuel */
+  .fc-day-today {
+    background-color: #e6f0ff !important;
+  }
+
+
+  /* css list evenement*/
+  input::placeholder {
+    color: #999;
+    font-style: italic;
+  }
+  
+  .btn-success {
+    background: linear-gradient(to right, #198754, #28a745);
+    transition: 0.3s ease;
+  }
+  
+  .btn-success:hover {
+    background: linear-gradient(to right, #157347, #218838);
+    box-shadow: 0 0 10px rgba(25, 135, 84, 0.3);
+  }
+  
+  .input-group-text {
+    border-top-left-radius: 50px;
+    border-bottom-left-radius: 50px;
+  }
+   /* css ajout evenement alert*/
+   .snackbar-success {
+    background-color: #4caf50 !important;
+    color: white !important;
+    font-weight: bold;
+  }
+  
+  .snackbar-error {
+    background-color: #f44336 !important;
+    color: white !important;
+    font-weight: bold;
+  }
+  
