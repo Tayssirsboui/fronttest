@@ -25,21 +25,7 @@
               "src/assets"
             ],
             "styles": [
-              "src/styles.css",
-              "src/assets/css/vendor/bootstrap.min.css",
-              "src/assets/css/vendor/animate.css",
-              "src/assets/css/vendor/icomoon.css",
-              "src/assets/css/vendor/flexslider.css",
-              "src/assets/css/vendor/owl.carousel.min.css",
-              "src/assets/css/vendor/owl.theme.default.min.css",
-              "src/assets/css/vendor/magnific-popup.css",
-              "src/assets/css/vendor/photoswipe.css",
-              "src/assets/css/vendor/default-skin.css",
-              "src/assets/fonts/icomoon/style.css",
-              "src/assets/css/styles-merged.css",
-              "src/assets/css/style.min.css",
-              "src/assets/css/custom.css",
-              "src/assets/css/style.css"
+              "src/styles.css"
             ],
             "scripts": [
                 "src/assets/back/libs/apexcharts/dist/apexcharts.min.js",
@@ -133,5 +119,8 @@
         }
       }
     }
+  },
+  "cli": {
+    "analytics": false
   }
 }

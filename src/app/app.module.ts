@@ -19,10 +19,15 @@ import { HeaderBackComponent } from './back/header-back/header-back.component';
 import { SamplePageComponent } from './back/sample-page/sample-page.component';
 import { EventsComponent } from './front/events/events.component';
 import { CourseSingleComponent } from './front/course-single/course-single.component';
-import { TeachersComponent } from './front/teachers/teachers.component';
+import { QuizComponent } from './front/quiz/quiz.component';
 import { ContactComponent } from './front/contact/contact.component';
+import { LocationStrategy, HashLocationStrategy } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { HttpClientModule } from '@angular/common/http';
+import { QuizzesComponent } from './back/quizzes/quizzes.component';
 
 @NgModule({
+  
   declarations: [
     AppComponent,
     FooterComponent,
@@ -40,15 +45,19 @@ import { ContactComponent } from './front/contact/contact.component';
     SamplePageComponent,
     EventsComponent,
     CourseSingleComponent,
-    TeachersComponent,
-    ContactComponent
+    QuizComponent,
+    ContactComponent,
+    QuizzesComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule, 
+    FormsModule,
+    HttpClientModule,
   
   ],
-  providers: [],
+  providers: [{provide: LocationStrategy, useClass: HashLocationStrategy,}],
   bootstrap: [AppComponent]
 })
+
 export class AppModule { }

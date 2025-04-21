@@ -1,4 +1,5 @@
-import { NgModule } from '@angular/core';
+import { QuizComponent } from './front/quiz/quiz.component';
+​import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { AboutComponent } from './front/about/about.component';
 import { CoursesComponent } from './front/courses/courses.component';
@@ -7,9 +8,9 @@ import { FrontLayoutComponent } from './front/front-layout/front-layout.componen
 import { BackLayoutComponent } from './back/back-layout/back-layout.component';
 import { DashboardComponent } from './back/dashboard/dashboard.component';
 import { CourseSingleComponent } from './front/course-single/course-single.component';
-import { TeachersComponent } from './front/teachers/teachers.component';
 import { EventsComponent } from './front/events/events.component';
 import { ContactComponent } from './front/contact/contact.component';
+import { QuizzesComponent } from './back/quizzes/quizzes.component';
 
 const routes: Routes = [
   {
@@ -17,31 +18,30 @@ const routes: Routes = [
     component: BackLayoutComponent,
     children: [
       { path: '', component: DashboardComponent },
+      { path: 'quizzes', component: QuizzesComponent, },
     ]
   },
   {
-    path: 'front',
-    component: FrontLayoutComponent,
+    path: '',
+    component: FrontLayoutComponent,  // Removed 'front' path
     children: [
-      { path: 'home', component: HomeComponent },
+      { path: '', component: HomeComponent },
       { path: 'courses', component: CoursesComponent },
       { path: 'about', component: AboutComponent },
-      { path: 'teachers', component: TeachersComponent },
+      { path: 'quiz', component: QuizComponent },
       { path: 'course-single', component: CourseSingleComponent },
       { path: 'events', component: EventsComponent },
       { path: 'contact', component: ContactComponent }
-
-
-
     ]
   },
-  { path: '', redirectTo: 'front/home', pathMatch: 'full' },
-  { path: '**', redirectTo: 'front/home' }
+  { path: '', redirectTo: '', pathMatch: 'full' },  // Updated redirect
+  { path: '**', redirectTo: '' }  // Updated wildcard
 ];
-
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule]
 })
 export class AppRoutingModule { }
+
+
