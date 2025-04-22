@@ -1,227 +1,93 @@
-import { Component } from '@angular/core';
-import { CardSettingsModel, ColumnsModel, SwimlaneSettingsModel } from '@syncfusion/ej2-angular-kanban';
+import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog';
+import { ColumnsModel } from '@syncfusion/ej2-angular-kanban';
 import { Tache } from 'src/app/models/tache';
+import { TacheService } from 'src/app/services/tache.service';
 
 @Component({
   selector: 'app-dashboard-kanban',
   templateUrl: './dashboard-kanban.component.html',
   styleUrls: ['./dashboard-kanban.component.css']
 })
-export class DashboardKanbanComponent {
-  title = 'example';
-  public columns: ColumnsModel[] = [
-    { headerText: 'To Do', keyField: 'Open' },
-    { headerText: 'In Progress', keyField: 'InProgress' },
-    { headerText: 'In Review', keyField: 'Review' },
-    { headerText: 'Done', keyField: 'Close' }
-];
-public swimlaneSettings: SwimlaneSettingsModel = { keyField: 'Assignee' };
+export class DashboardKanbanComponent implements OnInit {
+  @ViewChild('addTaskDialog') addTaskDialog!: TemplateRef<any>;
 
-public cardSettings : CardSettingsModel = {
-    headerField : 'Id',
-    contentField : 'Summary'
-};
-
-public localData : Object [] = [ 
-    {
-      "Id": "Task 1",
-      "Title": "Task - 29001",
-      "Status": "Open",
-      "Summary": "Analyze the new requirements gathered from the customer.",
-      "Type": "Story",
-      "Priority": "Low",
-      "Estimate": 3.5,
-      "Assignee": "Nancy Davloio"
-  },
-  {
-      "Id": "Task 2",
-      "Title": "Task - 29002",
-      "Status": "In Progress",
-      "Summary": "Improve application performance",
-      "Type": "Improvement",
-      "Priority": "Normal",
-      "Estimate": 6,
-      "Assignee": "Andrew Fuller"
-  },
-  {
-      "Id": "Task 3",
-      "Title": "Task - 29003",
-      "Status": "Open",
-      "Summary": "Arrange a web meeting with the customer to get new requirements.",
-      "Type": "Others",
-      "Priority": "Critical",
-      "Estimate": 5.5,
-      "Assignee": "Janet Leverling"
-  },
-  {
-      "Id": "Task 4",
-      "Title": "Task - 29004",
-      "Status": "In Progress",
-      "Summary": "Fix the issues reported in the IE browser.",
-      "Type": "Bug",
-      "Priority": "Critical",
-      "Estimate": 2.5,
-      "Assignee": "Janet Leverling"
-  },
-  {
-      "Id": "Task 5",
-      "Title": "Task - 29005",
-      "Status": "Review",
-      "Summary": "Fix the issues reported by the customer.",
-      "Type": "Bug",
-      "Priority": "Low",
-      "Estimate": "3.5",
-      "Assignee": "Steven walker"
-  },
-  {
-      "Id": "Task 6",
-      "Title": "Task - 29007",
-      "Status": "Testing",
-      "Summary": "Testing new requirements",
-      "Type": "Improvement",
-      "Priority": "Low",
-      "Estimate": 1.5,
-      "Assignee": "Anne Dodsworth"
-  },
-  {
-      "Id": "Task 7",
-      "Title": "Task - 29009",
-      "Status": "Review",
-      "Summary": "Fix the issues reported in Safari browser.",
-      "Type": "Bug",
-      "Priority": "Critical",
-      "Estimate": 1.5,
-      "Assignee": "Nancy Davloio"
-  },
-  {
-      "Id": "Task 8",
-      "Title": "Task - 29010",
-      "Status": "Close",
-      "Summary": "Test the application in the IE browser.",
-      "Type": "Story",
-      "Priority": "Low",
-      "Estimate": 5.5,
-      "Assignee": "Margaret hamilt"
-  },
-  {
-      "Id": "Task 9",
-      "Title": "Task - 29011",
-      "Status": "Testing",
-      "Summary": "Testing the issues reported by the customer.",
-      "Type": "Story",
-      "Priority": "High",
-      "Estimate": 1,
-      "Assignee": "Steven walker"
-  },
-  {
-      "Id": "Task 10",
-      "Title": "Task - 29015",
-      "Status": "Open",
-      "Summary": "Show the retrieved data from the server in grid control.",
-      "Type": "Story",
-      "Priority": "High",
-      "Estimate": 5.5,
-      "Assignee": "Margaret hamilt"
-  },
-  {
-      "Id": "Task 11",
-      "Title": "Task - 29016",
-      "Status": "In Progress",
-      "Summary": "Fix cannot open user’s default database SQL error.",
-      "Priority": "Critical",
-      "Type": "Bug",
-      "Estimate": 2.5,
-      "Assignee": "Janet Leverling"
-  },
-  {
-      "Id": "Task 12",
-      "Title": "Task - 29017",
-      "Status": "Review",
-      "Summary": "Fix the issues reported in data binding.",
-      "Type": "Story",
-      "Priority": "Normal",
-      "Estimate": "3.5",
-      "Assignee": "Janet Leverling"
-  },
-  {
-      "Id": "Task 13",
-      "Title": "Task - 29018",
-      "Status": "Close",
-      "Summary": "Analyze SQL server 2008 connection.",
-      "Type": "Story",
-      "Priority": "Critical",
-      "Estimate": 2,
-      "Assignee": "Andrew Fuller"
-  },
-  {
-      "Id": "Task 14",
-      "Title": "Task - 29019",
-      "Status": "Testing",
-      "Summary": "Testing databinding issues.",
-      "Type": "Story",
-      "Priority": "Low",
-      "Estimate": 1.5,
-      "Assignee": "Margaret hamilt"
-  },
-  {
-      "Id": "Task 15",
-      "Title": "Task - 29020",
-      "Status": "Close",
-      "Summary": "Analyze grid control.",
-      "Type": "Story",
-      "Priority": "High",
-      "Estimate": 2.5,
-      "Assignee": "Margaret hamilt"
-  },
-  {
-      "Id": "Task 16",
-      "Title": "Task - 29021",
-      "Status": "Close",
-      "Summary": "Stored procedure for initial data binding of the grid.",
-      "Type": "Others",
-      "Priority": "Critical",
-      "Estimate": 1.5,
-      "Assignee": "Steven walker"
-  },
-  {
-      "Id": "Task 17",
-      "Title": "Task - 29022",
-      "Status": "Close",
-      "Summary": "Analyze stored procedures.",
-      "Type": "Story",
-      "Priority": "Critical",
-      "Estimate": 5.5,
-      "Assignee": "Janet Leverling"
-  },
-  {
-      "Id": "Task 18",
-      "Title": "Task - 29023",
-      "Status": "Testing",
-      "Summary": "Testing editing issues.",
-      "Type": "Story",
-      "Priority": "Critical",
-      "Estimate": 1,
-      "Assignee": "Nancy Davloio"
-  },
-  {
-      "Id": "Task 19",
-      "Title": "Task - 29024",
-      "Status": "Review",
-      "Summary": "Test editing functionality.",
-      "Type": "Story",
-      "Priority": "Normal",
-      "Estimate": 0.5,
-      "Assignee": "Nancy Davloio"
-  },
-  {
-      "Id": "Task 20",
-      "Title": "Task - 29025",
-      "Status": "Open",
-      "Summary": "Enhance editing functionality.",
-      "Type": "Improvement",
-      "Priority": "Low",
-      "Estimate": 3.5,
-      "Assignee": "Andrew Fuller"
-  }
+  taskForm!: FormGroup;
+  projectId: number=7; // Assuming you get this from a service or route parameter
+  columns: ColumnsModel[] = [
+    { headerText: 'À faire', keyField: 'To Do' },
+    { headerText: 'En cours', keyField: 'In Progress' },
+    { headerText: 'Terminé', keyField: 'Done' }
   ];
+
+  dataSource: Tache[] = [];
+
+  constructor(
+    private fb: FormBuilder,
+    private dialog: MatDialog,
+    private tacheService: TacheService
+  ) {}
+
+  ngOnInit(): void {
+    this.taskForm = this.fb.group({
+      titre: ['', Validators.required],
+      description: ['', Validators.required],
+      priorite: ['Medium', Validators.required],
+      estimation: [''],
+      statut: ['To Do']
+    });
+
+    this.loadTaches();
+  }
+
+  loadTaches() {
+    this.tacheService.getTaches().subscribe({
+      next: (data) => {
+        this.dataSource = data;
+      },
+      error: (err) => {
+        console.error('Erreur chargement des tâches:', err);
+      }
+    });
+  }
+
+  getPriorityClass(priorite: string): string {
+    switch (priorite.toLowerCase()) {
+      case 'haute':
+        return 'high';
+      case 'moyenne':
+        return 'medium';
+      case 'faible':
+        return 'low';
+      default:
+        return '';
+    }
+  }
+  
+  openAddTaskDialog() {
+    this.taskForm.reset({
+      priorite: 'Medium',
+      statut: 'To Do'
+    });
+    this.dialog.open(this.addTaskDialog);
+  }
+
+  submitTask() {
+    if (this.taskForm.valid) {
+      const newTask: Tache = {
+        ...this.taskForm.value
+      };
+
+      this.tacheService.addTache(newTask, this.projectId).subscribe({
+        next: () => {
+          this.dialog.closeAll();
+          this.loadTaches();
+        },
+        error: (err) => {
+          console.error('Erreur lors de l’ajout de tâche:', err);
+        }
+      });
+    }
+  }
 }

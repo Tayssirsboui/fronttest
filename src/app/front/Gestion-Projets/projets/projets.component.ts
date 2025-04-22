@@ -1,10 +1,10 @@
 import { Component } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Projet } from 'src/app/models/projet';
-import { ProjetService } from 'src/app/services/projet.service';
 import { AjouterProjetComponent } from '../ajouter-projet/ajouter-projet.component';  // Assure-toi que le chemin est correct
 import { AjouterCollaborationComponent } from '../ajouter-collaboration/ajouter-collaboration.component';
 import { Router } from '@angular/router';
+import { ProjetService } from 'src/app/services/projet.service';
 
 @Component({
   selector: 'app-projets',

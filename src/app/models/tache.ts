@@ -1,12 +1,14 @@
+// src/app/models/tache.ts
+
+import { Projet } from './projet';
+
 export class Tache {
-    Id!: number;
-    Status!: string;
-    Summary!: string;
-    Type!: string;
-    Priority!: string;
-    Tags!: string;
-    Estimate!: string;
-    Assignee!: string;
-    RankId!: number;
-  }
-  
+  id?: number;
+  titre!: string;
+  description!: string;
+  statut!: 'À faire' | 'En cours' | 'Terminé';
+  priorite!: 'Haute' | 'Moyenne' | 'Faible';
+  estimation?: string;
+  projetId?: number;
+  projet?: Projet;
+}
