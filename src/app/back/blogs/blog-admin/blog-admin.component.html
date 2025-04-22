@@ -1,0 +1,154 @@
+<div class="blog-management-container">
+    <!-- Header and Search -->
+    <div class="management-header">
+      <h1>Gestion des Articles</h1>
+      <div class="card-body p-4">
+        <form [formGroup]="searchForm" (ngSubmit)="searchPosts()" class="search-form">
+          <div class="search-input-container">
+            <i class="fas fa-search search-icon"></i>
+            <input 
+              formControlName="searchQuery"
+              type="text" 
+              placeholder="Rechercher des articles..." 
+              class="search-input"
+            >
+          </div>
+        </form>
+        <button 
+          routerLink="/back/blogs/create" 
+         class="btn btn-success m-1"
+        >
+          <i class="fas fa-plus button-icon"></i>
+          Nouvel Article
+        </button>
+      </div>
+    </div>
+  
+    <!-- Posts Table -->
+    <div class="table-container">
+      <div class="table-wrapper">
+        <table class="posts-table">
+          <thead>
+            <tr>
+              <th class="title-column">Titre</th>
+              <th class="author-column">Auteur</th>
+              <th class="date-column">Date</th>
+              <th class="actions-column">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- Loading State -->
+            <tr *ngIf="isLoading">
+              <td colspan="4" class="loading-cell">
+                <div class="spinner"></div>
+              </td>
+            </tr>
+            
+            <!-- Empty State -->
+            <tr *ngIf="!isLoading && posts.length === 0">
+              <td colspan="4" class="empty-cell">
+                <i class="far fa-folder-open empty-icon"></i>
+                <p>Aucun article trouvé</p>
+              </td>
+            </tr>
+            
+            <!-- Posts List -->
+            <tr *ngFor="let post of paginatedPosts" class="post-row">
+              <td class="post-title-cell">
+                <div class="post-title-content">
+                  <div class="post-image">
+                    <img [src]="post.imageUrl || 'assets/default-post-image.jpg'" [alt]="post.title">
+                  </div>
+                  <div class="post-text">
+                    <div class="post-title">{{ post.title }}</div>
+                    <div class="post-excerpt">{{ post.content | slice:0:100 }}...</div>
+                  </div>
+                </div>
+              </td>
+              <td class="post-author">
+                {{ post.createdBy || 'Anonyme' }}
+              </td>
+              <td class="post-date">
+                {{ post.createdAt | date:'dd/MM/yyyy' }}
+              </td>
+              <td class="post-actions">
+                <button 
+                  (click)="editPost(post.id)" 
+                  class="action-button edit-button"
+                  title="Modifier"
+                >
+                  <i class="fas fa-edit"></i>
+                </button>
+                <button 
+                  (click)="deletePost(post.id)" 
+                  class="action-button delete-button"
+                  title="Supprimer"
+                >
+                  <i class="fas fa-trash"></i>
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+  
+      <!-- Pagination -->
+      <div class="pagination-container">
+        <div class="mobile-pagination">
+          <button 
+            (click)="onPageChange(currentPage - 1)" 
+            [disabled]="currentPage === 1"
+            class="pagination-button mobile-button"
+          >
+            Précédent
+          </button>
+          <button 
+            (click)="onPageChange(currentPage + 1)" 
+            [disabled]="currentPage === totalPages"
+            class="pagination-button mobile-button"
+          >
+            Suivant
+          </button>
+        </div>
+        <div class="desktop-pagination">
+          <div class="pagination-info">
+            <p>
+              Affichage de <span>{{ (currentPage - 1) * itemsPerPage + 1 }}</span> à 
+              <span>{{ Math.min(currentPage * itemsPerPage, totalPosts) }}</span> sur 
+              <span>{{ totalPosts }}</span> résultats
+            </p>
+          </div>
+          <div class="pagination-controls">
+            <nav class="pagination-nav">
+              <button 
+                (click)="onPageChange(currentPage - 1)" 
+                [disabled]="currentPage === 1"
+                class="pagination-button nav-button prev-button"
+              >
+                <span class="sr-only">Précédent</span>
+                <i class="fas fa-chevron-left"></i>
+              </button>
+              
+              <button 
+                *ngFor="let page of pages" 
+                (click)="onPageChange(page)"
+                [class.active]="currentPage === page"
+                class="pagination-button page-button"
+              >
+                {{ page }}
+              </button>
+              
+              <button 
+                (click)="onPageChange(currentPage + 1)" 
+                [disabled]="currentPage === totalPages"
+                class="pagination-button nav-button next-button"
+              >
+                <span class="sr-only">Suivant</span>
+                <i class="fas fa-chevron-right"></i>
+              </button>
+            </nav>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>

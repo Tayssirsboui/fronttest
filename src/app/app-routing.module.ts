@@ -10,6 +10,11 @@ import { CourseSingleComponent } from './front/course-single/course-single.compo
 import { TeachersComponent } from './front/teachers/teachers.component';
 import { EventsComponent } from './front/events/events.component';
 import { ContactComponent } from './front/contact/contact.component';
+import { BlogComponent } from './front/Blogs/blog/blog.component';
+import { BlogAdminComponent } from './back/blogs/blog-admin/blog-admin.component';
+import { AddPostComponent } from './front/Blogs/add-post/add-post.component';
+import { GeminiChatComponent } from './front/Blogs/gemini-chat/gemini-chat.component';
+import { BlogDetailsComponent } from './front/Blogs/blog-details/blog-details.component';
 
 const routes: Routes = [
   {
@@ -17,6 +22,7 @@ const routes: Routes = [
     component: BackLayoutComponent,
     children: [
       { path: '', component: DashboardComponent },
+      { path: 'blog', component: BlogAdminComponent },
     ]
   },
   {
@@ -28,8 +34,12 @@ const routes: Routes = [
       { path: 'about', component: AboutComponent },
       { path: 'teachers', component: TeachersComponent },
       { path: 'course-single', component: CourseSingleComponent },
-      { path: 'events', component: EventsComponent },
-      { path: 'contact', component: ContactComponent }
+      { path: 'blogs', component: BlogComponent },
+      { path: 'contact', component: ContactComponent },
+      { path: 'blog-details/:id', component: BlogDetailsComponent },
+      { path: 'add-post', component: AddPostComponent },
+      { path: 'add-post/:id', component: AddPostComponent },
+      { path: 'gemini', component: GeminiChatComponent },
 
 
 

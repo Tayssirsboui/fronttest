@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -21,6 +21,17 @@ import { EventsComponent } from './front/events/events.component';
 import { CourseSingleComponent } from './front/course-single/course-single.component';
 import { TeachersComponent } from './front/teachers/teachers.component';
 import { ContactComponent } from './front/contact/contact.component';
+import { AddPostComponent } from './front/Blogs/add-post/add-post.component';
+import { BlogComponent } from './front/Blogs/blog/blog.component';
+import { BlogDetailsComponent } from './front/Blogs/blog-details/blog-details.component';
+import { HttpClientModule } from '@angular/common/http';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { ToastrModule } from 'ngx-toastr';
+import { CommonModule } from '@angular/common';
+import { GeminiChatComponent } from './front/Blogs/gemini-chat/gemini-chat.component';
+import { PickerModule } from '@ctrl/ngx-emoji-mart';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { BlogAdminComponent } from './back/blogs/blog-admin/blog-admin.component';
 
 @NgModule({
   declarations: [
@@ -41,13 +52,35 @@ import { ContactComponent } from './front/contact/contact.component';
     EventsComponent,
     CourseSingleComponent,
     TeachersComponent,
-    ContactComponent
+    ContactComponent,
+    AddPostComponent,
+    BlogComponent,
+    BlogDetailsComponent,
+    FooterBackComponent,
+    GeminiChatComponent,
+    BlogAdminComponent
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule, 
-  
+    ReactiveFormsModule, 
+    HttpClientModule,
+    AppRoutingModule,
+    FormsModule,
+    NgbModule,
+    CommonModule,
+    PickerModule,
+    BrowserAnimationsModule,
+    ToastrModule.forRoot({
+      progressBar:true,
+      closeButton:true,
+      newestOnTop:true,
+      tapToDismiss:true,
+      positionClass:'toast-top-right',
+      timeOut: 8000,
+
+    }),
   ],
+  
   providers: [],
   bootstrap: [AppComponent]
 })
