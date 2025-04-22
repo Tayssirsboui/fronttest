@@ -15,7 +15,7 @@
         </mat-form-field>
       </div>
 
-      <!-- Date début avec heure -->
+      <!-- Date début -->
       <div class="col-md-6">
         <mat-form-field appearance="outline" class="w-100">
           <mat-label>Date de début</mat-label>
@@ -39,7 +39,7 @@
         </mat-form-field>
       </div>
 
-      <!-- Date fin avec heure -->
+      <!-- Date fin -->
       <div class="col-md-6">
         <mat-form-field appearance="outline" class="w-100">
           <mat-label>Date de fin</mat-label>
@@ -63,7 +63,7 @@
         </mat-form-field>
       </div>
 
-      <!-- Description -->
+      <!-- Description + Générer image -->
       <div class="col-md-6">
         <mat-form-field appearance="outline" class="w-100">
           <mat-label>Description</mat-label>
@@ -72,6 +72,19 @@
             La description est obligatoire
           </mat-error>
         </mat-form-field>
+
+        <!-- Bouton Générer image -->
+        <div class="d-flex align-items-center justify-content-between mt-2">
+          <button mat-stroked-button color="accent" type="button" (click)="genererImage()">
+            <mat-icon>image</mat-icon> Générer une image
+          </button>
+          <!-- Spinner de génération -->
+          <mat-progress-spinner *ngIf="isGenerating"
+                                mode="indeterminate"
+                                diameter="24"
+                                color="primary">
+          </mat-progress-spinner>
+        </div>
       </div>
 
       <!-- Nb participants -->
@@ -85,17 +98,22 @@
         </mat-form-field>
       </div>
 
-      <!-- Image -->
-      <div class="col-md-6 mt-3">
-        <label class="form-label fw-semibold d-block">Image</label>
+      <!-- Image manuelle -->
+      <div class="col-md-6 mt-4">
+        <label class="form-label fw-semibold d-block">Image manuelle</label>
         <input type="file" (change)="onFileSelected($event)" />
-        <div *ngIf="imagePreview" class="mt-2">
-          <img [src]="imagePreview" alt="Aperçu" class="img-thumbnail" style="max-height: 150px;" />
+      </div>
+
+      <!-- Aperçu de l'image générée ou manuelle -->
+      <div class="col-md-6 mt-4">
+        <div *ngIf="imagePreview">
+          <label class="form-label fw-semibold">Aperçu :</label>
+          <img [src]="imagePreview" alt="Aperçu" class="img-thumbnail mt-2" style="max-height: 150px;" />
         </div>
       </div>
     </div>
 
-    <!-- Actions -->
+    <!-- Boutons -->
     <mat-dialog-actions align="end" class="mt-4">
       <button mat-button mat-dialog-close>Annuler</button>
       <button mat-flat-button color="primary" [disabled]="form.invalid" type="submit">
@@ -104,4 +122,3 @@
     </mat-dialog-actions>
   </form>
 </div>
-
