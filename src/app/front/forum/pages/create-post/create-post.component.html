@@ -1,0 +1,50 @@
+<div class="post-form-container">
+  <h2>Create a post in /c/{{ communityName }}</h2>
+
+  <form (ngSubmit)="submitPost()" #postForm="ngForm">
+    <div class="form-group">
+      <label>Content</label>
+      <textarea
+        class="content-textarea"
+        name="content"
+        [(ngModel)]="postContent"
+        required
+        rows="6"
+        placeholder="What's on your mind?"
+      ></textarea>
+    </div>
+
+    <div class="emoji-row">
+      <button type="button" (click)="toggleEmojiPicker()" class="emoji-button">😊</button>
+    </div>
+
+    <div *ngIf="showEmojiPicker" class="emoji-picker-wrapper">
+      <emoji-mart set="google" (emojiSelect)="addEmoji($event)"></emoji-mart>
+    </div>
+
+    <input
+      [(ngModel)]="imageUrl"
+      name="imageUrl"
+      placeholder="Coller un lien d'image (optionnel)"
+      type="url"
+      class="image-url-input"
+    />
+
+    <input
+  type="text"
+  [(ngModel)]="videoUrl"
+  name="videoUrl"
+  placeholder="URL de la vidéo (YouTube, Vimeo...)"
+  class="form-control"
+/>
+
+
+    <button
+      class="submit-post-button"
+      type="submit"
+      [disabled]="!postForm.form.valid"
+    >
+      Post
+    </button>
+  </form>
+</div>

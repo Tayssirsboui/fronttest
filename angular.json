@@ -25,7 +25,9 @@
               "src/assets"
             ],
             "styles": [
+              
               "src/styles.css"
+
               
             ],
             "scripts": [
@@ -110,7 +112,10 @@
               "src/assets"
             ],
             "styles": [
+              
               "src/styles.css",
+              
+
              "src/assets/css/vendor/bootstrap.min.css"
             ],
             "scripts": [
@@ -120,5 +125,8 @@
         }
       }
     }
+  },
+  "cli": {
+    "analytics": false
   }
 }

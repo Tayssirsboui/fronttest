@@ -1,0 +1,60 @@
+<div *ngIf="communityDetails" class="community-container">
+  <!-- Colonne principale (Posts) -->
+  <div class="main-column">
+    <div class="community-header">
+      <img *ngIf="communityDetails.imageUrl" [src]="communityDetails.imageUrl" alt="Image de la communauté" />
+      <h2>c/{{ communityDetails.name }}</h2>
+    </div>
+
+    <!-- Liste des posts -->
+    <div class="post-list">
+      <div *ngFor="let post of communityDetails.posts" class="post-card">
+        <div class="post-author">
+          <img src="https://img.freepik.com/photos-gratuite/jeune-belle-fille-posant-dans-veste-cuir-noire-parc_1153-8104.jpg?semt=ais_hybrid&w=740" alt="Alice" />
+          <div>
+            <div class="name">Alice</div>
+            <div class="date">Posté le {{ post.createdAt | date: 'dd/MM/yyyy à HH:mm' }}</div>
+          </div>
+        </div>
+        <p>{{ post.content }}</p>
+        <img *ngIf="post.imageUrl" [src]="post.imageUrl" alt="Image du post" />
+        <div *ngIf="post.videoUrl" class="video-container">
+          <iframe
+  *ngIf="post.videoUrl"
+  [src]="post.videoUrl | safeUrl"
+  width="560"
+  height="315"
+  frameborder="0"
+  allowfullscreen>
+</iframe>
+
+
+        </div>
+       <!-- <button (click)="deletePost(post.id)">🗑️ Supprimer</button>-->
+      </div>
+    </div>
+
+    <div *ngIf="communityDetails.posts.length === 0" class="no-posts">
+      <p>Pas encore de posts ! Soyez le premier à contribuer.</p>
+    </div>
+  </div>
+
+  <!-- Colonne latérale -->
+  <div class="sidebar-column">
+    <div class="panel">
+      <button (click)="join()" class="btn btn-green">Join Community</button>
+      <button *ngIf="communityDetails?.id" (click)="goToCreatePost()" class="btn btn-blue">Créer un post</button>
+      <button (click)="generatePost(communityId)" class="btn btn-purple">🤖 Générer un post</button>
+
+    </div>
+
+    <div class="panel">
+      <h3>À propos de la communauté</h3>
+      <p>{{ communityDetails.description }}</p>
+    </div>
+
+    <div class="panel">
+      <button (click)="goHome()" class="btn btn-gray">Retour à la page d'accueil</button>
+    </div>
+  </div>
+</div>

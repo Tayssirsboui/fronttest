@@ -20,6 +20,20 @@ import { EventsComponent } from './front/events/events.component';
 import { CourseSingleComponent } from './front/course-single/course-single.component';
 import { TeachersComponent } from './front/teachers/teachers.component';
 import { ContactComponent } from './front/contact/contact.component';
+import { HttpClientModule } from '@angular/common/http';
+import { PickerModule } from '@ctrl/ngx-emoji-mart';
+import { FormsModule } from '@angular/forms';
+import { CommunityDetailComponent } from './front/forum/pages/community-detail/community-detail.component';
+import { CommunityListComponent } from './front/forum/pages/community-list/community-list.component';
+import { CreatePostComponent } from './front/forum/pages/create-post/create-post.component'
+import { CreateCommunityComponent } from './front/forum/pages/create-community/create-community.component';
+import { HashLocationStrategy, LocationStrategy } from '@angular/common';
+import { SafeUrlPipe } from './pipes/safe-url.pipe';
+
+
+
+
+
 
 @NgModule({
   declarations: [
@@ -32,6 +46,11 @@ import { ContactComponent } from './front/contact/contact.component';
     CoursesComponent,
     FooterBackComponent,
     SidebarBackComponent,
+    CommunityDetailComponent,
+    CreateCommunityComponent,
+    HomeComponent,
+    CommunityListComponent,
+    CreatePostComponent,
     BackLayoutComponent,
     FrontLayoutComponent,
     DashboardComponent,
@@ -40,13 +59,20 @@ import { ContactComponent } from './front/contact/contact.component';
     EventsComponent,
     CourseSingleComponent,
     TeachersComponent,
+    SafeUrlPipe,
+
     ContactComponent
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule
+    AppRoutingModule,
+    FormsModule,
+    HttpClientModule,  
+    PickerModule,
+
+
   ],
-  providers: [],
+  providers: [{provide: LocationStrategy,useClass:HashLocationStrategy }],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
