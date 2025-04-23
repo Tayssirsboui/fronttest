@@ -9,7 +9,7 @@ import { catchError, map, Observable, throwError } from 'rxjs';
 export class BlogService {
   private baseUrlPost = 'http://localhost:5100/api/v1/posts';
   private baseUrlComment = 'http://localhost:5110/api/v1/comments';
-  private apiUrl = 'http://localhost:5120/recommend-posts'; 
+  private apiUrl = 'http://localhost:5122/recommend-posts'; 
 userId!: number ;
   constructor(private http : HttpClient) { }
   getPostById(id:number){

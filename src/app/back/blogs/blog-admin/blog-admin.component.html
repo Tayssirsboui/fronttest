@@ -1,154 +1,99 @@
-<div class="blog-management-container">
-    <!-- Header and Search -->
-    <div class="management-header">
-      <h1>Gestion des Articles</h1>
-      <div class="card-body p-4">
-        <form [formGroup]="searchForm" (ngSubmit)="searchPosts()" class="search-form">
-          <div class="search-input-container">
-            <i class="fas fa-search search-icon"></i>
-            <input 
-              formControlName="searchQuery"
-              type="text" 
-              placeholder="Rechercher des articles..." 
-              class="search-input"
-            >
-          </div>
-        </form>
-        <button 
-          routerLink="/back/blogs/create" 
-         class="btn btn-success m-1"
-        >
-          <i class="fas fa-plus button-icon"></i>
-          Nouvel Article
-        </button>
+<div class="col-lg-12 d-flex align-items-stretch">
+  <div class="card w-100 shadow-sm border-0">
+    <div class="card-body p-4">
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <h5 class="card-title fw-bold text-primary mb-0">Blog Management</h5>
+        <div *ngIf="isLoading" class="spinner-border text-primary" role="status">
+          <span class="visually-hidden">Loading...</span>
+        </div>
       </div>
-    </div>
-  
-    <!-- Posts Table -->
-    <div class="table-container">
-      <div class="table-wrapper">
-        <table class="posts-table">
-          <thead>
+
+      <div class="table-responsive">
+        <table class="table table-hover align-middle">
+          <thead class="table-light">
             <tr>
-              <th class="title-column">Titre</th>
-              <th class="author-column">Auteur</th>
-              <th class="date-column">Date</th>
-              <th class="actions-column">Actions</th>
+              <th>Id</th>
+              <th>Author</th>
+              <th>Title</th>
+              <th>Content</th>
+              <th>Created At</th>
+              <th>Likes</th>
+              <th>Action</th>
             </tr>
           </thead>
           <tbody>
-            <!-- Loading State -->
-            <tr *ngIf="isLoading">
-              <td colspan="4" class="loading-cell">
-                <div class="spinner"></div>
+            <tr *ngFor="let p of posts" class="row-hover-blue">
+              <td>{{ p.id }}</td>
+              <td>
+                <div class="fw-semibold">{{ p.createdBy }}</div>
+                <small class="text-muted">Web Designer</small>
               </td>
-            </tr>
-            
-            <!-- Empty State -->
-            <tr *ngIf="!isLoading && posts.length === 0">
-              <td colspan="4" class="empty-cell">
-                <i class="far fa-folder-open empty-icon"></i>
-                <p>Aucun article trouvé</p>
+              <td>{{ p.title }}</td>
+              <td>
+                <span class="d-inline-block text-truncate" style="max-width: 200px;">
+                  {{ p.content }}
+                </span>
               </td>
-            </tr>
-            
-            <!-- Posts List -->
-            <tr *ngFor="let post of paginatedPosts" class="post-row">
-              <td class="post-title-cell">
-                <div class="post-title-content">
-                  <div class="post-image">
-                    <img [src]="post.imageUrl || 'assets/default-post-image.jpg'" [alt]="post.title">
-                  </div>
-                  <div class="post-text">
-                    <div class="post-title">{{ post.title }}</div>
-                    <div class="post-excerpt">{{ post.content | slice:0:100 }}...</div>
-                  </div>
+              <td>{{ p.createdAt | date: 'medium' }}</td>
+              <td>
+                <span class="badge bg-success">{{ p.likes }} ❤️</span>
+              </td>
+              <td>
+                <div class="d-flex gap-2 action-buttons">
+                  <button class="btn btn-outline-primary btn-md d-flex align-items-center px-3">
+                    <i class="bi bi-pencil me-1"></i> Edit
+                  </button>
+                  <button class="btn btn-outline-danger btn-md d-flex align-items-center px-3">
+                    <i class="bi bi-trash me-1"></i> Delete
+                  </button>
+
+                  <button
+                    class="btn btn-outline-secondary btn-md d-flex align-items-center px-3"
+                    (click)="openCommentsModal(p.id)">
+                    <i class="bi bi-chat-dots me-1"></i> Comments
+                  </button>
                 </div>
-              </td>
-              <td class="post-author">
-                {{ post.createdBy || 'Anonyme' }}
-              </td>
-              <td class="post-date">
-                {{ post.createdAt | date:'dd/MM/yyyy' }}
-              </td>
-              <td class="post-actions">
-                <button 
-                  (click)="editPost(post.id)" 
-                  class="action-button edit-button"
-                  title="Modifier"
-                >
-                  <i class="fas fa-edit"></i>
-                </button>
-                <button 
-                  (click)="deletePost(post.id)" 
-                  class="action-button delete-button"
-                  title="Supprimer"
-                >
-                  <i class="fas fa-trash"></i>
-                </button>
               </td>
             </tr>
           </tbody>
         </table>
-      </div>
-  
-      <!-- Pagination -->
-      <div class="pagination-container">
-        <div class="mobile-pagination">
-          <button 
-            (click)="onPageChange(currentPage - 1)" 
-            [disabled]="currentPage === 1"
-            class="pagination-button mobile-button"
-          >
-            Précédent
-          </button>
-          <button 
-            (click)="onPageChange(currentPage + 1)" 
-            [disabled]="currentPage === totalPages"
-            class="pagination-button mobile-button"
-          >
-            Suivant
-          </button>
-        </div>
-        <div class="desktop-pagination">
-          <div class="pagination-info">
-            <p>
-              Affichage de <span>{{ (currentPage - 1) * itemsPerPage + 1 }}</span> à 
-              <span>{{ Math.min(currentPage * itemsPerPage, totalPosts) }}</span> sur 
-              <span>{{ totalPosts }}</span> résultats
-            </p>
-          </div>
-          <div class="pagination-controls">
-            <nav class="pagination-nav">
-              <button 
-                (click)="onPageChange(currentPage - 1)" 
-                [disabled]="currentPage === 1"
-                class="pagination-button nav-button prev-button"
-              >
-                <span class="sr-only">Précédent</span>
-                <i class="fas fa-chevron-left"></i>
-              </button>
-              
-              <button 
-                *ngFor="let page of pages" 
-                (click)="onPageChange(page)"
-                [class.active]="currentPage === page"
-                class="pagination-button page-button"
-              >
-                {{ page }}
-              </button>
-              
-              <button 
-                (click)="onPageChange(currentPage + 1)" 
-                [disabled]="currentPage === totalPages"
-                class="pagination-button nav-button next-button"
-              >
-                <span class="sr-only">Suivant</span>
-                <i class="fas fa-chevron-right"></i>
-              </button>
-            </nav>
-          </div>
+
+        <div *ngIf="posts.length === 0 && !isLoading" class="text-center text-muted py-4">
+          No posts found.
         </div>
       </div>
     </div>
   </div>
+</div>
+
+<!-- Custom Modal for Comments -->
+<div *ngIf="showModal" class="custom-modal-backdrop" (click)="closeModal()">
+  <div class="custom-modal" (click)="$event.stopPropagation()"> <!-- Prevent backdrop click from closing -->
+    <div class="custom-modal-header">
+      <h5>Comments</h5>
+      <button (click)="closeModal()" class="close-btn">&times;</button>
+    </div>
+    <div class="custom-modal-body">
+      <div *ngIf="loadingComments" class="text-center my-3">
+        <div class="spinner-border text-primary" role="status"></div>
+      </div>
+
+      <div *ngIf="!loadingComments && comments.length > 0">
+        <div *ngFor="let comment of comments" class="card mb-3 shadow-sm">
+          <div class="card-body">
+            <h6 class="mb-1">{{ comment.createdBy }}</h6>
+            <p class="mb-1">{{ comment.description }}</p>
+            <small class="text-muted">{{ comment.createdAt | date: 'medium' }}</small>
+            <div class="mt-2">
+              <i class="bi bi-hand-thumbs-up me-1 text-primary"></i>{{ comment.likes }} likes
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div *ngIf="!loadingComments && comments.length === 0" class="text-muted text-center">
+        No comments for this post.
+      </div>
+    </div>
+  </div>
+</div>

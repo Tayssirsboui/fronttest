@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { Post } from 'src/app/models/post';
 import { BlogService } from 'src/app/services/blog.service';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { Comment } from 'src/app/models/comment';
 
 @Component({
   selector: 'app-blog-admin',
@@ -18,16 +19,56 @@ export class BlogAdminComponent implements OnInit {
   totalPosts = 0;
   searchForm: FormGroup;
   Math = Math;
+  comments: Comment[] = [];
+  loadingComments = false;
+  postId!: number;
+  post: Post | null = null;
+  showModal: boolean = false;
 
   constructor(
     private blogService: BlogService,
     private fb: FormBuilder,
     private toastr: ToastrService,
-    private router: Router
+    private router: Router, private Ac: ActivatedRoute
   ) {
     this.searchForm = this.fb.group({
       searchQuery: ['']
     });
+  }
+
+  // Open the comments modal and load the comments for the selected post
+  openCommentsModal(postId: number): void {
+    this.loadingComments = true;
+    this.comments = []; // Clear any previously loaded comments
+
+    this.postId = postId;
+
+    // Fetch the post data
+    this.blogService.getPostsById(postId).subscribe({
+      next: (data) => {
+        this.post = data; // Set the post data
+      },
+      error: (err) => {
+        console.error('Error loading post', err);
+        this.loadingComments = false;
+      }
+    });
+
+    this.blogService.getcommentsByPostId(postId).subscribe((data: any) => {
+      this.comments = data as Comment[];
+      const commentsCount = data.length;
+      this.loadingComments = false;
+      this.showModal = true; // Show the modal
+
+      if (this.post) {
+        this.post.commentsCount = commentsCount;
+      }
+    });
+  }
+
+  // Close the modal when clicking outside
+  closeModal(): void {
+    this.showModal = false;
   }
 
   ngOnInit(): void {
@@ -42,7 +83,7 @@ export class BlogAdminComponent implements OnInit {
         this.totalPosts = posts.length;
         this.isLoading = false;
       },
-      error: (err) => {
+      error: () => {
         this.toastr.error('Failed to load posts', 'Error');
         this.isLoading = false;
       }
@@ -61,7 +102,6 @@ export class BlogAdminComponent implements OnInit {
   get pages(): number[] {
     return Array(this.totalPages).fill(0).map((_, i) => i + 1);
   }
-  
 
   editPost(postId: number): void {
     this.router.navigate(['/admin/blog/edit', postId]);
@@ -80,12 +120,13 @@ export class BlogAdminComponent implements OnInit {
       });
     }
   }
+
   onPageChange(page: number): void {
     if (page >= 1 && page <= this.totalPages) {
       this.currentPage = page;
     }
   }
-  
+
   searchPosts(): void {
     const query = this.searchForm.get('searchQuery')?.value.toLowerCase();
     if (!query) {
@@ -93,8 +134,8 @@ export class BlogAdminComponent implements OnInit {
       return;
     }
 
-    this.posts = this.posts.filter(post => 
-      post.title.toLowerCase().includes(query) || 
+    this.posts = this.posts.filter(post =>
+      post.title.toLowerCase().includes(query) ||
       post.content.toLowerCase().includes(query)
     );
     this.totalPosts = this.posts.length;
