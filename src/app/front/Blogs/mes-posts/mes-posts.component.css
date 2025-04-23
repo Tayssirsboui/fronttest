@@ -1,0 +1,364 @@
+
+/* Effets 3D pour les cartes */
+.events .item {
+  background-color: #f1f0fe;
+  border-radius: 25px;
+  position: relative;
+  padding: 40px;
+  margin-bottom: 96px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+  transform-style: preserve-3d;
+  perspective: 1000px;
+  border: none;
+}
+
+/* Effet de soulèvement au survol */
+.events .item:hover {
+  transform: translateY(-10px) scale(1.02);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2), 
+              0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* Ombre portée plus prononcée */
+.events .item::before {
+  content: '';
+  position: absolute;
+  bottom: -15px;
+  left: 5%;
+  width: 90%;
+  height: 30px;
+  background: radial-gradient(ellipse at center, 
+              rgba(0,0,0,0.2) 0%, 
+              rgba(0,0,0,0) 70%);
+  filter: blur(10px);
+  z-index: -1;
+  transition: all 0.3s ease;
+}
+
+.events .item:hover::before {
+  bottom: -20px;
+  height: 40px;
+  filter: blur(15px);
+}
+
+/* Effet de bordure 3D */
+.events .item::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border-radius: 25px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Image avec effet 3D */
+.events .item .image img {
+  position: absolute;
+  border-radius: 25px;
+  max-width: 260px;
+  left: 0;
+  top: -70px;
+  box-shadow: 5px 15px 30px rgba(0, 0, 0, 0.2);
+  transform: rotateY(-5deg) rotateX(5deg);
+  transition: all 0.5s ease;
+  border: 5px solid white;
+}
+
+.events .item:hover .image img {
+  transform: rotateY(-10deg) rotateX(10deg) translateY(-10px);
+  box-shadow: 10px 20px 40px rgba(0, 0, 0, 0.3);
+}
+
+/* Bouton avec effet 3D */
+.events .item a {
+  position: absolute;
+  right: 0;
+  top: 22px;
+  background: linear-gradient(135deg, #7a6ad8, #5a4ac8);
+  width: 60px;
+  height: 120px;
+  display: inline-block;
+  text-align: center;
+  line-height: 120px;
+  font-size: 18px;
+  z-index: 1;
+  color: #fff;
+  border-radius: 60px 0px 0px 60px;
+  box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
+}
+
+.events .item a:hover {
+  transform: translateX(5px);
+  box-shadow: 8px 8px 20px rgba(0, 0, 0, 0.3);
+}
+
+/* Effet de profondeur pour le contenu */
+.events .item .col-lg-9 {
+  position: relative;
+  z-index: 2;
+  transform: translateZ(20px);
+}
+
+/* Animation subtile */
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+.events .item {
+  animation: float 6s ease-in-out infinite;
+}
+
+.events .item:hover {
+  animation: none;
+}
+.events .item ul {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  padding: 0;
+  margin: 0;
+}
+
+.events .item ul li {
+  display: inline-block;
+  width: 17.5%;
+  vertical-align: middle;
+}
+
+.events .item ul li:first-child {
+  width: 35%;
+}
+
+.events .item ul li:nth-of-type(2) {
+  width: 28%;
+}X
+
+.events .item ul li span.category {
+  font-size: 14px;
+  text-transform: uppercase;
+  color: #7a6ad8;
+  background-color: #fff;
+  padding: 8px 20px;
+  border-radius: 25px;
+  font-weight: 500;
+  display: inline-block;
+  margin-bottom: 20px;
+}
+
+.events .item ul li h4 {
+  font-size: 20px;
+  font-weight: 500;
+  width: 100%;
+}
+
+.events .item ul li span {
+  display: inline-block;
+  font-size: 14px;
+  color: #4a4a4a;
+  margin-bottom: 10px;
+}
+
+.events .item ul li h6 {
+  font-size: 16px;
+  color: #7a6ad8;
+  font-weight: 600;
+}
+
+.events .item a {
+  position: absolute;
+  right: 0;
+  top: 22px;
+  background-color: #7a6ad8;
+  width: 50px;
+  height: 120px;
+  display: inline-block;
+  text-align: center;
+  line-height: 120px;
+  font-size: 18px;
+  z-index: 1;
+  color: #fff;
+  border-radius: 60px 0px 0px 60px;
+}
+
+.fa-angle-right::before {
+  content: "\f105"; }
+.fa {
+    font-family: var(--fa-style-family, "Font Awesome 6 Free");
+    font-weight: var(--fa-style, 900); }
+    /* Effet 3D pour la carte flottante */
+.card {
+  display: none;
+  opacity: 0;
+  transition: all 0.3s ease;
+  position: absolute;
+  top: 50px;
+  right: 20px;
+  z-index: 100;
+  background: #2a2a2a;
+  border-radius: 12px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3),
+              inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  transform: perspective(1000px) rotateX(-5deg);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  overflow: hidden;
+}
+
+.card.active {
+  display: block;
+  opacity: 1;
+  transform: perspective(1000px) rotateX(0deg);
+  animation: cardAppear 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+@keyframes cardAppear {
+  0% {
+    opacity: 0;
+    transform: perspective(1000px) rotateX(-15deg) translateY(10px);
+  }
+  100% {
+    opacity: 1;
+    transform: perspective(1000px) rotateX(0deg) translateY(0);
+  }
+}
+
+/* Effet 3D pour les éléments de la carte */
+.card .item {
+  position: relative;
+  overflow: hidden;
+}
+
+.card .item::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, 
+              transparent, 
+              rgba(255, 255, 255, 0.1), 
+              transparent);
+  transition: all 0.5s ease;
+}
+
+.card .item:hover::before {
+  left: 100%;
+}
+.events_item .thumb span.category {
+  position: absolute;
+  left: 30px;
+  top: 30px;
+  font-size: 14px;
+  text-transform: uppercase;
+  color: #7a6ad8;
+  background-color: rgba(250, 250, 250, 0.95);
+  padding: 8px 20px;
+  border-radius: 25px;
+  font-weight: 500;
+  display: inline-block;
+}.avatar-profile {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid #7a6ad8;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  margin-right: 10px;
+}
+
+.avatar-profile:hover {
+  transform: scale(1.05);
+  box-shadow: 0 6px 16px rgba(0,0,0,0.25);
+  
+}
+
+.back-button {
+  margin: 10px 0;
+  padding: 8px 16px;
+  background-color: #7a6ad8;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.3s ease;
+}
+
+.back-button:hover {
+  background-color: #5a4ac8;
+}
+.dropdown-item {
+    transition: all 0.2s ease, transform 0.1s;
+    display: block; /* Ensure items are stacked vertically */
+
+  }
+  .dropdown-item:last-child {
+    margin-bottom: 0; /* Remove the margin from the last item */
+  }
+  .dropdown-item:active {
+    transform: scale(0.97);
+  }
+  .dropdown-menu-card {
+    display: none;
+    position: absolute;
+    top: 50px;
+    left: 20px;
+    z-index: 1000;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+    width: 360px;
+    transform: translateY(-10px);
+    opacity: 0;
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+  }  .dropdown-menu-card.active {
+    display: block;
+    transform: translateY(0);
+    opacity: 1;
+  }
+  .dropdown-menu-card.active {
+    animation: fadeInDropdown 0.3s ease-out forwards;
+  }
+  .dropdown-menu-list {
+    list-style: none;
+   
+    margin-bottom: 10px;
+  }.dropdown-divider {
+    height: 1px;
+    background-color: #eee;
+    margin: 2px 0;
+  }
+  
+  .delete-item {
+    color: #e74c3c !important;
+  }
+  
+  .delete-item:hover {
+    background-color: #fdecea !important;
+  }
+  
+  /* Animation d'entrée */
+  @keyframes fadeInDropdown {
+    from {
+      opacity: 0;
+      transform: translateY(-10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }

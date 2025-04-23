@@ -9,6 +9,7 @@ import { catchError, map, Observable, throwError } from 'rxjs';
 export class BlogService {
   private baseUrlPost = 'http://localhost:5100/api/v1/posts';
   private baseUrlComment = 'http://localhost:5110/api/v1/comments';
+  private apiUrl = 'http://localhost:5120/recommend-posts'; 
 
   constructor(private http : HttpClient) { }
   getPostById(id:number){
@@ -54,9 +55,11 @@ export class BlogService {
       
     } 
     getPostsByUserId(userId: number): Observable<Post[]> {
-      const params = new HttpParams().set('userId', userId.toString());
-      return this.http.get<Post[]>(this.baseUrlPost, { params });
+      return this.http.get<Post[]>(this.baseUrlPost).pipe(
+        map(posts => posts.filter(post => post.userId === userId))
+      );
     }
+    
     // Comment
     
     // getcommentsByPostId(postId: number): Observable<Comment[]> {
@@ -87,7 +90,10 @@ export class BlogService {
 postToFacebook(message: string): Observable<any> {
   return this.http.post(`${this.baseUrlFacebook}/post`, { message });
 }
-
+getRecommendedPosts(query: string): Observable<any[]> {
+  const params = new HttpParams().set('query', query);
+  return this.http.get<any[]>(this.apiUrl, { params });
+}
     
     
   }

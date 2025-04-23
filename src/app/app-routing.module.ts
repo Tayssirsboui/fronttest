@@ -12,9 +12,10 @@ import { EventsComponent } from './front/events/events.component';
 import { ContactComponent } from './front/contact/contact.component';
 import { BlogComponent } from './front/Blogs/blog/blog.component';
 import { BlogAdminComponent } from './back/blogs/blog-admin/blog-admin.component';
-import { AddPostComponent } from './front/Blogs/add-post/add-post.component';
+
 import { GeminiChatComponent } from './front/Blogs/gemini-chat/gemini-chat.component';
 import { BlogDetailsComponent } from './front/Blogs/blog-details/blog-details.component';
+import { MesPostsComponent } from './front/Blogs/mes-posts/mes-posts.component';
 
 const routes: Routes = [
   {
@@ -37,9 +38,10 @@ const routes: Routes = [
       { path: 'blogs', component: BlogComponent },
       { path: 'contact', component: ContactComponent },
       { path: 'blog-details/:id', component: BlogDetailsComponent },
-      { path: 'add-post', component: AddPostComponent },
-      { path: 'add-post/:id', component: AddPostComponent },
+      // { path: 'add-post', component: AddPostComponent },
+      // { path: 'add-post/:id', component: AddPostComponent },
       { path: 'gemini', component: GeminiChatComponent },
+      { path: 'mesPosts', component: MesPostsComponent },
 
 
 

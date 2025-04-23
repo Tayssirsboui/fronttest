@@ -21,7 +21,7 @@ import { EventsComponent } from './front/events/events.component';
 import { CourseSingleComponent } from './front/course-single/course-single.component';
 import { TeachersComponent } from './front/teachers/teachers.component';
 import { ContactComponent } from './front/contact/contact.component';
-import { AddPostComponent } from './front/Blogs/add-post/add-post.component';
+
 import { BlogComponent } from './front/Blogs/blog/blog.component';
 import { BlogDetailsComponent } from './front/Blogs/blog-details/blog-details.component';
 import { HttpClientModule } from '@angular/common/http';
@@ -32,6 +32,7 @@ import { GeminiChatComponent } from './front/Blogs/gemini-chat/gemini-chat.compo
 import { PickerModule } from '@ctrl/ngx-emoji-mart';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BlogAdminComponent } from './back/blogs/blog-admin/blog-admin.component';
+import { MesPostsComponent } from './front/Blogs/mes-posts/mes-posts.component';
 
 @NgModule({
   declarations: [
@@ -53,12 +54,13 @@ import { BlogAdminComponent } from './back/blogs/blog-admin/blog-admin.component
     CourseSingleComponent,
     TeachersComponent,
     ContactComponent,
-    AddPostComponent,
+    
     BlogComponent,
     BlogDetailsComponent,
     FooterBackComponent,
     GeminiChatComponent,
-    BlogAdminComponent
+    BlogAdminComponent,
+    MesPostsComponent
   ],
   imports: [
     BrowserModule,

@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Post } from '../models/post';
@@ -11,18 +11,10 @@ export class PostRecommendationService {
 
   constructor(private http: HttpClient) {}
 
-  // Send only the mood/user post text
-  recommendActivities(userPost: string): Observable<Post[]> {
-    return this.http.post<Post[]>(this.apiUrl, { user_post: userPost });
+ 
+  getRecommendedPosts(query: string): Observable<any[]> {
+    const params = new HttpParams().set('query', query);
+    return this.http.get<any[]>(this.apiUrl, { params });
   }
 
-  // Wrapper to use with all activities fetched from backend
-  recommendFromAllActivities(userPost: string): Observable<Post[]> {
-    return new Observable(observer => {
-      this.recommendActivities(userPost).subscribe({
-        next: (recommendations) => observer.next(recommendations),
-        error: (err) => observer.error(err)
-      });
-    });
-  }
 }
