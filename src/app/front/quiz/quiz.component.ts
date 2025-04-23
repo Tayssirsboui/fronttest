@@ -2,11 +2,14 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { QuizService } from '../../../services/quiz.service';
 import { Router, ActivatedRoute } from '@angular/router';
 
+
 @Component({
   selector: 'app-quiz',
   templateUrl: './quiz.component.html',
   styleUrls: ['./quiz.component.css']
+  
 })
+
 export class QuizComponent implements OnInit, OnDestroy {
   tests: any[] = []; // List of all quizzes
   filteredTests: any[] = []; // List of filtered quizzes based on search
@@ -77,7 +80,7 @@ export class QuizComponent implements OnInit, OnDestroy {
 
     this.quizService.getQuestionsByTest(testId).subscribe(data => {
       this.currentTest = data;
-      this.router.navigate([`/quiz/${testId}`]);
+      this.router.navigate([`/quiz`,testId]);
 
       this.timerDuration = (this.currentTest.testDTO.time || 1) * 60;
       this.timeLeft = this.timerDuration;

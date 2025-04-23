@@ -1,105 +1,95 @@
+<!-- Barre de recherche -->
 <div class="probootstrap-search" id="probootstrap-search">
   <button type="button" class="probootstrap-close js-probootstrap-close">
     <i class="icon-cross"></i>
   </button>
   <form>
-    <input type="search" name="s" id="search" placeholder="Search a keyword and hit enter...">
+    <input type="search" name="s" id="search" placeholder="Rechercher un mot-clé et appuyez sur Entrée...">
   </form>
 </div>
 
 <div class="probootstrap-page-wrapper">
- 
+
 <section class="probootstrap-section probootstrap-section-colored">
-    <div class="container">
-      <div class="row">
-        <div class="col-md-12 text-left section-heading probootstrap-animate">
-          <h1>Quizzes</h1>
-        </div>
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12 text-left section-heading probootstrap-animate">
+        <h1>Quizz</h1>
       </div>
     </div>
-  </section>
-  <section class="probootstrap-section">
-    <div class="container">
-      <div class="row">
-        <div class="col-md-12">
-          <div class="probootstrap-flex-block">
-            <div class="probootstrap-text probootstrap-animate">
-              <div class="text-uppercase probootstrap-uppercase">Featured Events</div>
-              <h3>Students Math Competition for The Year 2017</h3>
-              <p>Quis explicabo veniam labore ratione illo vero voluptate a deserunt incidunt odio aliquam commodi </p>
-              <p>
-                <span class="probootstrap-date"><i class="icon-calendar"></i>July 9, 2017</span>
-                <span class="probootstrap-location"><i class="icon-location2"></i>White Palace, Brooklyn, NYC</span>
-              </p>
-              <p>
-                <button type="button" class="btn btn-primary">
-                  Learn More
-                </button>
-              </p>            </div>
-              <div class="probootstrap-image probootstrap-animate" style="background-image: url(../../../assets/img/slider_4.jpg)">
-                <a [href]="'https://vimeo.com/45830194'" target="_blank" class="btn-video popup-vimeo" rel="noopener noreferrer">
-                  <i class="icon-play3"></i>
-                </a>
-              </div>
+  </div>
+</section>
+
+<section class="probootstrap-section">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="probootstrap-flex-block">
+          <div class="probootstrap-text probootstrap-animate">
+            <div class="text-uppercase probootstrap-uppercase">Événements à la une</div>
+            <h3>Compétition Mathématique Étudiante - 2017</h3>
+            <p>Quis explicabo veniam labore ratione illo vero voluptate a deserunt incidunt odio aliquam commodi</p>
+            <p>
+              <span class="probootstrap-date"><i class="icon-calendar"></i>9 Juillet 2017</span>
+              <span class="probootstrap-location"><i class="icon-location2"></i>White Palace, Brooklyn, NYC</span>
+            </p>
+            <p>
+              <button type="button" class="btn btn-primary">
+                En savoir plus
+              </button>
+            </p>
+          </div>
+          <div class="probootstrap-image probootstrap-animate" style="background-image: url(../../../assets/img/slider_4.jpg)">
+            <a [href]="'https://vimeo.com/45830194'" target="_blank" class="btn-video popup-vimeo" rel="noopener noreferrer">
+              <i class="icon-play3"></i>
+            </a>
           </div>
         </div>
       </div>
     </div>
-  </section>
-<!-- Slider Area Start -->
+  </div>
+</section>
 
-
-
-<!-- Quizzes area Start -->
+<!-- Liste des Quizz -->
 <div class="quizzes-area section-padding40 fix">
   <div class="container">
-   <!-- Filter and Search Container -->
-<div *ngIf="!quizStarted" class="filter-search-container">
-  <!-- Filter Bar -->
-  <div class="filter-bar-container">
-    <span></span>
-    <div class="filter-bar">
-      <label for="filterSelect">Sort by</label>
-      <select id="filterSelect" [(ngModel)]="selectedFilter" (change)="applyFilter()">
-        <option value="alphabetic">Alphabet</option>
-        <option value="duration">Duration</option>
-      </select>
+
+    <!-- Filtres + Recherche -->
+    <div *ngIf="!quizStarted" class="filter-search-container">
+      <div class="filter-bar-container">
+        <span></span>
+        <div class="filter-bar">
+          <label for="filterSelect">Trier par</label>
+          <select id="filterSelect" [(ngModel)]="selectedFilter" (change)="applyFilter()">
+            <option value="alphabetic">Alphabétique</option>
+            <option value="duration">Durée</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="search-bar-container">
+        <input 
+          type="text" 
+          class="search-bar" 
+          [(ngModel)]="searchQuery" 
+          (input)="searchQuiz()" 
+          placeholder="Rechercher des quizz..."
+        />
+      </div>
     </div>
-  </div>
 
-  <!-- Search Bar -->
-  <div class="search-bar-container">
-    <input 
-      type="text" 
-      class="search-bar" 
-      [(ngModel)]="searchQuery" 
-      (input)="searchQuiz()" 
-      placeholder="Search quizzes..."
-    />
-  </div>
-</div>
-
-    
-    
-    <!-- List of Quizzes -->
+    <!-- Cartes -->
     <div *ngIf="!quizStarted">
       <div class="row">
         <div class="col-lg-12 mb-4" *ngFor="let test of filteredTests">
-          <!-- Full-width quiz card design -->
           <div class="quiz-card-container">
             <div class="quiz-card">
               <div class="quiz-card-body">
-                <!-- Icon for the quiz -->
-                <!-- <div class="quiz-icon">
-                  <i class="fas fa-question-circle"></i> You can replace this with any icon
-                </div> -->
-                
-                <h3 style="color: white; text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.4);">{{ test.title }}</h3>
-                <p style="color: white; text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.4);">{{ test.description }}</p>
-                <p style="color: white; text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.4);">Time Limit: {{ test.time }} minutes</p>
-
+                <h3>{{ test.title }}</h3>
+                <p>{{ test.description }}</p>
+                <p>Durée limite : {{ test.time }} minutes</p>
                 <div class="quiz-card-footer">
-                  <button class="btn-start" (click)="startTest(test.id)">Start Quiz</button>
+                  <button class="btn-start" (click)="startTest(test.id)">Commencer le quizz</button>
                 </div>
               </div>
             </div>
@@ -107,17 +97,15 @@
         </div>
       </div>
 
-      <!-- View All Results Button -->
       <div class="text-center mt-4">
-        <button class="btn-view-results" (click)="viewAllResults()">See All Results</button>
+        <button class="btn-view-results" (click)="viewAllResults()">Voir tous les résultats</button>
       </div>
     </div>
 
-    <!-- Quiz In Progress -->
+    <!-- Quizz en cours -->
     <div *ngIf="quizStarted && currentTest" class="quiz-questions-area">
       <div class="row">
         <div class="col-12">
-          <!-- Timer Circle -->
           <div class="timer-container">
             <svg class="timer-svg" viewBox="0 0 100 100">
               <circle class="timer-bg" cx="50" cy="50" r="45" />
@@ -132,13 +120,12 @@
             </svg>
           </div>
 
-          <h3>{{ currentTest.title }} - Answer the questions</h3>
+          <h3>{{ currentTest.title }} - Répondez aux questions</h3>
 
-          <!-- Quiz Form -->
           <form (ngSubmit)="submitTest()">
             <div *ngIf="currentTest.questions?.length">
               <div class="question-card">
-                <p>{{ currentTest.questions[currentQuestionIndex].questionText }}</p> 
+                <p>{{ currentTest.questions[currentQuestionIndex].questionText }}</p>
                 <div *ngFor="let option of ['optionA', 'optionB', 'optionC', 'optionD']">
                   <label>
                     <input
@@ -155,7 +142,6 @@
               </div>
             </div>
 
-            <!-- Navigation Buttons -->
             <div class="navigation-buttons">
               <button
                 class="btn-next"
@@ -163,14 +149,14 @@
                 [disabled]="!selectedAnswer[currentTest.questions[currentQuestionIndex].id]"
                 (click)="nextQuestion()"
               >
-                Next Question
+                Question suivante
               </button>
               <button
                 class="btn-submit"
                 *ngIf="currentQuestionIndex === currentTest.questions.length - 1"
                 type="submit"
               >
-                Submit Quiz
+                Soumettre le quizz
               </button>
             </div>
           </form>
@@ -180,52 +166,46 @@
   </div>
 </div>
 
-<!-- Modal: Submission Result -->
+<!-- Résultat de soumission -->
 <div *ngIf="showSubmissionPopup" class="modal-overlay">
   <div class="modal-popup">
     <div class="modal-header-custom">
-      <h4 class="modal-title-custom">🎉 Test Submitted!</h4>
+      <h4 class="modal-title-custom">🎉 Quizz soumis !</h4>
     </div>
     <div class="modal-body-custom">
-      <p><strong>✅ Correct Answers:</strong> {{ submissionResult.correctAnswers }}</p>
-      <p><strong>📊 Score:</strong> {{ submissionResult.percentage }}%</p>
+      <p><strong>✅ Réponses correctes :</strong> {{ submissionResult.correctAnswers }}</p>
+      <p><strong>📊 Score :</strong> {{ submissionResult.percentage }}%</p>
     </div>
-
-    <!-- Share buttons section -->
     <div class="modal-footer-custom">
-      <p>Share your result:</p>
+      <p>Partager votre résultat :</p>
       <a href="https://www.facebook.com/sharer/sharer.php?u={{ shareUrl }}" target="_blank" class="share-btn facebook-btn">
-        <i class="ti ti-facebook"></i> Share on Facebook
+        <i class="ti ti-facebook"></i> Partager sur Facebook
       </a>
-      <a href="https://twitter.com/intent/tweet?url={{ shareUrl }}&text=I%20just%20completed%20a%20quiz!%20My%20score%20is%20{{ submissionResult.percentage }}%" target="_blank" class="share-btn twitter-btn">
-        <i class="ti ti-twitter"></i> Share on Twitter
+      <a href="https://twitter.com/intent/tweet?url={{ shareUrl }}&text=Je%20viens%20de%20terminer%20un%20quiz!%20Score%20: {{ submissionResult.percentage }}%" target="_blank" class="share-btn twitter-btn">
+        <i class="ti ti-twitter"></i> Partager sur Twitter
       </a>
-      <button class="btn btn-success" (click)="closePopup()">Close</button>
+      <button class="btn btn-success" (click)="closePopup()">Fermer</button>
     </div>
   </div>
 </div>
 
-
-
-
-<!-- Modal: View All Results -->
+<!-- Modal: Résultats -->
 <div *ngIf="showResultsModal" class="modal-overlay">
   <div class="modal-popup">
     <div class="modal-header-custom">
-      <h4 class="modal-title-custom">📋 All Quiz Results</h4>
+      <h4 class="modal-title-custom">📋 Résultats de tous les quizz</h4>
     </div>
     <div class="modal-body-custom">
       <table class="table table-bordered text-center">
         <thead>
           <tr>
-            <th>Test Name</th>
-            <th>Total Questions</th>
-            <th>Correct Answers</th>
-            <th>Percentage</th>
+            <th>Nom du test</th>
+            <th>Total de questions</th>
+            <th>Réponses correctes</th>
+            <th>Pourcentage</th>
           </tr>
         </thead>
         <tbody>
-          <!-- Loop through testResults to display each result -->
           <tr *ngFor="let result of testResults">
             <td>{{ result.testName }}</td>
             <td>{{ result.totalQuestions }}</td>
@@ -236,26 +216,22 @@
       </table>
     </div>
     <div class="modal-footer-custom">
-      <button class="btn btn-secondary" (click)="closeResultsModal()">Close</button>
+      <button class="btn btn-secondary" (click)="closeResultsModal()">Fermer</button>
     </div>
   </div>
 </div>
 
-
-<!-- Cheating Detected Popup -->
+<!-- Triche détectée -->
 <div *ngIf="showCheatingPopup" class="modal-overlay">
   <div class="modal-popup">
     <div class="modal-header-custom">
-      <h4 class="modal-title-custom">Cheating Detected!</h4>
+      <h4 class="modal-title-custom">Triche détectée !</h4>
     </div>
     <div class="modal-body-custom">
-      <p>You've switched tabs or minimized the window. The test will be submitted automatically.</p>
+      <p>Vous avez changé d'onglet ou réduit la fenêtre. Le test sera soumis automatiquement.</p>
     </div>
     <div class="modal-footer-custom">
-      <button class="btn btn-danger" (click)="closeCheatingPopup()">Close</button>
+      <button class="btn btn-danger" (click)="closeCheatingPopup()">Fermer</button>
     </div>
   </div>
 </div>
-
-
-

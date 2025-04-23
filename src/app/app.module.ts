@@ -17,14 +17,15 @@ import { FrontLayoutComponent } from './front/front-layout/front-layout.componen
 import { DashboardComponent } from './back/dashboard/dashboard.component';
 import { HeaderBackComponent } from './back/header-back/header-back.component';
 import { SamplePageComponent } from './back/sample-page/sample-page.component';
-import { EventsComponent } from './front/events/events.component';
+import { StagesComponent } from './front/stages/stages.component';
 import { CourseSingleComponent } from './front/course-single/course-single.component';
 import { QuizComponent } from './front/quiz/quiz.component';
 import { ContactComponent } from './front/contact/contact.component';
-import { LocationStrategy, HashLocationStrategy } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { LocationStrategy, HashLocationStrategy, PathLocationStrategy } from '@angular/common';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { QuizzesComponent } from './back/quizzes/quizzes.component';
+import { BstagesComponent } from './back/bstages/bstages.component';
 
 @NgModule({
   
@@ -43,20 +44,22 @@ import { QuizzesComponent } from './back/quizzes/quizzes.component';
     DashboardComponent,
     HeaderBackComponent,
     SamplePageComponent,
-    EventsComponent,
+    StagesComponent,
     CourseSingleComponent,
     QuizComponent,
     ContactComponent,
-    QuizzesComponent
+    QuizzesComponent,
+    BstagesComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule, 
     FormsModule,
     HttpClientModule,
+    ReactiveFormsModule
   
   ],
-  providers: [{provide: LocationStrategy, useClass: HashLocationStrategy,}],
+  providers: [{provide: LocationStrategy, useClass: PathLocationStrategy ,}],
   bootstrap: [AppComponent]
 })
 

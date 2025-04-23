@@ -1,50 +1,45 @@
-
 <!-- Search + Button Container -->
 <section class="quiz-header-container">
-    <div class="quiz-header-content">
-      
-      <!-- Search Bar -->
-      <div class="input-container">
-        <input 
-          type="text" 
-          class="form-control" 
-          placeholder="Search for a quiz..." 
-          [(ngModel)]="searchQuery"
-          (input)="searchQuizzes()" 
-        />
-        <i class="fa fa-search search-icon"></i>
-      </div>
-  
-      <!-- Create Button -->
-      <button class="btn btn-success create-btn" (click)="openCreateTestModal()">
-        Create New Quiz
-      </button>
-  
+  <div class="quiz-header-content">
+
+    <!-- Search Bar -->
+    <div class="input-container">
+      <input 
+        type="text" 
+        class="form-control" 
+        placeholder="Rechercher un quiz..." 
+        [(ngModel)]="searchQuery"
+        (input)="searchQuizzes()" 
+        style="font-size: 1.4rem;"
+      />
+      <i class="fa fa-search search-icon"></i>
     </div>
-  </section>
-  
-  <div class="main-wrapper">
+
+    <!-- Create Button -->
+    <button class="btn btn-success create-btn" (click)="openCreateTestModal()" style="font-size: 1.4rem;">
+      Créer un nouveau quiz
+    </button>
+
+  </div>
+</section>
+
+<div class="main-wrapper">
   <!-- Admin Quizzes Section -->
   <section class="quizzes-area section-padding40 fix">
     <div class="container">
-      <!-- List of Quizzes -->  
       <div class="row">
         <div class="col-lg-4" *ngFor="let quiz of filteredQuizzes">
           <div class="quiz-card">
             <div class="quiz-card-body">
               <h3>{{ quiz.title }}</h3>
-              <p>{{ quiz.description }}</p>
-              <p>Time Limit: {{ quiz.time }} minutes</p>
+              <p style="font-size: 1.4rem;">{{ quiz.description }}</p>
+              <p style="font-size: 1.4rem;">Durée limite : {{ quiz.time }} minutes</p>
               <div class="quiz-card-footer">
-                <!-- Add New Question Button -->
-                <button class="btn-edit" (click)="openAddQuestionModal(quiz.id)">Add New Question</button>
-                <!-- View Questions Button -->
-                <button class="btn-edit" (click)="openViewQuestionsModal(quiz.id)">View Questions</button>
-                <button class="btn-delete" (click)="deleteQuiz(quiz.id)">Delete Quiz</button>
-  
-                <!-- Bot Icon to Generate Questions -->
-                <button class="btn-edit" (click)="generateQuestions(quiz.description)">
-                  Generate Questions
+                <button class="btn-edit" style="font-size: 1.4rem;" (click)="openAddQuestionModal(quiz.id)">Ajouter une question</button>
+                <button class="btn-edit" style="font-size: 1.4rem;" (click)="openViewQuestionsModal(quiz.id)">Voir les questions</button>
+                <button class="btn-delete" style="font-size: 1.4rem;" (click)="deleteQuiz(quiz.id)">Supprimer</button>
+                <button class="btn-edit" style="font-size: 1.4rem;" (click)="generateQuestions(quiz.description, quiz.id)">
+                  Générer des questions
                 </button>
               </div>
             </div>
@@ -53,191 +48,133 @@
       </div>
     </div>
   </section>
-  </div>
+</div>
 
-  
-  
-  
-  <!-- Modal for Create New Test -->
-  <div *ngIf="showCreateTestModal" class="modal-overlay">
-    <div class="modal-popup">
-      <div class="modal-header-custom">
-        <h4 class="modal-title-custom">Create New Quizz</h4>
-        <button class="close-btn" (click)="closeModal()">×</button>
-      </div>
-  
-      <div class="modal-body-custom">
-        <form (ngSubmit)="createTest()">
-          <div class="form-group">
-            <label for="testTitle">Quizz Title</label>
-            <input
-              type="text"
-              class="form-control"
-              id="testTitle"
-              [(ngModel)]="newTest.title"
-              name="title"
-              required
-            />
-          </div>
-  
-          <div class="form-group">
-            <label for="testDescription">Quizz Description</label>
-            <textarea
-              class="form-control"
-              id="testDescription"
-              [(ngModel)]="newTest.description"
-              name="description"
-              required
-            ></textarea>
-          </div>
-  
-          <div class="form-group">
-            <label for="testTime">Time Limit (minutes)</label>
-            <input
-              type="number"
-              class="form-control"
-              id="testTime"
-              [(ngModel)]="newTest.time"
-              name="time"
-              required
-              min="1"
-            />
-          </div>
-  
-          <button type="submit" class="btn btn-primary" [disabled]="isSubmitting">Create Test</button>
-        </form>
-      </div>
-    </div>
-  </div>
-  
-  <!-- Modal for Adding New Question -->
-  <div *ngIf="showAddQuestionModal" class="modal-overlay">
-    <div class="modal-popup">
-      <div class="modal-header-custom">
-        <h4 class="modal-title-custom">Add New Question</h4>
-        <button class="close-btn" (click)="closeAddQuestionModal()">×</button>
-      </div>
-  
-      <div class="modal-body-custom">
-        <form (ngSubmit)="addQuestion()">
-          <div class="form-group">
-            <label for="questionText">Question Text</label>
-            <input
-              type="text"
-              class="form-control"
-              id="questionText"
-              [(ngModel)]="newQuestion.questionText"
-              name="questionText"
-              required
-            />
-          </div>
-  
-          <div class="form-group">
-            <label for="optionA">Option A</label>
-            <input
-              type="text"
-              class="form-control"
-              id="optionA"
-              [(ngModel)]="newQuestion.optionA"
-              name="optionA"
-              required
-            />
-          </div>
-  
-          <div class="form-group">
-            <label for="optionB">Option B</label>
-            <input
-              type="text"
-              class="form-control"
-              id="optionB"
-              [(ngModel)]="newQuestion.optionB"
-              name="optionB"
-              required
-            />
-          </div>
-  
-          <div class="form-group">
-            <label for="optionC">Option C</label>
-            <input
-              type="text"
-              class="form-control"
-              id="optionC"
-              [(ngModel)]="newQuestion.optionC"
-              name="optionC"
-              required
-            />
-          </div>
-  
-          <div class="form-group">
-            <label for="optionD">Option D</label>
-            <input
-              type="text"
-              class="form-control"
-              id="optionD"
-              [(ngModel)]="newQuestion.optionD"
-              name="optionD"
-              required
-            />
-          </div>
-  
-          <div class="form-group">
-            <label for="correctOption">Correct Option</label>
-            <input
-              type="text"
-              class="form-control"
-              id="correctOption"
-              [(ngModel)]="newQuestion.correctOption"
-              name="correctOption"
-              required
-            />
-          </div>
-  
-          <button type="submit" class="btn btn-primary" [disabled]="isSubmitting">Add Question</button>
-        </form>
-      </div>
-    </div>
-  </div>
-  
-  
-  <!-- Modal for Viewing Questions -->
-  <div *ngIf="showQuestionsModal" class="modal-overlay">
-    <div class="modal-popup">
-      <div class="modal-header-custom">
-        <h4 class="modal-title-custom">Questions for {{ selectedTest?.testDTO?.title }}</h4>
-        <button class="close-btn" (click)="closeQuestionsModal()">X</button>
-      </div>
-  
-      <div class="modal-body-custom">
-        <div *ngFor="let question of selectedTest?.questions" class="question-block">
-          <p class="question-text">{{ question.questionText }}</p>
-          <ul class="option-list">
-            <li class="option-item">{{ question.optionA }}</li>
-            <li class="option-item">{{ question.optionB }}</li>
-            <li class="option-item">{{ question.optionC }}</li>
-            <li class="option-item">{{ question.optionD }}</li>
-          </ul>
-        </div>
-      </div>
-      
-  
-  
-  
-  <!-- Modal for Displaying AI Generated Questions -->
-<div *ngIf="showGeneratedQuestionsModal">
+<!-- Modal: Créer un quiz -->
+<div *ngIf="showCreateTestModal" class="modal-overlay">
   <div class="modal-popup">
-    <div class="modal-header-custom">
-      <h4 class="modal-title-custom">Generated Questions</h4>
-      <button class="close-btn" (click)="closeGeneratedQuestionsModal()">×</button>
+    <div class="modal-header-custom" style="font-size: 1.4rem;">
+      <h4 class="modal-title-custom" style="font-size: 1.6rem;">Créer un nouveau quiz</h4>
+      <button class="close-btn" (click)="closeModal()" style="font-size: 1.6rem;">×</button>
     </div>
 
-    <div class="modal-body-custom">
-      <ul class="question-list">
-        <li *ngFor="let question of generatedQuestions; let i = index">
-          <strong>Question {{ i + 1 }}:</strong> {{ question }}
-        </li>
-      </ul>
+    <div class="modal-body-custom" style="font-size: 1.4rem;">
+      <form (ngSubmit)="createTest()">
+        <div class="form-group">
+          <label for="testTitle">Titre du quiz</label>
+          <input id="testTitle" class="form-control" [(ngModel)]="newTest.title" name="title" required style="font-size: 1.4rem;" />
+        </div>
+
+        <div class="form-group">
+          <label for="testDescription">Description</label>
+          <textarea id="testDescription" class="form-control" [(ngModel)]="newTest.description" name="description" required style="font-size: 1.4rem;"></textarea>
+        </div>
+
+        <div class="form-group">
+          <label for="testTime">Durée (minutes)</label>
+          <input type="number" id="testTime" class="form-control" [(ngModel)]="newTest.time" name="time" required min="1" style="font-size: 1.4rem;" />
+        </div>
+
+        <button type="submit" class="btn btn-primary" [disabled]="isSubmitting" style="font-size: 1.4rem;">
+          Créer
+        </button>
+      </form>
     </div>
   </div>
 </div>
 
+<!-- Modal: Ajouter une question -->
+<div *ngIf="showAddQuestionModal" class="modal-overlay">
+  <div class="modal-popup">
+    <div class="modal-header-custom" style="font-size: 1.4rem;">
+      <h4 class="modal-title-custom" style="font-size: 1.6rem;">Ajouter une question</h4>
+      <button class="close-btn" (click)="closeAddQuestionModal()" style="font-size: 1.6rem;">×</button>
+    </div>
 
+    <div class="modal-body-custom" style="font-size: 1.4rem;">
+      <form (ngSubmit)="addQuestion()">
+        <div class="form-group">
+          <label>Texte de la question</label>
+          <input type="text" class="form-control" [(ngModel)]="newQuestion.questionText" name="questionText" required style="font-size: 1.4rem;" />
+        </div>
+
+        <div class="form-group">
+          <label>Option A</label>
+          <input type="text" class="form-control" [(ngModel)]="newQuestion.optionA" name="optionA" required style="font-size: 1.4rem;" />
+        </div>
+
+        <div class="form-group">
+          <label>Option B</label>
+          <input type="text" class="form-control" [(ngModel)]="newQuestion.optionB" name="optionB" required style="font-size: 1.4rem;" />
+        </div>
+
+        <div class="form-group">
+          <label>Option C</label>
+          <input type="text" class="form-control" [(ngModel)]="newQuestion.optionC" name="optionC" required style="font-size: 1.4rem;" />
+        </div>
+
+        <div class="form-group">
+          <label>Option D</label>
+          <input type="text" class="form-control" [(ngModel)]="newQuestion.optionD" name="optionD" required style="font-size: 1.4rem;" />
+        </div>
+
+        <div class="form-group">
+          <label>Option correcte</label>
+          <input type="text" class="form-control" [(ngModel)]="newQuestion.correctOption" name="correctOption" required style="font-size: 1.4rem;" />
+        </div>
+
+        <button type="submit" class="btn btn-primary" [disabled]="isSubmitting" style="font-size: 1.4rem;">
+          Ajouter la question
+        </button>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- Modal: Voir les questions -->
+<div *ngIf="showQuestionsModal" class="modal-overlay">
+  <div class="modal-popup">
+    <div class="modal-header-custom" style="font-size: 1.4rem;">
+      <h4 class="modal-title-custom">Questions pour {{ selectedTest?.testDTO?.title }}</h4>
+      <button class="close-btn" (click)="closeQuestionsModal()">X</button>
+    </div>
+
+    <div class="modal-body-custom" style="font-size: 1.4rem;">
+      <div *ngFor="let question of selectedTest?.questions" class="question-block">
+        <p class="question-text">{{ question.questionText }}</p>
+        <ul class="option-list">
+          <li class="option-item">{{ question.optionA }}</li>
+          <li class="option-item">{{ question.optionB }}</li>
+          <li class="option-item">{{ question.optionC }}</li>
+          <li class="option-item">{{ question.optionD }}</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal: Questions générées -->
+<div *ngIf="showGeneratedQuestionsModal" class="modal-overlay"
+     style="position: fixed; inset: 0; background: rgba(0, 0, 0, 0.6); display: flex; justify-content: center; align-items: center; z-index: 1050;">
+  <div class="modal-popup"
+       style="background: #fff; border-radius: 12px; width: 600px; max-width: 90%; max-height: 80vh;
+              display: flex; flex-direction: column; box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2); overflow: hidden;">
+    <div class="modal-header-custom"
+         style="display: flex; justify-content: space-between; align-items: center; padding: 20px; border-bottom: 1px solid #ddd;">
+      <h4 class="modal-title-custom" style="font-size: 26px; margin: 0;">Questions générées</h4>
+      <button class="close-btn" (click)="closeGeneratedQuestionsModal()"
+              style="font-size: 24px; background: none; border: none; cursor: pointer;">×</button>
+    </div>
+
+    <div class="modal-body-custom" style="overflow-y: auto; flex: 1; padding: 20px;">
+      <div *ngFor="let q of generatedQuestions; let i = index" class="question-block" style="margin-bottom: 20px;">
+        <p style="font-size: 20px; font-weight: bold; color: #2c3e50; margin-bottom: 10px;">
+          <strong>Question {{ i + 1 }} :</strong> {{ q.questionText }}
+        </p>
+        <button class="btn btn-primary btn-sm" (click)="addGeneratedQuestionToQuiz(q, generatedQuestionQuizId!)">
+          ➕ Ajouter au quiz
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

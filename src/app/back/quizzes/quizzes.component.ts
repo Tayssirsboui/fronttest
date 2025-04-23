@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { QuizService } from '../../../services/quiz.service'; // Corrected import path
+import { QuizService } from '../../../services/quiz.service';
 import { Router } from '@angular/router';
 import { ChangeDetectorRef } from '@angular/core';
-
 
 @Component({
   selector: 'app-quizzes',
@@ -11,31 +10,37 @@ import { ChangeDetectorRef } from '@angular/core';
 })
 export class QuizzesComponent implements OnInit {
   quizzes: any[] = [];
-  filteredQuizzes: any[] = []; // This will hold the filtered quizzes based on search
+  filteredQuizzes: any[] = [];
   newTest: any = { title: '', description: '', time: 0 };
   newQuestion: any = { questionText: '', optionA: '', optionB: '', optionC: '', optionD: '', correctOption: '' };
-  showCreateTestModal: boolean = false;
-  showAddQuestionModal: boolean = false;
+  showCreateTestModal = false;
+  showAddQuestionModal = false;
   currentTestId?: number;
-  isSubmitting: boolean = false;
+  isSubmitting = false;
 
-  // Variables to hold selected test and modal visibility
   selectedTest: any;
-  showQuestionsModal: boolean = false;
+  showQuestionsModal = false;
 
-  // For AI-generated questions
-  generatedQuestions: any[] = [];
-  showGeneratedQuestionsModal: boolean = false; // Flag to show the modal
+  generatedQuestions: {
+    questionText: string;
+    optionA: string;
+    optionB: string;
+    optionC: string;
+    optionD: string;
+    correctOption: string;
+  }[] = [];
 
-  // Popup success flag and tick animation toggle
-  showSuccessPopup: boolean = false;
-  successMessage: string = '';
-  showTickAnimation: boolean = false;  // This controls the tick animation
+  showGeneratedQuestionsModal = false;
+  generatedQuestionQuizId: number | null = null;
 
-  showDeletePopup: boolean = false;  // New flag for delete success
-  deleteMessage: string = '';  // Message for delete success
+  showSuccessPopup = false;
+  successMessage = '';
+  showTickAnimation = false;
 
-  searchQuery: string = ''; // This holds the search query
+  showDeletePopup = false;
+  deleteMessage = '';
+  searchQuery = '';
+  showGeneratedSuccessPopup = false;
 
   constructor(private quizService: QuizService, private router: Router, private cdr: ChangeDetectorRef) {}
 
@@ -43,218 +48,166 @@ export class QuizzesComponent implements OnInit {
     this.fetchQuizzes();
   }
 
-  // Fetch quizzes from backend
   fetchQuizzes(): void {
-    this.quizService.getAllTests().subscribe(
-      (data: any[]) => {
-        this.quizzes = data; // Update quizzes list
-        this.filteredQuizzes = this.quizzes; // Initially show all quizzes
+    this.quizService.getAllTests().subscribe({
+      next: (data) => {
+        this.quizzes = data;
+        this.filteredQuizzes = this.quizzes;
       },
-      (error) => {
-        console.error('Error fetching quizzes:', error);
-      }
-    );
-  }
-
-  // Method to search quizzes based on the search query
-  searchQuizzes(): void {
-    if (this.searchQuery.trim() === '') {
-      this.filteredQuizzes = this.quizzes; // Show all quizzes if search is empty
-    } else {
-      this.filteredQuizzes = this.quizzes.filter(quiz => 
-        quiz.title.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
-        quiz.description.toLowerCase().includes(this.searchQuery.toLowerCase())
-      );
-    }
-  }
-
-  generateQuestions(description: string): void {
-    this.quizService.generateQuestions(description).subscribe({
-      next: (res) => {
-        console.log('🧠 AI Response:', res);
-        this.showGeneratedQuestionsModal = true;
-
-  
-        if (res && Array.isArray(res.questions)) {
-          this.generatedQuestions = res.questions;
-  
-          // Active l'affichage une fois les données réellement prêtes
-        
-        
-        } 
-        else if (res && res.error) {
-          console.error('⚠️ Erreur côté AI :', res.error);
-        } 
-        else {
-          console.warn('⚠️ Réponse inattendue :', res);
-        }
-      },
-      error: (err) => {
-        console.error('❌ Erreur HTTP vers Flask API :', err);
-      }
+      error: (error) => console.error('Error fetching quizzes:', error)
     });
   }
-  
 
+  searchQuizzes(): void {
+    const query = this.searchQuery.trim().toLowerCase();
+    this.filteredQuizzes = query
+      ? this.quizzes.filter(quiz => quiz.title.toLowerCase().includes(query) || quiz.description.toLowerCase().includes(query))
+      : this.quizzes;
+  }
 
+  generateQuestions(description: string, quizId: number): void {
+    this.quizService.generateQuestions(description).subscribe({
+      next: (res) => {
+        if (res && Array.isArray(res.questions)) {
+          this.generatedQuestions = res.questions;
+          this.generatedQuestionQuizId = quizId;
+          this.showGeneratedQuestionsModal = true;
+          this.showGeneratedSuccessPopup = true;
+        } else {
+          console.warn('⚠️ Unexpected AI response:', res);
+        }
+      },
+      error: (err) => console.error('❌ AI API error:', err)
+    });
+  }
 
-  
-  
-  // Close the modal displaying generated questions
   closeGeneratedQuestionsModal(): void {
     this.showGeneratedQuestionsModal = false;
   }
 
-  // Other existing methods...
-
-  // Open the modal for creating a new test
   openCreateTestModal(): void {
+    this.newTest = { title: '', description: '', time: 0 };
     this.showCreateTestModal = true;
-    this.newTest = { title: '', description: '', time: 0 }; // Reset form data when opening the modal
   }
 
-  // Close the modal for creating a new test
   closeModal(): void {
     this.showCreateTestModal = false;
   }
 
-  // Method to submit the new test to the backend
   createTest(): void {
-    if (this.isValidForm()) {
-      this.isSubmitting = true;
-      this.quizService.createTest(this.newTest).subscribe(
-        (response) => {
-          console.log('Test created successfully', response);
-          this.fetchQuizzes(); // Refresh the quiz list after the test is created
-          this.closeModal(); // Close the modal after submission
-          this.isSubmitting = false;
-
-          // Show success popup and trigger tick animation for create
-          this.successMessage = "Test created successfully!";
-          this.showSuccessPopup = true;
-          this.showTickAnimation = true;
-
-          // Hide the popup after 3 seconds
-          setTimeout(() => {
-            this.showSuccessPopup = false;
-            this.showTickAnimation = false;
-          }, 3000);
-        },
-        (error) => {
-          console.error('Error creating test:', error);
-          alert('An error occurred while creating the test.');
-          this.isSubmitting = false;
-        }
-      );
-    } else {
-      console.error('Form is invalid');
+    if (!this.isValidForm()) {
       alert('Please fill in all fields correctly');
+      return;
     }
+
+    this.isSubmitting = true;
+    this.quizService.createTest(this.newTest).subscribe({
+      next: (response) => {
+        this.fetchQuizzes();
+        this.closeModal();
+        this.isSubmitting = false;
+        this.successMessage = 'Test created successfully!';
+        this.showSuccessPopup = true;
+        this.showTickAnimation = true;
+        setTimeout(() => {
+          this.showSuccessPopup = false;
+          this.showTickAnimation = false;
+        }, 3000);
+      },
+      error: (error) => {
+        console.error('Error creating test:', error);
+        alert('An error occurred while creating the test.');
+        this.isSubmitting = false;
+      }
+    });
   }
 
-  // Form validation to check if required fields are filled for creating a test
-  isValidForm(): boolean {
-    return this.newTest.title.trim() !== '' && 
-           this.newTest.description.trim() !== '' && 
-           this.newTest.time > 0;
-  }
-
-  // Method to delete a quiz
   deleteQuiz(testId: number): void {
-    if (confirm("Are you sure you want to delete this quiz?")) {
-      this.quizService.deleteTest(testId).subscribe(
-        (response: string) => { // Expecting a plain text response
-          console.log('Quiz deleted successfully', response);
-          
-          // After deletion, refresh the list of quizzes
-          this.fetchQuizzes();
-
-          // Show success popup and trigger tick animation for delete
-          this.deleteMessage = "Quiz deleted successfully!";
-          this.showDeletePopup = true;
-          this.showTickAnimation = true;
-
-          // Hide the popup after 3 seconds
-          setTimeout(() => {
-            this.showDeletePopup = false;
-            this.showTickAnimation = false;
-          }, 3000);
-        },
-        (error) => {
-          console.error('Error deleting quiz:', error);
-          alert('Error deleting quiz');
-        }
-      );
-    }
+    if (!confirm("Are you sure you want to delete this quiz?")) return;
+    this.quizService.deleteTest(testId).subscribe({
+      next: () => {
+        this.fetchQuizzes();
+        this.deleteMessage = "Quiz deleted successfully!";
+        this.showDeletePopup = true;
+        this.showTickAnimation = true;
+        setTimeout(() => {
+          this.showDeletePopup = false;
+          this.showTickAnimation = false;
+        }, 3000);
+      },
+      error: (error) => {
+        console.error('Error deleting quiz:', error);
+        alert('Error deleting quiz');
+      }
+    });
   }
 
-  // Open modal to add a new question to the selected test
   openAddQuestionModal(testId: number): void {
-    this.showAddQuestionModal = true;
+    this.currentTestId = testId;
     this.newQuestion = { questionText: '', optionA: '', optionB: '', optionC: '', optionD: '', correctOption: '' };
-    this.currentTestId = testId; // Store the testId to add a question to the specific test
+    this.showAddQuestionModal = true;
   }
 
-  // Close the add question modal
   closeAddQuestionModal(): void {
     this.showAddQuestionModal = false;
   }
 
-  // Method to add a new question to the selected test
   addQuestion(): void {
-    if (this.isValidQuestion()) {
-      const questionData = {
-        id: this.currentTestId,  // Make sure to pass the correct testId here
-        questionText: this.newQuestion.questionText,
-        optionA: this.newQuestion.optionA,
-        optionB: this.newQuestion.optionB,
-        optionC: this.newQuestion.optionC,
-        optionD: this.newQuestion.optionD,
-        correctOption: this.newQuestion.correctOption
-      };
-
-      console.log("Current test ID:", this.currentTestId);  // Ensure it's a valid number
-
-      this.quizService.addQuestionToTest(questionData).subscribe(
-        (response) => {
-          console.log('Question added successfully', response);
-          this.fetchQuizzes(); // Refresh the quiz list after adding the question
-          this.closeAddQuestionModal();
-        },
-        (error) => {
-          console.error('Error adding question:', error);
-          alert('Error adding question');
-        }
-      );
-    } else {
+    if (!this.isValidQuestion()) {
       alert('Please fill in all fields correctly');
+      return;
     }
-  }
 
-  // Form validation for adding a new question
-  isValidQuestion(): boolean {
-    return this.newQuestion.questionText.trim() !== '' &&
-           this.newQuestion.optionA.trim() !== '' &&
-           this.newQuestion.optionB.trim() !== '' &&
-           this.newQuestion.optionC.trim() !== '' &&
-           this.newQuestion.optionD.trim() !== '' &&
-           this.newQuestion.correctOption.trim() !== '';
-  }
+    const questionData = {
+      id: this.currentTestId,
+      ...this.newQuestion
+    };
 
-  // Open modal to view questions for the selected test
-  openViewQuestionsModal(testId: number): void {
-    this.quizService.getQuestionsByTest(testId).subscribe(
-      (data: any) => {
-        this.selectedTest = data; // Set selected test and questions
-        this.showQuestionsModal = true; // Show modal
+    this.quizService.addQuestionToTest(questionData).subscribe({
+      next: () => {
+        this.fetchQuizzes();
+        this.closeAddQuestionModal();
       },
-      (error) => {
-        console.error('Error fetching questions:', error);
+      error: (error) => {
+        console.error('Error adding question:', error);
+        alert('Error adding question');
       }
-    );
+    });
   }
 
-  // Close the modal for viewing questions
+  addGeneratedQuestionToQuiz(question: {
+    questionText: string;
+    optionA: string;
+    optionB: string;
+    optionC: string;
+    optionD: string;
+    correctOption: string;
+  }, testId: number): void {
+    this.newQuestion = { ...question };
+    this.currentTestId = testId;
+    this.showAddQuestionModal = true;
+    this.showGeneratedQuestionsModal = false;
+  }
+
+  isValidForm(): boolean {
+    return !!(this.newTest.title.trim() && this.newTest.description.trim() && this.newTest.time > 0);
+  }
+
+  isValidQuestion(): boolean {
+    const q = this.newQuestion;
+    return q.questionText && q.optionA && q.optionB && q.optionC && q.optionD && q.correctOption;
+  }
+
+  openViewQuestionsModal(testId: number): void {
+    this.quizService.getQuestionsByTest(testId).subscribe({
+      next: (data) => {
+        this.selectedTest = data;
+        this.showQuestionsModal = true;
+      },
+      error: (error) => console.error('Error fetching questions:', error)
+    });
+  }
+
   closeQuestionsModal(): void {
     this.showQuestionsModal = false;
   }

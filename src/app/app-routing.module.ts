@@ -8,9 +8,10 @@ import { FrontLayoutComponent } from './front/front-layout/front-layout.componen
 import { BackLayoutComponent } from './back/back-layout/back-layout.component';
 import { DashboardComponent } from './back/dashboard/dashboard.component';
 import { CourseSingleComponent } from './front/course-single/course-single.component';
-import { EventsComponent } from './front/events/events.component';
+import { StagesComponent } from './front/stages/stages.component';
 import { ContactComponent } from './front/contact/contact.component';
 import { QuizzesComponent } from './back/quizzes/quizzes.component';
+import { BstagesComponent } from './back/bstages/bstages.component';
 
 const routes: Routes = [
   {
@@ -19,6 +20,7 @@ const routes: Routes = [
     children: [
       { path: '', component: DashboardComponent },
       { path: 'quizzes', component: QuizzesComponent, },
+      { path: 'bstage', component: BstagesComponent, }
     ]
   },
   {
@@ -29,8 +31,9 @@ const routes: Routes = [
       { path: 'courses', component: CoursesComponent },
       { path: 'about', component: AboutComponent },
       { path: 'quiz', component: QuizComponent },
+      { path: 'quiz/:id', component: QuizComponent },
       { path: 'course-single', component: CourseSingleComponent },
-      { path: 'events', component: EventsComponent },
+      { path: 'stages', component: StagesComponent },
       { path: 'contact', component: ContactComponent }
     ]
   },
@@ -39,7 +42,7 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
+  imports: [RouterModule.forRoot(routes,{ onSameUrlNavigation: 'reload' })],
   exports: [RouterModule]
 })
 export class AppRoutingModule { }
