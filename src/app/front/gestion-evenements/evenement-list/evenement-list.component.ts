@@ -7,13 +7,12 @@ import { EvenementDetailComponent } from '../evenement-detail/evenement-detail.c
 import { ParticipationModalComponent } from '../participation-modal/participation-modal.component';
 import { EvenementModifierComponent } from '../evenement-modifier/evenement-modifier.component';
 import * as AOS from 'aos';
-
 import { EvenementModalComponent } from '../evenement-modal/evenement-modal.component';
 import { ParticipationService } from 'src/app/services/participation.service';
 import { ListeAttenteModalComponent } from '../liste-attente-modal/liste-attente-modal.component';
-
-
 import { MatDialog } from '@angular/material/dialog';
+import { StatutEvenement } from 'src/app/models/statut-evenement.enum'; // ✅ import de l'enum
+
 declare var bootstrap: any;
 
 @Component({
@@ -28,24 +27,20 @@ export class EvenementListComponent implements OnInit {
 
   constructor(
     private evenementService: EvenementService,
-    private modalService: NgbModal,//supprimer
+    private modalService: NgbModal,
     private router: Router,
     private participationService: ParticipationService,
     private dialog: MatDialog,
-    
   ) {}
 
   ngOnInit(): void {
     this.evenementService.getAll().subscribe({
       next: data => {
-        this.evenements = data;
-        this.evenementsFiltres = data;
-        AOS.init({ duration: 1000, once: true }); // ✅ initialise l'animation après chargement des données
-           //  Active les tooltips Bootstrap
-           const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
-           tooltipTriggerList.forEach(tooltipTriggerEl => {
-             new bootstrap.Tooltip(tooltipTriggerEl);
-           });
+        this.evenements = data.filter(e => e.statut === StatutEvenement.APPROUVE); // ✅ seulement les approuvés
+        this.evenementsFiltres = [...this.evenements];
+        AOS.init({ duration: 1000, once: true });
+        const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
+        tooltipTriggerList.forEach(el => new bootstrap.Tooltip(el));
       },
       error: err => console.error('Erreur de chargement', err)
     });
@@ -60,16 +55,12 @@ export class EvenementListComponent implements OnInit {
     });
   }
 
-  // ouvrirParticipation(e: Evenement) {
-  //   const modalRef = this.modalService.open(ParticipationModalComponent, { centered: true });
-  //   modalRef.componentInstance.evenement = e;
-  // }
   ouvrirParticipation(e: Evenement) {
     const dialogRef = this.dialog.open(ParticipationModalComponent, {
       width: '400px',
       data: e
     });
-  
+
     dialogRef.afterClosed().subscribe((updatedEvent: Evenement) => {
       if (updatedEvent) {
         this.participationService.getEvenementById(updatedEvent.id).subscribe(freshEvent => {
@@ -82,13 +73,13 @@ export class EvenementListComponent implements OnInit {
       }
     });
   }
+
   ouvrirListeAttenteModal(evenement: Evenement) {
     this.dialog.open(ListeAttenteModalComponent, {
       width: '400px',
       data: evenement
     });
   }
-  
 
   modifierEvenement(e: Evenement) {
     const modalRef = this.modalService.open(EvenementModifierComponent, {
@@ -100,9 +91,7 @@ export class EvenementListComponent implements OnInit {
     modalRef.componentInstance.data = e;
 
     modalRef.result.then(
-      (result) => {
-        if (result === true) this.ngOnInit();
-      },
+      result => { if (result === true) this.ngOnInit(); },
       () => {}
     );
   }
@@ -112,7 +101,7 @@ export class EvenementListComponent implements OnInit {
       this.evenementService.delete(id).subscribe({
         next: () => {
           this.evenements = this.evenements.filter(e => e.id !== id);
-          this.filtrerEvenements(); // refresh filtre
+          this.filtrerEvenements();
         },
         error: err => alert("Erreur lors de la suppression ❌")
       });
@@ -120,60 +109,55 @@ export class EvenementListComponent implements OnInit {
   }
 
   trierParDate(order: string) {
-    if (order === 'asc') {
-      this.evenementsFiltres.sort((a, b) => new Date(a.dateDebut).getTime() - new Date(b.dateDebut).getTime());
-    } else if (order === 'desc') {
-      this.evenementsFiltres.sort((a, b) => new Date(b.dateDebut).getTime() - new Date(a.dateDebut).getTime());
-    }
+    this.evenementsFiltres.sort((a, b) =>
+      order === 'asc'
+        ? new Date(a.dateDebut).getTime() - new Date(b.dateDebut).getTime()
+        : new Date(b.dateDebut).getTime() - new Date(a.dateDebut).getTime()
+    );
   }
 
   filtrerEvenements(): void {
     const normalized = this.normalize(this.searchTerm.trim().toLowerCase());
-
     this.evenementsFiltres = this.evenements.filter(e => {
       const titreNorm = this.normalize(e.titre.toLowerCase());
       const lieuNorm = this.normalize(e.lieu.toLowerCase());
-      return titreNorm.startsWith(normalized) || lieuNorm.startsWith(normalized);
+      return titreNorm.includes(normalized) || lieuNorm.includes(normalized);
     });
   }
 
   normalize(str: string): string {
     return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
   }
+
   ouvrirAjoutEvenement() {
     const dialogRef = this.dialog.open(EvenementModalComponent, {
       width: '700px',
       disableClose: true,
       autoFocus: true
     });
-  
+
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
         this.ngOnInit();
       }
     });
   }
-  // Pagination
+
   currentPage = 1;
   itemsPerPage = 4;
-  
+
   get paginatedEvenements(): Evenement[] {
     const start = (this.currentPage - 1) * this.itemsPerPage;
     return this.evenementsFiltres.slice(start, start + this.itemsPerPage);
   }
-  
+
   get totalPages(): number[] {
     return Array(Math.ceil(this.evenementsFiltres.length / this.itemsPerPage)).fill(0).map((_, i) => i + 1);
   }
-  
+
   changerPage(page: number) {
     if (page >= 1 && page <= this.totalPages.length) {
       this.currentPage = page;
     }
   }
-  
-
-
-
-  
 }

@@ -41,7 +41,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSelectModule } from '@angular/material/select';
-import { HashLocationStrategy, LocationStrategy } from '@angular/common';
+import { HashLocationStrategy, LocationStrategy, PathLocationStrategy } from '@angular/common';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { NgxMatDatetimePickerModule, NgxMatNativeDateModule, NgxMatTimepickerModule } from '@angular-material-components/datetime-picker';
@@ -52,6 +52,14 @@ import { MatIconModule } from '@angular/material/icon';
 import { GoogleMapsModule } from '@angular/google-maps';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { AdminGestionEvenementsComponent } from './back/admin-gestion-evenements/admin-gestion-evenements.component';
+import { StatsEvenementModalComponent } from './back/stats-evenement-modal/stats-evenement-modal.component';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { NgChartsModule } from 'ng2-charts';
+
+
+
+
 
 @NgModule({
   declarations: [
@@ -81,6 +89,8 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
     ListeAttenteModalComponent,
     CalendrierUtilisateurComponent,
     EvenementDetailsModalComponent,
+    AdminGestionEvenementsComponent,
+    StatsEvenementModalComponent,
   
     
   ],
@@ -88,6 +98,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
   imports: [
     BrowserModule,
     AppRoutingModule, 
+    NgChartsModule,
     HttpClientModule,
     ReactiveFormsModule,
     RouterModule,
@@ -108,6 +119,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
     NgxMatMomentModule,
     NgxMatNativeDateModule,
     MatDialogModule,
+    MatProgressBarModule,
     MatDividerModule,
     MatCardModule,
     MatButtonModule,
@@ -115,6 +127,8 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
     MatProgressSpinnerModule,
     GoogleMapsModule,
     MatSnackBarModule,
+  
+    MatDialogModule,
     ToastrModule.forRoot({
       positionClass: 'toast-top-right',
       timeOut: 3000,
@@ -123,7 +137,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
       preventDuplicates: true
     }),
   ],
-  providers: [{provide : LocationStrategy, useClass : HashLocationStrategy}],
+  providers: [{provide : LocationStrategy, useClass : PathLocationStrategy}],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

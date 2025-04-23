@@ -40,7 +40,8 @@
              
             ],
             "scripts": [
-             
+              "src/assets/back/js/dashboard.js",
+              "src/assets/back/libs/apexcharts/dist/apexcharts.min.js",
                 "src/assets/js/scripts.min.js",
                 "src/assets/js/main.min.js",
                 "src/assets/js/custom.js",

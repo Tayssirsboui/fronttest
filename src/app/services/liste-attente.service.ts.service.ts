@@ -7,7 +7,7 @@ import { ListeAttente } from '../models/liste-attente.model';
   providedIn: 'root'
 })
 export class ListeAttenteService {
-  private apiUrl = 'http://localhost:8089/backend/liste-attente';
+  private apiUrl = 'http://localhost:5500/liste-attente';
 
   constructor(private http: HttpClient) {}
 

@@ -10,7 +10,7 @@ import { Evenement } from '../models/evenement.model';
 export class EvenementService {
 
   
-   private apiUrl = 'http://localhost:8089/backend/evenements';
+   private apiUrl = 'http://localhost:5500/evenements';
   
     constructor(private http: HttpClient) { }
     
@@ -40,9 +40,30 @@ export class EvenementService {
       return this.http.put(`${this.apiUrl}/modify-evenement`, formData);
     }
     getEvenementsParUtilisateur(utilisateurId: number): Observable<Evenement[]> {
-      return this.http.get<Evenement[]>(`http://localhost:8089/backend/participations/evenements-par-utilisateur/${utilisateurId}`);
+      return this.http.get<Evenement[]>(`http://localhost:5500/participations/evenements-par-utilisateur/${utilisateurId}`);
     }
     
     
-    
+      // 🔥 Nouveauté : événements NON_TRAITE pour l’admin
+  getNonTraites(): Observable<Evenement[]> {
+    return this.http.get<Evenement[]>(`${this.apiUrl}/non-traite`);
+  }
+
+  // 🔁 Mise à jour du statut
+  changerStatut(id: number, statut: 'APPROUVE' | 'REJETE'): Observable<Evenement> {
+    return this.http.put<Evenement>(`${this.apiUrl}/changer-statut/${id}?statut=${statut}`, {});
+  }
+  
+  getApprouves(): Observable<Evenement[]> {
+    return this.http.get<Evenement[]>(`${this.apiUrl}/approuves`);
+  }
+  countParticipants(id: number) {
+    return this.http.get<number>(`${this.apiUrl}/count-participants/${id}`);
+  }
+  getStatsGlobale(): Observable<any> {
+    return this.http.get(`${this.apiUrl}/stats-globale`);
+  }
+  
+
 }
+

@@ -36,7 +36,7 @@ export class EvenementModifierComponent implements OnInit {
 
     // Si l'événement a déjà une image
     if (this.data.image) {
-      this.imagePreview = 'http://localhost:8089/backend/' + this.data.image;
+      this.imagePreview = 'http://localhost:5500/' + this.data.image;
     }
   }
 

@@ -94,7 +94,8 @@ export class EvenementModalComponent implements OnInit {
     formData.append('nbMaxParticipants', this.form.value.nbMaxParticipants.toString());
     formData.append('dateDebut', this.formatDate(this.form.value.dateDebut));
     formData.append('dateFin', this.formatDate(this.form.value.dateFin));
-    formData.append('statut', 'A_VENIR');
+    formData.append('statut', 'NON_TRAITE');
+
     formData.append('dateCreation', new Date().toISOString().slice(0, 16));
 
     if (this.generatedImageBlob) {

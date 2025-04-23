@@ -8,8 +8,8 @@ import { Evenement } from '../models/evenement.model';
   providedIn: 'root'
 })
 export class ParticipationService {
-  private apiUrl = 'http://localhost:8089/backend/participations';
-  private evenementUrl = 'http://localhost:8089/backend/evenements';
+  private apiUrl = 'http://localhost:5500/participations';
+  private evenementUrl = 'http://localhost:5500/evenements';
 
   constructor(private http: HttpClient) {}
 
@@ -31,5 +31,9 @@ export class ParticipationService {
     }
   
     
-  
+
+   // ✅ Compter le nombre de participants à un événement
+   countByEvent(eventId: number): Observable<number> {
+    return this.http.get<number>(`${this.apiUrl}/count-by-evenement/${eventId}`);
+  }
 }
