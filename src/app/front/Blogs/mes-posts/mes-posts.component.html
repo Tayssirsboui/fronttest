@@ -78,7 +78,34 @@
         </div>
       </div>
     </div>
+
+   <!-- 🔧 Modal d'édition -->
+<div class="modal-overlay" *ngIf="showEditModal" (ngSubmit)="submitEdit()">
+  <div class="modal-content">
+    <h3>Modifier le post</h3>
+    <form (ngSubmit)="submitEdit()" *ngIf="selectedPostToEdit">
+      <label>Titre</label>
+      <input type="text" [(ngModel)]="selectedPostToEdit.title" name="title" class="form-control" required>
+
+      <label>Contenu</label>
+      <textarea [(ngModel)]="selectedPostToEdit.content" name="content" rows="4" class="form-control" required></textarea>
+
+      <label>Auteur</label>
+      <input type="text"  [(ngModel)]="selectedPostToEdit.createdBy" name="createdBy" class="form-control" required>
+
+      <!-- Boutons -->
+      <div class="modal-buttons mt-3">
+        <button type="submit" class="btn btn-success"(click)="submitEdit()">✅ Enregistrer</button>
+        <button type="button" class="btn btn-secondary" (click)="closeEditModal()">❌ Annuler</button>
+      </div>
+    </form>
   </div>
+</div>
+
+  </div> 
+   <button class="back-button" (click)="goBack()">
+    ⬅ Retour
+  </button>
   
   <!-- FontAwesome -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />

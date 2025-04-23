@@ -10,7 +10,7 @@ export class BlogService {
   private baseUrlPost = 'http://localhost:5100/api/v1/posts';
   private baseUrlComment = 'http://localhost:5110/api/v1/comments';
   private apiUrl = 'http://localhost:5120/recommend-posts'; 
-
+userId!: number ;
   constructor(private http : HttpClient) { }
   getPostById(id:number){
     return this.http.get<Post>(this.baseUrlPost+id)
@@ -20,8 +20,8 @@ export class BlogService {
     return this.http.get<Post[]>(this.baseUrlPost)
     
   }
-  addPostWithImage(formData: FormData): Observable<Post> {
-    return this.http.post<Post>(this.baseUrlPost, formData, {
+  addPostWithImage(formData: FormData,userId:number): Observable<Post> {
+    return this.http.post<Post>(`${this.baseUrlPost}/${userId}`, formData, {
       reportProgress: true, // Pour suivre la progression du téléchargement
       observe: 'response' // Pour obtenir toute la réponse
     }).pipe(
@@ -36,16 +36,16 @@ export class BlogService {
   //   return this.http.post<Post>(this.baseUrlPost, formData);
   // }
   
-  addPost(postData: any): Observable<Post> {
-    return this.http.post<Post>(this.baseUrlPost, postData);
+  addPost(postData: any,userId:number): Observable<Post> {
+    return this.http.post<Post>(`${this.baseUrlPost}/${userId}`, postData);
   }
   
 
 
-  updatePost(id: number,userId:number, post: Post): Observable<Post> {
-    return this.http.put<Post>(`${this.baseUrlPost}/${id}/user/${userId}`, post);
-
+  updatePost(postId: number, userId: number, formData: FormData): Observable<Post> {
+    return this.http.put<Post>(`${this.baseUrlPost}/${postId}/user/${userId}`, formData);
   }
+  
   DeletePost(id: number) {
     return this.http.delete(`${this.baseUrlPost}/${id}`);
 
@@ -85,15 +85,10 @@ export class BlogService {
      updateComment(commentId: number, userId: number, comment: any): Observable<any> {
       return this.http.put(`${this.baseUrlComment}/${commentId}/user/${userId}`, comment);
     }
-    private baseUrlFacebook = 'http://localhost:5100/api/facebook';
-
-postToFacebook(message: string): Observable<any> {
-  return this.http.post(`${this.baseUrlFacebook}/post`, { message });
-}
-getRecommendedPosts(query: string): Observable<any[]> {
-  const params = new HttpParams().set('query', query);
-  return this.http.get<any[]>(this.apiUrl, { params });
-}
+    getRecommendedPosts(userPost: string): Observable<any> {
+      const payload = { user_post: userPost };
+      return this.http.post<any>(this.apiUrl, payload);
+    }
     
     
   }

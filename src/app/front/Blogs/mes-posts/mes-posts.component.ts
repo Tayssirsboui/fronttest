@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { BlogService } from 'src/app/services/blog.service';
 import { Post } from 'src/app/models/post';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-mes-posts',
@@ -11,13 +12,65 @@ export class MesPostsComponent implements OnInit {
   userPosts: Post[] = [];
   userId: number = 1; // Replace with dynamic user ID if needed
   isLoading = false;
+  selectedPostToEdit: Post | null = null;
+showEditModal: boolean = false;
 
-  constructor(private bs: BlogService) {}
+
+  selectedFile: File | null = null;
+
+
+  constructor(private bs: BlogService,private location: Location) {}
 
   ngOnInit(): void {
     this.fetchUserPosts();
   }
+  onEdit(post: Post) {
+    this.selectedPostToEdit = { ...post }; // clone l'objet pour éviter la modification directe
+    this.showEditModal = true;
+  }
 
+
+  onEditImageSelected(event: any): void {
+    const file = event.target.files[0];
+    if (file) {
+      this.selectedFile = file;
+    }
+  }
+  
+  closeEditModal() {
+    this.showEditModal = false;
+    this.selectedPostToEdit = null;
+  }
+  
+  submitEdit() {
+    if (this.selectedPostToEdit) {
+      const formData = new FormData();
+      formData.append('title', this.selectedPostToEdit.title || '');
+      formData.append('content', this.selectedPostToEdit.content || '');
+  
+      if (this.selectedFile) {
+        formData.append('image', this.selectedFile);
+      }
+  
+      this.bs.updatePost(this.selectedPostToEdit.id, this.userId, formData).subscribe({
+        next: (updatedPost) => {
+          console.log('Post modifié avec succès', updatedPost);
+          this.fetchUserPosts();
+          this.closeEditModal();
+        },
+        error: (err) => {
+          console.error('Erreur lors de la modification du post', err);
+        }
+      });
+    }
+  }
+
+  
+
+
+
+
+  
   fetchUserPosts(): void {
     this.isLoading = true;
     this.bs.getPostsByUserId(this.userId).subscribe(
@@ -37,10 +90,8 @@ toggleMenu(postId: number) {
   this.openMenuId = this.openMenuId === postId ? null : postId;
 }
 
-onEdit(post: Post) {
-  console.log('Modifier', post);
-  // Add your navigation or modal logic here
-}
+
+
 
 onDelete(postId: number): void {
   if (confirm("Voulez-vous vraiment supprimer ce post ?")) {
@@ -58,6 +109,8 @@ onDelete(postId: number): void {
 }
 
 
-
+goBack(): void {
+  this.location.back();
+}
 
 }

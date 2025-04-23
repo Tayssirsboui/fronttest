@@ -1,20 +1,17 @@
-import { HttpClient, HttpParams } from '@angular/common/http';
+// src/app/services/comment-enhancement.service.ts
 import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { Post } from '../models/post';
 
 @Injectable({
   providedIn: 'root'
 })
-export class PostRecommendationService {
-  private apiUrl = 'http://localhost:5120/recommend-posts'; // Flask backend
+export class postRecommendationService {
+  private apiUrl = 'http://localhost:5120/enhance-comment';
 
   constructor(private http: HttpClient) {}
 
- 
-  getRecommendedPosts(query: string): Observable<any[]> {
-    const params = new HttpParams().set('query', query);
-    return this.http.get<any[]>(this.apiUrl, { params });
+  enhanceComment(comment: string): Observable<{ enhanced_comment: string }> {
+    return this.http.post<{ enhanced_comment: string }>(this.apiUrl, { comment });
   }
-
 }
