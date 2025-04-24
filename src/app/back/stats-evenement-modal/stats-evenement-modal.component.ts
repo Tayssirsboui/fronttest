@@ -75,4 +75,6 @@ export class StatsEvenementModalComponent implements OnInit {
       this.chartData.datasets[0].data = [nb, placesRestantes];
     });
   }
+
+  
 }

@@ -64,6 +64,10 @@ export class EvenementService {
     return this.http.get(`${this.apiUrl}/stats-globale`);
   }
   
+  downloadPdf(): void {
+    const url = 'http://localhost:5500/evenements/export/pdf';
+    window.open(url, '_blank');
+  }
 
 }
 

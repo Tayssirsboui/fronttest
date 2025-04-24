@@ -106,7 +106,7 @@ export class EvenementModalComponent implements OnInit {
 
     this.evenementService.createWithFormData(formData).subscribe({
       next: (data) => {
-        this.snackBar.open('✅ Événement ajouté avec succès', 'Fermer', {
+        this.snackBar.open('✅ Demande ajouté avec succès', 'Fermer', {
           duration: 3000,
           horizontalPosition: 'end',
           verticalPosition: 'bottom',

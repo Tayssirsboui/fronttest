@@ -1,19 +1,12 @@
-<div class="container mt-4">
-    <!-- SECTION 1 - En attente de validation -->
-    <h2 class="mb-4 fw-bold">🕓 Événements en attente de validation</h2>
-  
-    <!-- Pagination -->
-    <div class="d-flex justify-content-end align-items-center gap-2 mb-3">
-      <button class="btn p-2 bg-white border-0 shadow-sm rounded-circle"
-              (click)="precedent()" [disabled]="pageIndex === 0">
-        <i class="ti ti-chevron-left fs-4 text-dark"></i>
-      </button>
-      <button class="btn p-2 bg-white border-0 shadow-sm rounded-circle"
-              (click)="suivant()" [disabled]="(pageIndex + 1) * 2 >= evenements.length">
-        <i class="ti ti-chevron-right fs-4 text-dark"></i>
+<div class="container mt-4">  
+    <!-- Bouton Export PDF -->
+    <div class="d-flex justify-content-end mb-3">
+      <button class="btn btn-dark fw-semibold" (click)="exportPdf()">
+        <i class="bi bi-file-earmark-pdf-fill me-2"></i> Télécharger PDF des événements
       </button>
     </div>
-  
+   <!-- SECTION 1 - En attente de validation -->
+   <h2 class="mb-4 fw-bold">🕓 Événements en attente de validation</h2>
     <!-- Groupe de 2 cartes côte à côte -->
     <div *ngFor="let groupe of paginatedEvenements()" class="card p-4 shadow-sm border-0 mb-4">
       <div class="row g-4">
@@ -46,6 +39,27 @@
       </div>
     </div>
   
+    <!-- Pagination discrète + Sélecteur -->
+    <div class="d-flex justify-content-center align-items-center gap-3 mt-2 mb-5 small text-muted">
+      <button class="btn btn-sm btn-outline-dark px-3"
+              (click)="precedent()"
+              [disabled]="pageIndex === 0">
+        ←
+      </button>
+      <button class="btn btn-sm btn-outline-dark px-3"
+              (click)="suivant()"
+              [disabled]="pageIndex + 1 >= totalPages">
+        →
+      </button>
+      <select class="form-select form-select-sm w-auto"
+      [(ngModel)]="pageIndex"
+      (change)="changerPage(pageIndex)">
+<option *ngFor="let i of totalPagesArray(); let index = index" [value]="index">
+  {{ index + 1 }}
+</option>
+</select>
+    </div>
+  
     <!-- Message si vide -->
     <div *ngIf="evenements.length === 0" class="text-muted mt-5 text-center">
       Aucun événement à valider pour le moment.
@@ -53,47 +67,44 @@
   
     <!-- SECTION 2 - Événements approuvés -->
     <div class="mt-5">
-        <h4 class="fw-bold text-success mb-4 fs-4">
-          <i class="ti ti-check me-2"></i> Événements Approuvés
-        </h4>
-      
-        <div class="table-responsive">
-          <table class="table table-hover align-middle fs-5">
-            <thead class="table-light">
-              <tr>
-                <th style="width: 120px;">Image</th>
-                <th>Titre</th>
-                <th>Lieu</th>
-                <th>Date</th>
-                <th>Description</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr *ngFor="let e of evenementsApprouves">
-                <td>
-                  <img *ngIf="e.image"
-                       [src]="'http://localhost:5500/' + e.image"
-                       alt="img"
-                       style="width: 100px; height: 70px; object-fit: cover; border-radius: 6px;">
-                </td>
-                <td class="fw-semibold">{{ e.titre }}</td>
-                <td><i class="ti ti-map-pin text-primary me-1"></i>{{ e.lieu }}</td>
-                <td><i class="ti ti-calendar text-success me-1"></i>{{ e.dateDebut | date:'short' }}</td>
-                <td>{{ e.description }}</td>
-                <td>
-                    <button class="btn btn-outline-primary btn-sm"
-                    (click)="ouvrirStats(e)">
-                      📊 Voir Statistiques
-                    </button>
-                  </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
+      <h4 class="fw-bold text-success mb-4 fs-4">
+        <i class="ti ti-check me-2"></i> Événements Approuvés
+      </h4>
+  
+      <div class="table-responsive">
+        <table class="table table-hover align-middle fs-5">
+          <thead class="table-light">
+            <tr>
+              <th style="width: 120px;">Image</th>
+              <th>Titre</th>
+              <th>Lieu</th>
+              <th>Date</th>
+              <th>Description</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let e of evenementsApprouves">
+              <td>
+                <img *ngIf="e.image"
+                     [src]="'http://localhost:5500/' + e.image"
+                     alt="img"
+                     style="width: 100px; height: 70px; object-fit: cover; border-radius: 6px;">
+              </td>
+              <td class="fw-semibold">{{ e.titre }}</td>
+              <td><i class="ti ti-map-pin text-primary me-1"></i>{{ e.lieu }}</td>
+              <td><i class="ti ti-calendar text-success me-1"></i>{{ e.dateDebut | date:'short' }}</td>
+              <td>{{ e.description }}</td>
+              <td>
+                <button class="btn btn-outline-primary btn-sm"
+                        (click)="ouvrirStats(e)">
+                  📊 Voir Statistiques
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
       </div>
-      
-      
-      
- 
+    </div>
+  </div>
   
