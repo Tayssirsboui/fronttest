@@ -5,6 +5,7 @@ import { Post } from 'src/app/models/post';
 import { BlogService } from 'src/app/services/blog.service';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { Comment } from 'src/app/models/comment';
+import { ChartConfiguration, ChartOptions } from 'chart.js';
 
 @Component({
   selector: 'app-blog-admin',
@@ -12,6 +13,7 @@ import { Comment } from 'src/app/models/comment';
   styleUrls: ['./blog-admin.component.css']
 })
 export class BlogAdminComponent implements OnInit {
+  
   posts: Post[] = [];
   isLoading = true;
   currentPage = 1;
@@ -29,21 +31,80 @@ export class BlogAdminComponent implements OnInit {
     private blogService: BlogService,
     private fb: FormBuilder,
     private toastr: ToastrService,
-    private router: Router, private Ac: ActivatedRoute
+    private router: Router,
+    private Ac: ActivatedRoute
   ) {
     this.searchForm = this.fb.group({
       searchQuery: ['']
     });
   }
+  // Chart configuration
+  showStats: boolean = false;
 
+toggleStats(): void {
+  this.showStats = !this.showStats;
+}
+
+showStatsModal: boolean = false;
+
+openStatsModal(): void {
+  this.showStatsModal = true;
+}
+
+closeStatsModal(): void {
+  this.showStatsModal = false;
+}
+
+  showConfirmModal = false;
+  confirmType: 'post' | 'comment' = 'post';
+  itemIdToDelete: number | null = null;
+  
+
+  openConfirmModal(type: 'post' | 'comment', id: number): void {
+    this.confirmType = type;
+    this.itemIdToDelete = id;
+    this.showConfirmModal = true;
+  }
+  
+  closeConfirmModal(): void {
+    this.showConfirmModal = false;
+    this.itemIdToDelete = null;
+  }
+  
+  confirmDeletion(): void {
+    if (this.confirmType === 'post' && this.itemIdToDelete !== null) {
+      this.blogService.DeletePost(this.itemIdToDelete).subscribe({
+        next: () => {
+          this.toastr.success('Post deleted successfully', 'Success');
+          this.loadPosts();
+        },
+        error: () => {
+          this.toastr.error('Failed to delete post', 'Error');
+        },
+        complete: () => this.closeConfirmModal()
+      });
+    } else if (this.confirmType === 'comment' && this.itemIdToDelete !== null) {
+      this.blogService.deleteComment(this.itemIdToDelete).subscribe({
+        next: () => {
+          this.toastr.success('Comment deleted successfully', 'Success');
+          this.comments = this.comments.filter(c => c.idComment !== this.itemIdToDelete);
+        },
+        error: () => {
+          this.toastr.error('Failed to delete comment', 'Error');
+        },
+        complete: () => this.closeConfirmModal()
+      });
+    }
+  }
+  
   // Open the comments modal and load the comments for the selected post
   openCommentsModal(postId: number): void {
     this.loadingComments = true;
     this.comments = []; // Clear any previously loaded comments
-
+  
     this.postId = postId;
-
-    // Fetch the post data
+  
+    // Load post data
     this.blogService.getPostsById(postId).subscribe({
       next: (data) => {
         this.post = data; // Set the post data
@@ -53,22 +114,73 @@ export class BlogAdminComponent implements OnInit {
         this.loadingComments = false;
       }
     });
-
+  
+    // Fetch comments for the post
     this.blogService.getcommentsByPostId(postId).subscribe((data: any) => {
-      this.comments = data as Comment[];
-      const commentsCount = data.length;
-      this.loadingComments = false;
-      this.showModal = true; // Show the modal
+      console.log('Fetched comments:', data); // Log the full response
 
-      if (this.post) {
-        this.post.commentsCount = commentsCount;
+      if (data && data.length > 0) {
+        this.comments = data as Comment[];
+
+        // Log each comment's id to verify it's being fetched properly
+        this.comments.forEach(comment => {
+          console.log('Comment ID:', comment.idComment); // Ensure the id is present
+        });
+
+        const commentsCount = data.length;
+        this.loadingComments = false;
+        this.showModal = true; // Show the modal
+
+        if (this.post) {
+          this.post.commentsCount = commentsCount;
+        }
+      } else {
+        console.error('No comments found or structure is incorrect');
+        this.loadingComments = false;
       }
     });
   }
-
+  
   // Close the modal when clicking outside
   closeModal(): void {
     this.showModal = false;
+  }
+  deleteComment(commentId: number): void {
+    console.log('Deleting comment with ID:', commentId); // Log to check commentId
+    
+    // Validate commentId before attempting to delete
+    if (commentId && commentId !== undefined && commentId !== null) {
+      this.blogService.deleteComment(commentId).subscribe({
+        next: () => {
+          this.toastr.success('Comment deleted successfully', 'Success');
+          // Remove the deleted comment from the comments array by using idComment
+          this.comments = this.comments.filter(comment => comment.idComment !== commentId);
+        },
+        error: (err: any) => {
+          this.toastr.error('Failed to delete comment', 'Error');
+          console.error('Error:', err);
+        }
+      });
+    } else {
+      console.error('Invalid commentId:', commentId); // Log invalid commentId
+    }
+  }
+  
+  
+
+  // Delete post
+  deletePost(postId: number): void {
+    if (confirm('Are you sure you want to delete this post?')) {
+      this.blogService.DeletePost(postId).subscribe({
+        next: () => {
+          this.toastr.success('Post deleted successfully', 'Success');
+          this.loadPosts();
+        },
+        error: (err) => {
+          this.toastr.error('Failed to delete post', 'Error');
+        }
+      });
+    }
   }
 
   ngOnInit(): void {
@@ -105,20 +217,6 @@ export class BlogAdminComponent implements OnInit {
 
   editPost(postId: number): void {
     this.router.navigate(['/admin/blog/edit', postId]);
-  }
-
-  deletePost(postId: number): void {
-    if (confirm('Are you sure you want to delete this post?')) {
-      this.blogService.DeletePost(postId).subscribe({
-        next: () => {
-          this.toastr.success('Post deleted successfully', 'Success');
-          this.loadPosts();
-        },
-        error: (err) => {
-          this.toastr.error('Failed to delete post', 'Error');
-        }
-      });
-    }
   }
 
   onPageChange(page: number): void {

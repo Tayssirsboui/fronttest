@@ -33,6 +33,8 @@ import { PickerModule } from '@ctrl/ngx-emoji-mart';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BlogAdminComponent } from './back/blogs/blog-admin/blog-admin.component';
 import { MesPostsComponent } from './front/Blogs/mes-posts/mes-posts.component';
+import { NgChartsModule } from 'ng2-charts';
+import { StatPostsComponent } from './back/blogs/stat-posts/stat-posts.component';
 
 @NgModule({
   declarations: [
@@ -60,10 +62,12 @@ import { MesPostsComponent } from './front/Blogs/mes-posts/mes-posts.component';
     FooterBackComponent,
     GeminiChatComponent,
     BlogAdminComponent,
-    MesPostsComponent
+    MesPostsComponent,
+    StatPostsComponent
   ],
   imports: [
     BrowserModule,
+    NgChartsModule,
     ReactiveFormsModule, 
     HttpClientModule,
     AppRoutingModule,

@@ -1,5 +1,5 @@
 export interface Comment {
-    id: number;
+    idComment: number; // changed from 'id' to 'idComment'
     userId: number;
     likes: number;
     description: string;
@@ -7,4 +7,5 @@ export interface Comment {
     createdAt: Date;
     postId: number;
     userReaction?: 'like' | 'dislike'; // si tu l’utilises dans le template
- }
+  }
+  

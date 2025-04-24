@@ -1,0 +1,58 @@
+/* Modal styles chartgraphique  */
+.stat-card {
+    transition: transform 0.2s ease;
+    border-radius: 12px;
+  }
+  
+  .stat-card:hover {
+    transform: scale(1.03);
+  }
+  .stat-card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border-radius: 10px;
+    border: none;
+  }
+  
+  .stat-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1) !important;
+  }
+  
+  .card {
+    border: none;
+    border-radius: 12px;
+    width: 100%;
+    
+  }
+  
+  .dropdown-toggle::after {
+    margin-left: 0.5em;
+  }.dropdown-toggle svg {
+    margin-bottom: 2px;
+  }
+  
+  .dropdown-menu {
+    min-width: 180px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    border: none;
+    border-radius: 8px;
+    padding: 0.5rem 0;
+  }
+  
+  .dropdown-item {
+    padding: 0.5rem 1.5rem;
+    font-size: 0.875rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  
+  .dropdown-item:hover {
+    background-color: #f8f9fa;
+    color: #0d6efd;
+  }
+  
+  .dropdown-item svg {
+    width: 14px;
+    height: 14px;
+  }

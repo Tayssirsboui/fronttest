@@ -2,7 +2,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Post } from '../models/post';
 import { catchError, map, Observable, throwError } from 'rxjs';
-
+import {  of } from 'rxjs';
 @Injectable({
   providedIn: 'root'
 })
@@ -90,5 +90,32 @@ userId!: number ;
       return this.http.post<any>(this.apiUrl, payload);
     }
     
-    
+    deleteComment(commentId: number): Observable<void> {
+      return this.http.delete<void>(`${this.baseUrlComment}/${commentId}`);
+    }
+    getIrningData(): Observable<any> {
+      // Simuler des données d'API
+      return of({
+        months: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct'],
+        values: [140, 120, 100, 80, 60, 40, 60, 80, 100, 120]
+      });
+    }
+     // Calculer les statistiques des posts
+  getDashboardStats() {
+    return this.getPosts().pipe(
+      map(posts => {
+        const totalPosts = posts.length;
+        const totalComments = posts.reduce((acc, post) => acc + post.commentsCount, 0);
+        const activeAuthors = new Set(posts.map(post => post.createdBy)).size;
+        const mostLikedPost = posts.reduce((max, post) => post.likes > max.likes ? post : max, posts[0]);
+
+        return {
+          totalPosts,
+          totalComments,
+          activeAuthors,
+          mostLikedPost: mostLikedPost.title
+        };
+      })
+    );
+  }
   }
