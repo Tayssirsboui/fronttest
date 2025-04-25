@@ -153,4 +153,16 @@ export class BlogDetailsComponent {
     this.editMode = false;
     this.selectedCommentId = null;
   }
+  likeComment(commentId: number): void {
+    this.bs.likeComment(commentId, this.userId).subscribe({
+      next: () => {
+        // Reload the comments to get the updated like count after the like action
+        const postId = this.post?.id; // Get the current post ID
+        if (postId) {
+          this.bs.getcommentsByPostId(postId); // Re-fetch the comments to reflect the updated data
+        }
+      },
+      error: (err) => console.error('Error liking comment:', err)
+    });
+  }
 }

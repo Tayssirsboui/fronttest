@@ -117,5 +117,10 @@ userId!: number ;
         };
       })
     );
+    
+  }
+  likeComment(commentId: number, userId: number): Observable<void> {
+    return this.http.put<void>(`${this.baseUrlComment}/${commentId}/like/${userId}`, {});
+
   }
   }

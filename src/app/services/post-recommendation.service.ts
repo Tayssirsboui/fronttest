@@ -8,7 +8,6 @@ import { Observable } from 'rxjs';
 })
 export class postRecommendationService {
   private apiUrlE = 'http://localhost:5120/enhance-comment';
-  private apiUrl = 'http://localhost:5120/recommend-posts'; // Flask backend
 
   constructor(private http: HttpClient) {}
 

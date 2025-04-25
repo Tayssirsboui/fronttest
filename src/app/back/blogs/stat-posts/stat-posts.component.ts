@@ -19,20 +19,23 @@ dashboardStats: any[] = [];
 
 chartLabels: string[] = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
-chartData: ChartConfiguration<'bar'>['data'] = {
+chartData: ChartConfiguration<'line'>['data'] = {
   labels: this.chartLabels,
   datasets: [
     {
       label: 'Posts per Month',
       data: Array(12).fill(0), // Initialiser avec 0
-      backgroundColor: '#0d6efd',
-      borderRadius: 6
+      fill: false, // Ne pas remplir sous la courbe
+      borderColor: '#0d6efd', // Couleur de la ligne
+      tension: 0.4, // Lissage de la courbe
+      borderWidth: 2,
+      pointRadius: 5, // Rayon des points sur la courbe
     }
   ]
 };
 
 
-chartOptions: ChartOptions<'bar'> = {
+chartOptions: ChartOptions<'line'> = {
   responsive: true,
   plugins: {
     legend: {
@@ -41,6 +44,12 @@ chartOptions: ChartOptions<'bar'> = {
   },
   scales: {
     y: {
+      beginAtZero: true,
+      ticks: {
+        stepSize: 1 // Ajustez cela en fonction de vos besoins
+      }
+    },
+    x: {
       beginAtZero: true
     }
   }
@@ -84,7 +93,6 @@ loadPostsPerMonth() {
           label: 'Posts per Month',
           data: monthlyCounts,
           backgroundColor: '#0d6efd',
-          borderRadius: 6
         }
       ]
     };

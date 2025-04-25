@@ -9,4 +9,5 @@ export class Post {
     createdAt!: Date;
     commentsCount!: number; // Ajoutez cette propriété pour stocker le nombre de commentaires
     similarity?: number;
+    allowComments?: boolean;
  }

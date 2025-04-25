@@ -1,4 +1,22 @@
 
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+
+<div class="input-group mb-3 w-50">
+  <span class="input-group-text bg-light"><i class="bi bi-search text-muted"></i></span>
+  <input type="text" class="form-control"placeholder="🔍 Rechercher un post..." 
+         [(ngModel)]="searchTerm">
+         
+        
+</div>
+
+<button class="btn btn-outline-primary mb-3" (click)="toggleSortOrder()">
+  📅 Trier par date 
+  {{ sortAsc ? '⬆️ Ancien → Récent' : '⬇️ Récent → Ancien' }}
+</button>
+
+</div>
+
 <!-- Modal Backdrop -->
 <div *ngIf="showStatsModal" class="custom-modal-backdrop" (click)="closeStatsModal()">
   <div class="custom-modal-xl" (click)="$event.stopPropagation()">
@@ -18,17 +36,23 @@
     <div class="card-body p-4">
       <div class="d-flex justify-content-between align-items-center mb-3">
         <h5 class="card-title fw-bold text-primary mb-0">Blog Management</h5>
+        <div class="download-buttons">
+          <button class="btn btn-outline-primary" (click)="downloadPageAsPNG($event)">Download as PNG</button>
+          <button class="btn btn-outline-secondary" (click)="downloadPageAsJPEG($event)">Download as JPEG</button>
+          <button class="btn btn-outline-success" (click)="downloadPageAsPDF($event)">Download as PDF</button>
+          <button class="btn btn-outline-danger" (click)="downloadPageAsCSV($event)">Download as CSV</button>
+        </div>
         <div *ngIf="isLoading" class="spinner-border text-primary" role="status">
           <span class="visually-hidden">Loading...</span>
         </div>
       </div>
 
-      <div class="table-responsive">
+      <div class="table-responsive" id="admin-page">
         <table class="table table-hover align-middle">
           <thead class="table-light">
             <tr>
               <th>Id</th>
-              <th>Author</th>
+              <th>Author 🧑‍💻</th>
               <th>Title</th>
               <th>Content</th>
               <th>Created At</th>
@@ -49,7 +73,7 @@
                   {{ p.content }}
                 </span>
               </td>
-              <td>{{ p.createdAt | date: 'medium' }}</td>
+              <td>{{ p.createdAt | date: 'medium' }} 📅</td>
               <td>
                 <span class="badge bg-success">{{ p.likes }} ❤️</span>
               </td>
@@ -70,6 +94,36 @@
             </tr>
           </tbody>
         </table>
+        <nav *ngIf="totalPages > 1" class="mt-3">
+          <ul class="pagination justify-content-center">
+            <li class="page-item" [class.disabled]="currentPage === 1">
+              <button class="page-link" (click)="onPageChange(currentPage - 1)">Previous</button>
+            </li>
+        
+            <li class="page-item"
+                *ngFor="let page of pages"
+                [class.active]="page === currentPage">
+              <button class="page-link" (click)="onPageChange(page)">
+                {{ page }}
+              </button>
+            </li>
+        
+            <li class="page-item" [class.disabled]="currentPage === totalPages">
+              <button class="page-link" (click)="onPageChange(currentPage + 1)">Next</button>
+            </li>
+          </ul>
+        </nav>
+        <div class="mb-3">
+          <label for="itemsPerPageSelect" class="form-label">Posts per page:</label>
+          <select id="itemsPerPageSelect" class="form-select w-auto d-inline-block ms-2"
+                  [(ngModel)]="itemsPerPage" (change)="currentPage = 1">
+            <option [value]="5">5</option>
+            <option [value]="10">10</option>
+            <option [value]="20">20</option>
+            <option [value]="20">40</option>
+          </select>
+        </div>
+                
 
         <div *ngIf="posts.length === 0 && !isLoading" class="text-center text-muted py-4">
           No posts found.
@@ -130,7 +184,7 @@
 
       <div class="d-flex justify-content-center gap-3">
         <button class="btn btn-danger px-4" (click)="confirmDeletion()">
-          <i class="bi bi-trash me-1"></i> Yes, Delete
+          <i class="bi bi-trash me-1"></i> Yes, Delete ✅
         </button>
         <button class="btn btn-outline-secondary px-4" (click)="closeConfirmModal()">
           <i class="bi bi-x-circle me-1"></i> Cancel
@@ -139,12 +193,30 @@
     </div>
   </div>
 </div>
+<!-- No Comments Popup -->
+<div *ngIf="noCommentsPopup" class="custom-modal-backdrop" (click)="noCommentsPopup = false">
+  <div class="custom-modal" (click)="$event.stopPropagation()"> <!-- Prevent backdrop click from closing -->
+    <div class="custom-modal-header">
+      <h5>No Comments Available</h5>
+      <button (click)="noCommentsPopup = false" class="close-btn">&times;</button>
+    </div>
+    <div class="custom-modal-body">
+      <p class="text-center">This post does not have any comments yet.</p>
+      <div class="text-center">
+        <button class="btn btn-outline-secondary" (click)="noCommentsPopup = false">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 
 <div class="text-center my-5">
   <button class="btn btn-xl rounded-pill px-5 py-3 fw-bold stats-button-gradient" 
           (click)="openStatsModal()">
           <i class="bi bi-speedometer2 me-2"></i> 
-    <span class="fs-4">Show Analytics Dashboard</span>
+    <span class="fs-4"> 📊 Show Analytics Dashboard</span>
   </button>
+  
 </div>
+
 

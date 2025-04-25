@@ -7,5 +7,6 @@ export interface Comment {
     createdAt: Date;
     postId: number;
     userReaction?: 'like' | 'dislike'; // si tu l’utilises dans le template
+    likedBy: any[]
   }
   

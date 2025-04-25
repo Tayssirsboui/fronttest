@@ -6,6 +6,8 @@ import { BlogService } from 'src/app/services/blog.service';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { Comment } from 'src/app/models/comment';
 import { ChartConfiguration, ChartOptions } from 'chart.js';
+import html2canvas from 'html2canvas';
+import jsPDF from 'jspdf';
 
 @Component({
   selector: 'app-blog-admin',
@@ -26,7 +28,7 @@ export class BlogAdminComponent implements OnInit {
   postId!: number;
   post: Post | null = null;
   showModal: boolean = false;
-
+  noCommentsPopup: boolean = false;
   constructor(
     private blogService: BlogService,
     private fb: FormBuilder,
@@ -38,9 +40,38 @@ export class BlogAdminComponent implements OnInit {
       searchQuery: ['']
     });
   }
+  sortAsc: boolean = false;
+
+toggleSortOrder(): void {
+  this.sortAsc = !this.sortAsc;
+  this.sortPostsByDate();
+}
+
+sortPostsByDate(): void {
+  this.posts.sort((a, b) => {
+    const dateA = new Date(a.createdAt).getTime();
+    const dateB = new Date(b.createdAt).getTime();
+    return this.sortAsc ? dateA - dateB : dateB - dateA;
+  });
+}
   // Chart configuration
   showStats: boolean = false;
+  searchTerm: string = '';
 
+  get filteredPosts() {
+    return this.posts.filter(p =>
+      p.title?.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
+      p.content?.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
+      p.createdBy?.toLowerCase().includes(this.searchTerm.toLowerCase())
+    );
+  }
+  
+  get paginatedPosts(): any[] {
+    const start = (this.currentPage - 1) * this.itemsPerPage;
+    const end = start + this.itemsPerPage;
+    return this.filteredPosts.slice(start, end);
+  }
+  
 toggleStats(): void {
   this.showStats = !this.showStats;
 }
@@ -118,25 +149,27 @@ closeStatsModal(): void {
     // Fetch comments for the post
     this.blogService.getcommentsByPostId(postId).subscribe((data: any) => {
       console.log('Fetched comments:', data); // Log the full response
-
+  
       if (data && data.length > 0) {
         this.comments = data as Comment[];
-
+  
         // Log each comment's id to verify it's being fetched properly
         this.comments.forEach(comment => {
           console.log('Comment ID:', comment.idComment); // Ensure the id is present
         });
-
+  
         const commentsCount = data.length;
         this.loadingComments = false;
         this.showModal = true; // Show the modal
-
+  
         if (this.post) {
           this.post.commentsCount = commentsCount;
         }
       } else {
-        console.error('No comments found or structure is incorrect');
+        // Si aucun commentaire n'est trouvé, afficher la popup
+        console.error('No comments found for this post');
         this.loadingComments = false;
+        this.noCommentsPopup = true; // Afficher la popup
       }
     });
   }
@@ -193,8 +226,9 @@ closeStatsModal(): void {
       next: (posts: Post[]) => {
         this.posts = posts;
         this.totalPosts = posts.length;
+        this.sortPostsByDate(); // <-- ici
         this.isLoading = false;
-      },
+      },      
       error: () => {
         this.toastr.error('Failed to load posts', 'Error');
         this.isLoading = false;
@@ -202,10 +236,7 @@ closeStatsModal(): void {
     });
   }
 
-  get paginatedPosts(): Post[] {
-    const startIndex = (this.currentPage - 1) * this.itemsPerPage;
-    return this.posts.slice(startIndex, startIndex + this.itemsPerPage);
-  }
+
 
   get totalPages(): number {
     return Math.ceil(this.totalPosts / this.itemsPerPage);
@@ -238,5 +269,73 @@ closeStatsModal(): void {
     );
     this.totalPosts = this.posts.length;
     this.currentPage = 1;
+  }
+  downloadPageAsPNG(event: Event): void {
+    event.preventDefault();
+    const pageElement = document.getElementById('admin-page'); // Replace with the actual container ID or class
+    if (pageElement) {
+      html2canvas(pageElement).then(canvas => {
+        const link = document.createElement('a');
+        link.download = 'admin-page.png';
+        link.href = canvas.toDataURL('image/png');
+        link.click();
+      });
+    }
+  }
+
+  downloadPageAsJPEG(event: Event): void {
+    event.preventDefault();
+    const pageElement = document.getElementById('admin-page');
+    if (pageElement) {
+      html2canvas(pageElement).then(canvas => {
+        const link = document.createElement('a');
+        link.download = 'admin-page.jpg';
+        link.href = canvas.toDataURL('image/jpeg', 0.9);
+        link.click();
+      });
+    }
+  }
+
+  downloadPageAsPDF(event: Event): void {
+    event.preventDefault();
+    const pageElement = document.getElementById('admin-page');
+    if (pageElement) {
+      html2canvas(pageElement).then(canvas => {
+        const imgData = canvas.toDataURL('image/png');
+        const pdf = new jsPDF('landscape');
+        const imgProps = pdf.getImageProperties(imgData);
+        const pdfWidth = pdf.internal.pageSize.getWidth();
+        const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+        pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+        pdf.save('admin-page.pdf');
+      });
+    }
+  }
+
+  downloadPageAsCSV(event: Event): void {
+    event.preventDefault();
+    const headers = ['Id', 'Title', 'Author', 'Likes', 'Date'];
+    const data = this.posts.map(post => ({
+      Id: post.id,
+      Title: post.title,
+      Author: post.createdBy,
+      Likes: post.likes,
+      Date: post.createdAt
+    }));
+
+    let csv = headers.join(',') + '\n';
+    data.forEach(row => {
+      csv += `${row.Id},${row.Title},${row.Author},${row.Likes},${row.Date}\n`;
+    });
+
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement('a');
+    const url = URL.createObjectURL(blob);
+    link.setAttribute('href', url);
+    link.setAttribute('download', 'admin-page-data.csv');
+    link.style.visibility = 'hidden';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
   }
 }
