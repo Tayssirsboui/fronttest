@@ -7,4 +7,6 @@ export class Collaboration {
     dateDemande?: Date;
     dateValidation?: Date;
     projet!: Projet;
+    projetId!: number; // ✅ Ensure this exists
+
   }

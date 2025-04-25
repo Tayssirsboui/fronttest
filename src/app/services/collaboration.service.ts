@@ -27,4 +27,5 @@ export class CollaborationService {
     accepterCollaboration(id: number): Observable<any> {
       return this.http.put(`http://localhost:5210/collaboration/collaborations/${id}/accepter`, null);
     }    
+  
 }

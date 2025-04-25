@@ -34,7 +34,7 @@ const routes: Routes = [
       { path: 'events', component: EventsComponent },
       { path: 'collaborations', component: CollaborationsComponent },
       { path: 'contact', component: ContactComponent },
-      { path: 'kanban', component: DashboardKanbanComponent }
+      { path: 'kanban/:id', component: DashboardKanbanComponent }
 
     ]
   },

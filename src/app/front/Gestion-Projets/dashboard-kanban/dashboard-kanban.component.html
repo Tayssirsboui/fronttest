@@ -1,11 +1,13 @@
 <div class="header-bar">
+  <mat-progress-bar mode="determinate" [value]="progressValue"></mat-progress-bar>
   <button mat-raised-button color="primary" (click)="openAddTaskDialog()">➕ Ajouter une tâche</button>
 </div>
 
 <ejs-kanban
   [dataSource]="dataSource"
   keyField="statut"
-  [cardSettings]="{ contentField: 'description', headerField: 'titre' }"
+  (actionComplete)="onKanbanAction($event)"
+  [cardSettings]="{ contentField: 'description', headerField: 'titre', template: cardTemplate }"
   height="600px"
   width="100%"
 >
@@ -15,14 +17,18 @@
     <e-column headerText="Terminé" keyField="Terminé"></e-column>
   </e-columns>
 
-  <ng-template #cardSettingsTemplate let-data>
+  <ng-template #cardTemplate let-data>
     <div class="kanban-card">
+     
       <h4 class="card-title">{{ data.titre }}</h4>
       <p class="card-summary">{{ data.description }}</p>
       <div class="card-footer">
         <span class="priority" [ngClass]="getPriorityClass(data.priorite)">Priorité : {{ data.priorite }}</span>
         <span class="estimation">Estimation : {{ data.estimation }}</span>
       </div>
+      <button mat-icon-button color="warn" (click)="deleteTask(data.id)">
+        <mat-icon>delete</mat-icon>
+      </button>
     </div>
   </ng-template>
 </ejs-kanban>
@@ -42,7 +48,7 @@
 
     <mat-form-field appearance="fill">
       <mat-label>Estimation</mat-label>
-      <input matInput formControlName="estimation" placeholder="ex: 2 jours" />
+      <input matInput formControlName="estimation" />
     </mat-form-field>
 
     <mat-form-field appearance="fill">

@@ -4,6 +4,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { ColumnsModel } from '@syncfusion/ej2-angular-kanban';
 import { Tache } from 'src/app/models/tache';
 import { TacheService } from 'src/app/services/tache.service';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-dashboard-kanban',
@@ -14,37 +15,35 @@ export class DashboardKanbanComponent implements OnInit {
   @ViewChild('addTaskDialog') addTaskDialog!: TemplateRef<any>;
 
   taskForm!: FormGroup;
-  projectId: number=7; // Assuming you get this from a service or route parameter
-  columns: ColumnsModel[] = [
-    { headerText: 'À faire', keyField: 'To Do' },
-    { headerText: 'En cours', keyField: 'In Progress' },
-    { headerText: 'Terminé', keyField: 'Done' }
-  ];
-
+  projectId: number = 0;
   dataSource: Tache[] = [];
+  progressValue = 0;
 
   constructor(
     private fb: FormBuilder,
     private dialog: MatDialog,
-    private tacheService: TacheService
+    private tacheService: TacheService,
+    private route: ActivatedRoute
   ) {}
 
   ngOnInit(): void {
+    this.projectId = +this.route.snapshot.paramMap.get('id')!;
     this.taskForm = this.fb.group({
       titre: ['', Validators.required],
       description: ['', Validators.required],
-      priorite: ['Medium', Validators.required],
+      priorite: ['Moyenne', Validators.required],
       estimation: [''],
-      statut: ['To Do']
+      statut: ['À faire']
     });
 
     this.loadTaches();
   }
 
   loadTaches() {
-    this.tacheService.getTaches().subscribe({
+    this.tacheService.getTachesByProjetId(this.projectId).subscribe({
       next: (data) => {
         this.dataSource = data;
+        this.updateProgress();
       },
       error: (err) => {
         console.error('Erreur chargement des tâches:', err);
@@ -52,23 +51,16 @@ export class DashboardKanbanComponent implements OnInit {
     });
   }
 
-  getPriorityClass(priorite: string): string {
-    switch (priorite.toLowerCase()) {
-      case 'haute':
-        return 'high';
-      case 'moyenne':
-        return 'medium';
-      case 'faible':
-        return 'low';
-      default:
-        return '';
-    }
+  updateProgress() {
+    const total = this.dataSource.length;
+    const done = this.dataSource.filter(t => t.statut === 'Terminé').length;
+    this.progressValue = total > 0 ? (done / total) * 100 : 0;
   }
-  
+
   openAddTaskDialog() {
     this.taskForm.reset({
-      priorite: 'Medium',
-      statut: 'To Do'
+      priorite: 'Moyenne',
+      statut: 'À faire'
     });
     this.dialog.open(this.addTaskDialog);
   }
@@ -76,7 +68,8 @@ export class DashboardKanbanComponent implements OnInit {
   submitTask() {
     if (this.taskForm.valid) {
       const newTask: Tache = {
-        ...this.taskForm.value
+        ...this.taskForm.value,
+        projetId: this.projectId
       };
 
       this.tacheService.addTache(newTask, this.projectId).subscribe({
@@ -90,4 +83,41 @@ export class DashboardKanbanComponent implements OnInit {
       });
     }
   }
+
+  deleteTask(id?: number) {
+    if (!id) return;
+    this.tacheService.deleteTache(id).subscribe(() => this.loadTaches());
+  }
+
+  getPriorityClass(priorite: string): string {
+    switch (priorite.toLowerCase()) {
+      case 'haute': return 'high';
+      case 'moyenne': return 'medium';
+      case 'faible': return 'low';
+      default: return '';
+    }
+  }
+
+  onKanbanAction(args: any): void {
+    if (args.requestType === 'cardChanged' && args.changedRecords.length > 0) {
+      const updatedTask: Tache = args.changedRecords[0];
+  
+      // Ensure projetId is kept
+      if (!updatedTask.projetId) {
+        updatedTask.projetId = this.projectId;
+      }
+  
+      // Call the new endpoint to update only the status
+      this.tacheService.updateStatut(updatedTask.id!, updatedTask.statut).subscribe({
+        next: () => {
+          this.loadTaches(); // refresh list and update progress bar
+        },
+        error: (err) => {
+          console.error('Erreur lors de la mise à jour du statut:', err);
+        }
+      });
+    }
+  }
+  
 }
+

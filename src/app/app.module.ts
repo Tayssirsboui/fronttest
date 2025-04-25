@@ -34,12 +34,15 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatFormFieldModule } from '@angular/material/form-field'; 
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
-import { LocationStrategy, HashLocationStrategy } from '@angular/common';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { LocationStrategy, HashLocationStrategy, PathLocationStrategy } from '@angular/common';
 import {  MatPaginatorModule } from '@angular/material/paginator';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { KanbanModule } from '@syncfusion/ej2-angular-kanban';
 import { DashboardKanbanComponent } from './front/Gestion-Projets/dashboard-kanban/dashboard-kanban.component';
-
+import { RoadmapModalComponent } from './front/Gestion-Projets/roadmap-modal/roadmap-modal.component';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { MatIconModule } from '@angular/material/icon';
 @NgModule({
   declarations: [
     AppComponent,
@@ -65,7 +68,8 @@ import { DashboardKanbanComponent } from './front/Gestion-Projets/dashboard-kanb
     AjouterCollaborationComponent,
     AjouterProjetComponent,
     CollaborationsComponent,
-    DashboardKanbanComponent
+    DashboardKanbanComponent,
+    RoadmapModalComponent
   ],
   imports: [
     BrowserModule,
@@ -82,10 +86,14 @@ import { DashboardKanbanComponent } from './front/Gestion-Projets/dashboard-kanb
     MatSelectModule,
     MatPaginatorModule,
     MatSnackBarModule,
-    KanbanModule
+    KanbanModule,
+    MatProgressSpinnerModule,
+    MatProgressBarModule,
+    MatIconModule
+
 
   ],
-  providers: [{ provide: LocationStrategy, useClass: HashLocationStrategy }],
+  providers: [{ provide: LocationStrategy, useClass: PathLocationStrategy }],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

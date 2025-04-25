@@ -1,0 +1,49 @@
+<!-- roadmap-modal.component.html -->
+<h2 mat-dialog-title>Roadmap du projet</h2>
+<mat-dialog-content>
+  <div *ngIf="loading" class="text-center">
+    <mat-spinner></mat-spinner>
+    <p>Génération en cours...</p>
+  </div>
+
+  <div *ngIf="!loading">
+    <p><strong>Projet :</strong> {{ collab.projet.titre }}</p>
+    <p><strong>Rôle :</strong> {{ collab.role }}</p>
+
+    <!-- Tâches existantes du projet -->
+    <div *ngIf="existingTasks.length > 0">
+      <h4 class="mb-2">📋 Tâches existantes</h4>
+      <ul class="list-group mb-4">
+        <li class="list-group-item" *ngFor="let task of existingTasks">
+          <strong>{{ task.titre }}</strong> - {{ task.priorite }} - <i>{{ task.statut }}</i>
+        </li>
+      </ul>
+    </div>
+
+    <button mat-raised-button color="primary" (click)="genererRoadmap()">Générer Roadmap</button>
+
+    <!-- Sous-tâches proposées -->
+    <div *ngIf="subtasks.length">
+      <h4 class="mt-3">Sous-tâches proposées par l’IA</h4>
+      <div *ngFor="let task of subtasks" class="card my-2 p-3 shadow-sm">
+        <label>Titre:</label>
+        <input matInput [(ngModel)]="task.titre" class="form-control mb-2">
+
+        <label>Priorité:</label>
+        <select matInput [(ngModel)]="task.priorite" class="form-control mb-2">
+          <option>High</option>
+          <option>Medium</option>
+          <option>Low</option>
+        </select>
+
+        <label>Estimation:</label>
+        <input matInput [(ngModel)]="task.estimation" class="form-control">
+      </div>
+    </div>
+  </div>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close>Annuler</button>
+  <button mat-raised-button color="accent" (click)="validerRoadmap()" [disabled]="!subtasks.length">Valider et envoyer au Kanban</button>
+</mat-dialog-actions>

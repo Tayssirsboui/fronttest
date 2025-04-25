@@ -81,7 +81,11 @@
                 <button *ngIf="collab.statut === 'Non traité'" class="btn btn-sm btn-outline-warning" (click)="onModifier(collab)">✏️ Modifier</button>
                 <button *ngIf="collab.statut === 'Non traité'" class="btn btn-sm btn-outline-danger" (click)="onAnnuler(collab.id)">🗑️ Annuler</button>
               </div>
-              
+              <!-- Ajoute ce bouton dans chaque carte de collaboration-->
+<button *ngIf="collab.statut === 'Accepté'" class="btn btn-sm btn-outline-info" (click)="openRoadmapModal(collab)">
+  👁️ Voir détails
+</button> 
+
             </div>
           </div>
         </div>

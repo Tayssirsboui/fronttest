@@ -90,5 +90,13 @@
     width: 100%;
   }
   
+  .project-info {
+    font-size: 12px;
+    font-weight: 500;
+    color: #666;
+    margin-bottom: 5px;
+    border-left: 3px solid #2196f3;
+    padding-left: 6px;
+  }
   
   

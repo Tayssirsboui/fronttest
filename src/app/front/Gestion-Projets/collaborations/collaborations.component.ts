@@ -4,6 +4,8 @@ import { CollaborationService } from 'src/app/services/collaboration.service';
 import { MatDialog } from '@angular/material/dialog';
 import { AjouterCollaborationComponent } from '../ajouter-collaboration/ajouter-collaboration.component';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { RoadmapModalComponent } from '../roadmap-modal/roadmap-modal.component';
+import { ProjetService } from 'src/app/services/projet.service';
 
 @Component({
   selector: 'app-collaborations',
@@ -26,7 +28,8 @@ export class CollaborationsComponent implements OnInit {
   constructor(
     private collaborationService: CollaborationService,
     private dialog: MatDialog,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private projetService: ProjetService // Assurez-vous d'importer le service ProjetService
 
   ) {}
 
@@ -105,6 +108,25 @@ export class CollaborationsComponent implements OnInit {
         panelClass: ['success-snackbar']
       });
       
+    });
+  }
+  openRoadmapModal(collab: Collaboration): void {
+    if (!collab.projetId) {
+      console.error("Aucun projetId trouvé dans la collaboration.");
+      return;
+    }
+  
+    this.projetService.getProjetById(collab.projetId).subscribe({
+      next: (projet) => {
+        collab.projet = projet; // injecte le projet dans l'objet collab
+        this.dialog.open(RoadmapModalComponent, {
+          width: '700px',
+          data: collab
+        });
+      },
+      error: (err) => {
+        console.error("Erreur lors du chargement du projet:", err);
+      }
     });
   }
   

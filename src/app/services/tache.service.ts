@@ -16,9 +16,10 @@ export class TacheService {
     return this.http.get<Tache[]>(`${this.baseUrl}/retrieve-all-taches`);
   }
 
-  getTachesByProjet(projetId: number): Observable<Tache[]> {
+  getTachesByProjetId(projetId: number): Observable<Tache[]> {
     return this.http.get<Tache[]>(`${this.baseUrl}/projet/${projetId}`);
   }
+  
 
   addTache(tache: Tache, projetId: number): Observable<Tache> {
     return this.http.post<Tache>(`${this.baseUrl}/add-tache/${projetId}`, tache);
@@ -31,4 +32,9 @@ export class TacheService {
   deleteTache(id: number): Observable<void> {
     return this.http.delete<void>(`${this.baseUrl}/remove-tache/${id}`);
   }
+
+  updateStatut(id: number, statut: string): Observable<Tache> {
+    return this.http.put<Tache>(`${this.baseUrl}/update-statut/${id}`, { statut });
+  }
+  
 }
