@@ -13,11 +13,13 @@ import { ActivatedRoute } from '@angular/router';
 })
 export class DashboardKanbanComponent implements OnInit {
   @ViewChild('addTaskDialog') addTaskDialog!: TemplateRef<any>;
+  @ViewChild('editTaskDialog') editTaskDialog!: TemplateRef<any>;
 
   taskForm!: FormGroup;
   projectId: number = 0;
   dataSource: Tache[] = [];
   progressValue = 0;
+  currentEditingTask: Tache | null = null;
 
   constructor(
     private fb: FormBuilder,
@@ -27,16 +29,24 @@ export class DashboardKanbanComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.projectId = +this.route.snapshot.paramMap.get('id')!;
-    this.taskForm = this.fb.group({
-      titre: ['', Validators.required],
-      description: ['', Validators.required],
-      priorite: ['Moyenne', Validators.required],
-      estimation: [''],
-      statut: ['À faire']
-    });
+    this.route.paramMap.subscribe(params => {
+      const id = params.get('id');
+      if (id) {
+        this.projectId = +id;
 
-    this.loadTaches();
+        this.taskForm = this.fb.group({
+          projetId: [this.projectId],
+          titre: ['', Validators.required],
+          description: ['', Validators.required],
+          estimation: [''],
+          priorite: ['Moyenne', Validators.required],
+          statut: ['À faire'],
+          
+        });
+
+        this.loadTaches();
+      }
+    });
   }
 
   loadTaches() {
@@ -59,19 +69,20 @@ export class DashboardKanbanComponent implements OnInit {
 
   openAddTaskDialog() {
     this.taskForm.reset({
+      projetId: this.projectId,
+      titre: '',
+      description: '',
+      estimation: '',
       priorite: 'Moyenne',
-      statut: 'À faire'
+      statut: 'À faire',
+      
     });
     this.dialog.open(this.addTaskDialog);
   }
 
   submitTask() {
     if (this.taskForm.valid) {
-      const newTask: Tache = {
-        ...this.taskForm.value,
-        projetId: this.projectId
-      };
-
+      const newTask: Tache = this.taskForm.value;
       this.tacheService.addTache(newTask, this.projectId).subscribe({
         next: () => {
           this.dialog.closeAll();
@@ -84,33 +95,55 @@ export class DashboardKanbanComponent implements OnInit {
     }
   }
 
+  openEditTaskDialog(task: Tache) {
+    this.currentEditingTask = task;
+    this.taskForm.setValue({
+      projetId: task.projetId || this.projectId,
+      titre: task.titre,
+      description: task.description,
+      estimation: task.estimation,
+      priorite: task.priorite,
+      statut: task.statut,
+      
+    });
+    this.dialog.open(this.editTaskDialog);
+  }
+
+  submitEditTask() {
+    if (this.taskForm.valid && this.currentEditingTask) {
+      const updated: Tache = {
+        ...this.currentEditingTask,
+        ...this.taskForm.value
+      };
+      this.tacheService.updateTache(updated).subscribe({
+        next: () => {
+          this.dialog.closeAll();
+          this.loadTaches();
+          this.currentEditingTask = null;
+        },
+        error: (err) => {
+          console.error('Erreur de modification :', err);
+        }
+      });
+    }
+  }
+
   deleteTask(id?: number) {
     if (!id) return;
     this.tacheService.deleteTache(id).subscribe(() => this.loadTaches());
   }
 
-  getPriorityClass(priorite: string): string {
-    switch (priorite.toLowerCase()) {
-      case 'haute': return 'high';
-      case 'moyenne': return 'medium';
-      case 'faible': return 'low';
-      default: return '';
-    }
-  }
-
   onKanbanAction(args: any): void {
     if (args.requestType === 'cardChanged' && args.changedRecords.length > 0) {
       const updatedTask: Tache = args.changedRecords[0];
-  
-      // Ensure projetId is kept
+
       if (!updatedTask.projetId) {
         updatedTask.projetId = this.projectId;
       }
-  
-      // Call the new endpoint to update only the status
+
       this.tacheService.updateStatut(updatedTask.id!, updatedTask.statut).subscribe({
         next: () => {
-          this.loadTaches(); // refresh list and update progress bar
+          this.loadTaches();
         },
         error: (err) => {
           console.error('Erreur lors de la mise à jour du statut:', err);
@@ -118,6 +151,14 @@ export class DashboardKanbanComponent implements OnInit {
       });
     }
   }
-  
-}
 
+  getPriorityClass(priorite: string | null | undefined): string {
+    if (!priorite) return '';
+    switch (priorite.toLowerCase()) {
+      case 'haute': return 'high';
+      case 'moyenne': return 'medium';
+      case 'faible': return 'low';
+      default: return '';
+    }
+  }
+}
