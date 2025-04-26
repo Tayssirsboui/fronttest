@@ -30,13 +30,13 @@
             ],
             "styles": [
               "src/styles.css",
-              "src/assets/css/vendor/bootstrap.min.css",
+         
             
               "./node_modules/@angular/material/prebuilt-themes/indigo-pink.css",
               "node_modules/bootstrap-icons/font/bootstrap-icons.css",
               "node_modules/aos/dist/aos.css",
-              "node_modules/ngx-toastr/toastr.css",
-              "node_modules/animate.css/animate.min.css"
+              "node_modules/ngx-toastr/toastr.css"
+              
             ],
             "scripts": [
               "src/assets/back/js/dashboard.js",
