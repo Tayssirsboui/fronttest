@@ -61,12 +61,7 @@
       <!-- Liste des filtres -->
       <ul class="event_filter">
 
-        <li>
-          <a [class.is_active]="selectedFilter === 'favorites'" 
-          (click)="setFilter('favorites')">
-         <i class="fas fa-heart"></i> Mes Favoris
-       </a>
-      </li>
+   
           <li>
             <a
             [routerLink]="['/categories']"
@@ -77,7 +72,12 @@
             </a>
             
           </li>
-     
+          <li>
+            <a [class.is_active]="selectedFilter === 'favorites'" 
+            (click)="setFilter('favorites')">
+           <i class="fas fa-heart"></i> Mes Favoris 🤍
+         </a>
+        </li>
         
         <li *ngFor="let domaine of getUniqueDomaines()">
           <a

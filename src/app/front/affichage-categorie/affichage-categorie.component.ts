@@ -134,7 +134,7 @@ get totalPages(): number {
   filteredCategories: Categorie[] = []; // Liste des catégories filtrées
   selectedFilter: string = '*'; // Filtre par défaut (toutes les catégories)
   listcategorie!: Categorie[]; // Liste des catégories pour d'autres opérations
-
+  reload = false; // Variable pour forcer le rechargement des favoris
   isPressing = false;      // Si l'utilisateur appuie sur le bouton
   isConfirmed = false;     // Si la suppression est confirmée
   pressTimeout: any;       // Délai de maintien
@@ -386,6 +386,7 @@ deleteCategorie(categorieId: number): void {
       updatedFiltered = this.categories.filter(categorie =>
         this.favoris.some(fav => fav.idCategorie === categorie.idCategorie)
       );
+      this.reload = true;
     } else if (filter === '*') {
       this.selectedFilter = '*';
       updatedFiltered = [...this.categories];
@@ -447,9 +448,17 @@ toggleFavorite(categorie: Categorie): void {
     this.rs.retirerFavori(this.idUser, categorie.idCategorie).subscribe(() => {
       this.favoris = this.favoris.filter(fav => fav.idCategorie !== categorie.idCategorie);
       this.showSuccess(`Favori retiré : ${categorie.nomCategorie}`);
+     
+     
       this.rs.getFavoris(this.idUser).subscribe(favs => {
         this.favoris = favs;
         console.log('favorite', this.favoris);});
+        //this.updatePagedCategories();
+        if (this.reload ){
+
+        this.setFilter('favorites')
+        this.cdRef.detectChanges();
+      this.reload = false;}
     });
   } else {
     this.rs.ajouterFavori(this.idUser, categorie.idCategorie).subscribe(() => {
