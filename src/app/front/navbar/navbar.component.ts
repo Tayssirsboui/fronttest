@@ -6,5 +6,12 @@ import { Component } from '@angular/core';
   styleUrls: ['./navbar.component.css']
 })
 export class NavbarComponent {
+  notifications: any[] = [];
 
+  // constructor(private notificationService: NotificationService) {}
+
+  // ngOnInit() {
+  //   this.notificationService.notifications$.subscribe(n => {
+  //     this.notifications = n;
+  //   });}
 }

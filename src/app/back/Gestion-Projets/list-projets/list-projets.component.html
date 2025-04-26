@@ -1,0 +1,88 @@
+<div class="container mt-4">
+    <div class="row">
+      <div class="col-md-4 mb-4" *ngFor="let projet of projetsFiltres">
+        <div class="card shadow h-100 border-0" (click)="ouvrirDetails(projet)" style="cursor: pointer;">
+          <div class="card-body">
+            <h5 class="fw-bold text-dark">{{ projet.titre }}</h5>
+            <p class="text-muted">{{ projet.description }}</p>
+            <span class="badge" [ngClass]="getBadgeClass(getStatut(projet))">{{ getStatut(projet) }}</span>
+            <p class="mt-2 mb-1 text-muted"><strong>Collaborateurs :</strong> {{ getCollaborateursActuels(projet) }}</p>
+          </div>
+          <div class="card-footer bg-transparent border-0 d-flex justify-content-end">
+            <button class="btn btn-danger btn-sm" (click)="supprimerProjet(projet.id); $event.stopPropagation()">
+              🗑️ Supprimer
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  
+    <!-- Pagination -->
+    <div class="d-flex justify-content-center mt-3">
+      <button class="btn btn-outline-secondary btn-sm me-2" (click)="prevPage()" [disabled]="currentPage === 1">⬅️</button>
+      <span class="align-self-center">Page {{ currentPage }} / {{ totalPages }}</span>
+      <button class="btn btn-outline-secondary btn-sm ms-2" (click)="nextPage()" [disabled]="currentPage === totalPages">➡️</button>
+    </div>
+  </div>
+  
+  <!-- Modal de détails -->
+  <ng-template #detailsModal let-data>
+    <h2 mat-dialog-title class="fw-bold">📋 Détails du projet</h2>
+
+    <mat-dialog-content class="dialog-body">
+      <div class="section">
+        <p><strong>Titre :</strong> {{ data.titre }}</p>
+        <p><strong>Description :</strong> {{ data.description }}</p>
+        <p><strong>Catégorie :</strong> {{ data.categorie }}</p>
+        <p><strong>Date de fin prévue :</strong> {{ data.dateFinPrevue | date: 'longDate' }}</p>
+      </div>
+    
+      <hr />
+    
+      <div class="section">
+        <h5>👥 Collaborations</h5>
+        <ul class="list-group list-group-flush" *ngIf="data.collaborations?.length > 0; else noCollab">
+          <li class="list-group-item py-1" *ngFor="let c of data.collaborations">
+            <strong>{{ c.nomCollaborateur }}</strong> <span class="text-muted">({{ c.role }})</span>
+          </li>
+        </ul>
+        <ng-template #noCollab>
+          <p class="text-muted">Aucune collaboration.</p>
+        </ng-template>
+      </div>
+    
+      <hr />
+    
+      <div class="section">
+        <h5 class="mb-2"><i class="bi bi-check2-square text-success"></i> Tâches</h5>
+
+        <div class="taches-grid">
+          <div class="task-card" *ngFor="let t of data.taches">
+            <h6 class="task-title">{{ t.titre }}</h6>
+            <div class="badges">
+              <span class="badge statut" [ngClass]="{
+                'bg-secondary': t.statut === 'À faire',
+                'bg-warning text-dark': t.statut === 'En cours',
+                'bg-success': t.statut === 'Terminé'
+              }">{{ t.statut }}</span>
+        
+              <span class="badge priorite" [ngClass]="{
+                'bg-danger': t.priorite === 'Haute',
+                'bg-warning text-dark': t.priorite === 'Moyenne',
+                'bg-info text-dark': t.priorite === 'Faible'
+              }">{{ t.priorite }}</span>
+            </div>
+          </div>
+        </div>        
+        <ng-template #noTaches>
+          <p class="text-muted">Aucune tâche assignée.</p>
+        </ng-template>
+      </div>
+    </mat-dialog-content>
+    
+    <mat-dialog-actions align="end">
+      <button mat-button mat-dialog-close>Fermer</button>
+    </mat-dialog-actions>
+    
+  </ng-template>
+  

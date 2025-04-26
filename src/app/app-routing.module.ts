@@ -13,6 +13,7 @@ import { ContactComponent } from './front/contact/contact.component';
 import { ProjetsComponent } from './front/Gestion-Projets/projets/projets.component';
 import { CollaborationsComponent } from './front/Gestion-Projets/collaborations/collaborations.component';
 import { DashboardKanbanComponent } from './front/Gestion-Projets/dashboard-kanban/dashboard-kanban.component';
+import { ListProjetsComponent } from './back/Gestion-Projets/list-projets/list-projets.component';
 
 const routes: Routes = [
   {
@@ -20,6 +21,7 @@ const routes: Routes = [
     component: BackLayoutComponent,
     children: [
       { path: '', component: DashboardComponent },
+      { path: 'projets', component: ListProjetsComponent },
     ]
   },
   {

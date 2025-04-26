@@ -2,7 +2,7 @@
   <div class="container">
     <div class="navbar-header">
       <div class="btn-more js-btn-more visible-xs">
-        <a href="#"><i class="icon-dots-three-vertical "></i></a>
+        <a href="#"><i class="icon-dots-three-vertical"></i></a>
       </div>
       <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse" aria-expanded="false" aria-controls="navbar">
         <span class="sr-only">Toggle navigation</span>
@@ -15,6 +15,7 @@
 
     <div id="navbar-collapse" class="navbar-collapse collapse">
       <ul class="nav navbar-nav navbar-right">
+
         <li class="active"><a routerLink="">Home</a></li>
         <li><a routerLink="/projets">Projets</a></li>
         <li><a routerLink="/collaborations">Collaborations</a></li>
@@ -25,21 +26,31 @@
           <ul class="dropdown-menu">
             <li><a routerLink="/courses">Courses</a></li>
             <li><a routerLink="/course-single">Course Single</a></li>
-            
-            <!-- <li class="dropdown-submenu dropdown">
-              <a href="#" data-toggle="dropdown" class="dropdown-toggle"><span>Sub Menu</span></a>
-              <ul class="dropdown-menu">
-                <li><a href="#">Second Level Menu</a></li>
-                <li><a href="#">Second Level Menu</a></li>
-                <li><a href="#">Second Level Menu</a></li>
-                <li><a href="#">Second Level Menu</a></li>
-              </ul>
-            </li> -->
-            
           </ul>
         </li>
+
         <li><a routerLink="/about">About Us</a></li>
         <li><a routerLink="/contact">Contact</a></li>
+
+        <!-- 🔔 Notification Bell Beautiful -->
+        <li class="dropdown notification-wrapper">
+          <a href="#" data-toggle="dropdown" class="dropdown-toggle">
+            <i class="icon-bell"></i>
+            <span class="notif-badge" *ngIf="notifications.length > 0">{{ notifications.length }}</span>
+          </a>
+
+          <ul class="dropdown-menu notifications-menu">
+            <li class="header">Notifications ({{ notifications.length }})</li>
+            <li *ngIf="notifications.length === 0" class="text-center p-3">
+              Aucune notification pour l'instant.
+            </li>
+            <li *ngFor="let notif of notifications" class="notification-item">
+              <div class="notif-icon">📣</div>
+              <div class="notif-text">{{ notif.message }}</div>
+            </li>
+          </ul>
+        </li>
+
       </ul>
     </div>
   </div>

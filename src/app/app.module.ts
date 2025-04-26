@@ -43,6 +43,7 @@ import { DashboardKanbanComponent } from './front/Gestion-Projets/dashboard-kanb
 import { RoadmapModalComponent } from './front/Gestion-Projets/roadmap-modal/roadmap-modal.component';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatIconModule } from '@angular/material/icon';
+import { ListProjetsComponent } from './back/Gestion-Projets/list-projets/list-projets.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -69,7 +70,8 @@ import { MatIconModule } from '@angular/material/icon';
     AjouterProjetComponent,
     CollaborationsComponent,
     DashboardKanbanComponent,
-    RoadmapModalComponent
+    RoadmapModalComponent,
+    ListProjetsComponent
   ],
   imports: [
     BrowserModule,
