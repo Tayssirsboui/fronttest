@@ -14,6 +14,9 @@ export class ListeParticipationsComponent implements OnInit {
   evenements: Evenement[] = [];
   participationsParEvenement: { [evenementId: number]: ParticipationDetails[] } = {};
 
+  // ✅ Ajouter cette map pour suivre les événements ouverts
+  expandedEventIds: Set<number> = new Set();
+
   constructor(
     private evenementService: EvenementService,
     private participationService: ParticipationService
@@ -40,5 +43,17 @@ export class ListeParticipationsComponent implements OnInit {
       },
       error: (err) => console.error(`Erreur chargement participations pour événement ${evenementId}`, err)
     });
+  }
+
+  toggleExpand(evenementId: number): void {
+    if (this.expandedEventIds.has(evenementId)) {
+      this.expandedEventIds.delete(evenementId);
+    } else {
+      this.expandedEventIds.add(evenementId);
+    }
+  }
+
+  isExpanded(evenementId: number): boolean {
+    return this.expandedEventIds.has(evenementId);
   }
 }
