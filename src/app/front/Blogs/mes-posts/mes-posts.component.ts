@@ -10,7 +10,7 @@ import { Location } from '@angular/common';
 })
 export class MesPostsComponent implements OnInit {
   userPosts: Post[] = [];
-  userId: number = 1; // Replace with dynamic user ID if needed
+  userId!: number ; // Replace with dynamic user ID if needed
   isLoading = false;
   selectedPostToEdit: Post | null = null;
 showEditModal: boolean = false;

@@ -19,7 +19,7 @@ export class BlogComponent implements OnInit {
   activeCardId: number | null = null;
   listPosts: Post[] = [];
   paginatedPosts: Post[] = [];
-  userId: number = 1;
+  userId!: number ;
   showModal = false;
   selectedPostId: number | null = null;
   currentPage = 1;

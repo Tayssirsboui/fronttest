@@ -19,7 +19,7 @@ export class BlogDetailsComponent {
   selectedCommentId: number | null = null;
   showEmojiPicker = false;
   comments!: Comment[];
-  userId: number = 2;
+  userId!: number ;
   id!: number;
   post!: Post;
   loadingEnhancement: boolean = false;

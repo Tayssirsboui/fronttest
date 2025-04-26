@@ -49,9 +49,6 @@ import { BlogAdminComponent } from './back/blogs/blog-admin/blog-admin.component
 import { MesPostsComponent } from './front/Blogs/mes-posts/mes-posts.component';
 import { NgChartsModule } from 'ng2-charts';
 import { StatPostsComponent } from './back/blogs/stat-posts/stat-posts.component';
-import { LocationStrategy, HashLocationStrategy, PathLocationStrategy } from '@angular/common';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
 import { QuizzesComponent } from './back/quizzes/quizzes.component';
 import { BstagesComponent } from './back/bstages/bstages.component';
 
@@ -104,8 +101,6 @@ import { BstagesComponent } from './back/bstages/bstages.component';
     AppRoutingModule,
     FormsModule,
     HttpClientModule,
-    ReactiveFormsModule
-    FormsModule,
     WebcamModule,
     CodeInputModule,
     NgbModule,

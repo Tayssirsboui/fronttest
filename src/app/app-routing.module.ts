@@ -55,7 +55,6 @@ const routes: Routes = [
       { path: 'quiz', component: QuizComponent },
       { path: 'quiz/:id', component: QuizComponent },
       { path: 'course-single', component: CourseSingleComponent },
-      { path: 'events', component: EventsComponent },
       { path: 'contact', component: ContactComponent },
       { path: 'blogs', component: BlogComponent },
       { path: 'blog-details/:id', component: BlogDetailsComponent },
