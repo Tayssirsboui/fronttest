@@ -7,8 +7,8 @@ import {  of } from 'rxjs';
   providedIn: 'root'
 })
 export class BlogService {
-  private baseUrlPost = 'http://localhost:5100/api/v1/posts';
-  private baseUrlComment = 'http://localhost:5110/api/v1/comments';
+  private baseUrlPost = 'http://localhost:8222/api/v1/posts';
+  private baseUrlComment = 'http://localhost:8222/api/v1/comments';
   private apiUrl = 'http://localhost:5122/recommend-posts'; 
 userId!: number ;
   constructor(private http : HttpClient) { }
@@ -82,12 +82,13 @@ userId!: number ;
       return this.http.post<Comment>(`${this.baseUrlComment}/${postId}/${userId}`, comment);
     }
     
-     updateComment(commentId: number, userId: number, comment: any): Observable<any> {
-      return this.http.put(`${this.baseUrlComment}/${commentId}/user/${userId}`, comment);
+    
+    updateComment(commentId: number, userId: number, commentData: any): Observable<Comment> {
+      return this.http.put<Comment>(`${this.baseUrlComment}/${commentId}/user/${userId}`, commentData);
     }
     getRecommendedPosts(userPost: string): Observable<any> {
       const payload = { user_post: userPost };
-      return this.http.post<any>(this.apiUrl, payload);
+      return this.http.post<any>('http://localhost:5122/recommend-posts', payload);
     }
     
     deleteComment(commentId: number): Observable<void> {

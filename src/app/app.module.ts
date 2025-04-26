@@ -56,14 +56,13 @@ import { StatPostsComponent } from './back/blogs/stat-posts/stat-posts.component
     CourseSingleComponent,
     TeachersComponent,
     ContactComponent,
-    
     BlogComponent,
     BlogDetailsComponent,
     FooterBackComponent,
     GeminiChatComponent,
     BlogAdminComponent,
     MesPostsComponent,
-    StatPostsComponent
+    StatPostsComponent,
   ],
   imports: [
     BrowserModule,

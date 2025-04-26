@@ -27,7 +27,7 @@ const routes: Routes = [
     ]
   },
   {
-    path: 'front',
+    path: '',
     component: FrontLayoutComponent,
     children: [
       { path: 'home', component: HomeComponent },
@@ -47,8 +47,8 @@ const routes: Routes = [
 
     ]
   },
-  { path: '', redirectTo: 'front/home', pathMatch: 'full' },
-  { path: '**', redirectTo: 'front/home' }
+  { path: '', redirectTo: 'home', pathMatch: 'full' },
+  { path: '**', redirectTo: 'home' }
 ];
 
 

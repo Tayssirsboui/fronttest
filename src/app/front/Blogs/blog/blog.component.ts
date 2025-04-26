@@ -8,6 +8,7 @@ import { BlogService } from 'src/app/services/blog.service';
 import { Post } from 'src/app/models/post';
 import { ToastrService } from 'ngx-toastr';
 import * as bootstrap from 'bootstrap';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-blog',
@@ -34,6 +35,7 @@ export class BlogComponent implements OnInit {
   recommendedPosts: any[] = [];
   selectedFile: File | null = null;
 style: any;
+showSortOptions = false;
 
   constructor(
     private fb: FormBuilder,
@@ -46,9 +48,10 @@ style: any;
       title: ['', [Validators.required, Validators.minLength(3)]],
       content: ['', [Validators.required, Validators.minLength(10)]],
       image: [''],
-      createdBy: ['', Validators.required]
+     // createdBy: ['', Validators.required]
     });
   }
+  
 
   ngOnInit() {
     this.toastr.info("Chargement des posts", "Info");
@@ -123,13 +126,22 @@ style: any;
       this.updatePaginatedPosts();
     }
   }
+   // Méthode pour basculer l'affichage des options de tri
+   toggleSortOptions() {
+    this.showSortOptions = !this.showSortOptions;
+  }
 
   sortByDate(order: string): void {
+    if (!this.listPosts) return; // Sécurité
+  
     if (order === 'latest') {
-      this.paginatedPosts.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+      this.listPosts.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
     } else if (order === 'oldest') {
-      this.paginatedPosts.sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
+      this.listPosts.sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
     }
+  
+    // Après tri, il faut mettre à jour la pagination
+    this.updatePaginatedPosts();
   }
 
   onFileSelected(event: any): void {
@@ -138,7 +150,8 @@ style: any;
       this.selectedFile = file;
       console.log('Fichier chargé :', file);
     }
-  }
+  } 
+ 
   
   loadCommentsCount(): void {
     this.paginatedPosts.forEach(post => {
@@ -151,7 +164,7 @@ style: any;
     const formData = new FormData();
     formData.append('title', this.postForm.value.title);
     formData.append('description', this.postForm.value.content);
-    formData.append('createdBy', this.postForm.value.createdBy);
+    //formData.append('createdBy', this.postForm.value.createdBy);
   
     if (this.selectedFile) {
       formData.append('image', this.selectedFile); // ✅ le backend attend bien "image"
@@ -162,8 +175,20 @@ style: any;
   
     this.bs.addPost(formData, this.userId).subscribe({
       next: () => {
-        this.toastr.success('Le post a été ajouté avec succès', 'Succès');
-        this.router.navigate(['/front/blog']);
+        Swal.fire({
+          icon: 'success',
+          title: 'Succès',
+          text: 'Le post a été ajouté avec succès !',
+          confirmButtonText: 'OK',
+          timer: 2000,
+          timerProgressBar: true,
+        }).then(() => {
+          this.loadPosts();
+          this.postForm.reset();
+          this.selectedFile = null;
+          this.toastr.success('Le post a été ajouté avec succès', 'Succès');
+        this.router.navigate(['/blogs']);
+        });
       },
       error: (err) => {
         this.toastr.error("Échec de l'ajout du post", 'Erreur');
@@ -232,6 +257,7 @@ style: any;
       });
     }
   }
+  
   goBack() {
     this.location.back();
   }

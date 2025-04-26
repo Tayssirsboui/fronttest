@@ -1,12 +1,12 @@
 export interface Comment {
-    idComment: number; // changed from 'id' to 'idComment'
-    userId: number;
-    likes: number;
-    description: string;
-    createdBy: string;
-    createdAt: Date;
-    postId: number;
-    userReaction?: 'like' | 'dislike'; // si tu l’utilises dans le template
-    likedBy: any[]
-  }
-  
+  idComment: number;
+  userId: number;
+  likes: number;
+  description: string;
+  createdBy: string;
+  createdAt: Date;
+  postId: number;
+  userReaction?: 'like' | 'dislike';
+  likedBy: any[];
+  likedByUser?: boolean; // Indicates if the current user has liked the comment 
+}

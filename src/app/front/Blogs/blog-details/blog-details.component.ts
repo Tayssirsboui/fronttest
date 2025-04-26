@@ -6,7 +6,7 @@ import { Post } from 'src/app/models/post';
 import { BlogService } from 'src/app/services/blog.service';
 import { Comment } from 'src/app/models/comment';
 import { ToastrService } from 'ngx-toastr';
-import { postRecommendationService } from 'src/app/services/post-recommendation.service'; // <-- Ajouter ce service
+import { postRecommendationService } from 'src/app/services/post-recommendation.service';
 
 @Component({
   selector: 'app-blog-details',
@@ -18,41 +18,36 @@ export class BlogDetailsComponent {
   editMode: boolean = false;
   selectedCommentId: number | null = null;
   showEmojiPicker = false;
-  showEmojis: boolean = false;
-  showGifPicker: boolean = false;
   comments!: Comment[];
-  newCommentContent: string = '';
-  userId: number = 1;
+  userId: number = 2;
   id!: number;
   post!: Post;
-  commentsCount!: number;
+  loadingEnhancement: boolean = false;
 
   constructor(
     private bs: BlogService,
     private toastr: ToastrService,
     private Ac: ActivatedRoute,
-    private enhancementService: postRecommendationService,// <-- Ajoute ceci
+    private enhancementService: postRecommendationService,
     private route: Router,
-    private fb: FormBuilder  ) {
+    private fb: FormBuilder
+  ) {
     this.commentForm = this.fb.group({
       description: ['', [Validators.required]],
-      createdBy: ['', Validators.required]
+      createdBy: ['', Validators.required] // <-- kept this since it's used in template
     });
   }
 
+  
   ngOnInit() {
+    // Initialize the postId (id) once here
     this.id = +this.Ac.snapshot.paramMap.get('id')!;
     this.bs.getPostsById(this.id).subscribe(data => {
       this.post = data;
     });
 
-    this.bs.getcommentsByPostId(this.id).subscribe((data: any) => {
-      this.comments = data as Comment[];
-      const commentsCount = data.length;
-      if (this.post) {
-        this.post.commentsCount = commentsCount;
-      }
-    });
+    // Get the comments for the post on page load
+    this.refreshComments();
   }
 
   toggleEmojiPicker() {
@@ -75,39 +70,37 @@ export class BlogDetailsComponent {
     });
   }
 
-  toggleGifPicker() {
-    this.showGifPicker = !this.showGifPicker;
-  }
-
-  calculateCommentsCount(): number {
-    if (this.comments) {
-      const commentsCount = this.comments.length;
-      if (this.post) {
-        this.post.commentsCount = commentsCount;
-      }
-      return commentsCount;
-    }
-    return 0;
-  }
-
-  // 💡 NOUVEAU : améliorer le commentaire avec Flask avant de l’envoyer
   enhanceComment(): void {
     const raw = this.commentForm.value.description;
+    
+    // Vérifier si le commentaire n'est pas vide
     if (!raw?.trim()) {
       alert("Veuillez saisir un commentaire à améliorer.");
       return;
     }
-
+  
+    // Affichage du loader
+    this.loadingEnhancement = true;
+  
+    // Appel au service pour améliorer le commentaire
     this.enhancementService.enhanceComment(raw).subscribe({
       next: (res) => {
+        // Mettre à jour la valeur du commentaire dans le formulaire avec le texte amélioré
         this.commentForm.patchValue({ description: res.enhanced_comment });
+        // Afficher un message de succès
         this.toastr.success("Commentaire enrichi automatiquement !");
+        
+        // Cacher le loader
+        this.loadingEnhancement = false;
       },
       error: () => {
+        // En cas d'erreur, cacher le loader et afficher un message d'erreur
+        this.loadingEnhancement = false;
         this.toastr.error("Erreur lors de l'enrichissement du commentaire.");
       }
     });
   }
+  
 
   addComment(): void {
     const trimmedDescription = this.commentForm.value.description?.trim();
@@ -117,24 +110,28 @@ export class BlogDetailsComponent {
       return;
     }
 
-    this.commentForm.patchValue({ description: trimmedDescription });
+    // ✅ Patch createdBy if it's required
+    this.commentForm.patchValue({
+      description: trimmedDescription,
+      createdBy: 'CurrentUserName' // <-- Replace with real username if available
+    });
 
     const commentData = {
       ...this.commentForm.value,
-      postId: this.id,
+      postId: this.id,  // Use the postId (this.id)
       userId: this.userId
     };
 
     if (this.editMode && this.selectedCommentId) {
       this.bs.updateComment(this.selectedCommentId!, this.userId, commentData).subscribe(() => {
         this.toastr.info('Commentaire modifié avec succès.', 'Info');
-        this.ngOnInit();
+        this.refreshComments();
         this.resetForm();
       });
     } else {
       this.bs.addComment(this.id, this.userId, commentData).subscribe(() => {
         this.toastr.success('Commentaire ajouté avec succès.');
-        this.ngOnInit();
+        this.refreshComments();
         this.resetForm();
       });
     }
@@ -144,7 +141,8 @@ export class BlogDetailsComponent {
     this.editMode = true;
     this.selectedCommentId = comment.idComment;
     this.commentForm.patchValue({
-      description: comment.description
+      description: comment.description,
+      createdBy: comment.createdBy // ✅ fill in required field
     });
   }
 
@@ -153,16 +151,29 @@ export class BlogDetailsComponent {
     this.editMode = false;
     this.selectedCommentId = null;
   }
+
+  refreshComments(): void {
+    // No need to reset this.id here, it's already set in ngOnInit
+    this.bs.getcommentsByPostId(this.id).subscribe((data: any) => {
+      console.log('Loaded comments for post', this.id, ':', data);
+      this.comments = data as Comment[];
+      this.post.commentsCount = this.comments.length;
+    });
+  }
+
   likeComment(commentId: number): void {
     this.bs.likeComment(commentId, this.userId).subscribe({
       next: () => {
-        // Reload the comments to get the updated like count after the like action
-        const postId = this.post?.id; // Get the current post ID
-        if (postId) {
-          this.bs.getcommentsByPostId(postId); // Re-fetch the comments to reflect the updated data
+        const comment = this.comments.find(c => c.idComment === commentId);
+        if (comment && !comment.likedByUser) {
+          comment.likes = (comment.likes || 0) + 1;
+          comment.likedByUser = true; // prevent further increments on front
         }
       },
-      error: (err) => console.error('Error liking comment:', err)
+      error: (err) => {
+        console.error('Error liking comment:', err);
+      }
     });
   }
+  
 }

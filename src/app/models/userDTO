@@ -1,0 +1,23 @@
+export interface UserDTO {
+  idUser: number;
+  provider: 'LOCAL' | 'GOOGLE' | 'FACEBOOK' | 'GITHUB'; // Adjust according to your `AuthProvider` enum
+  providerId?: string;
+
+  nom: string;
+  prenom: string;
+  email: string;
+  motDePasse?: string; // Usually optional or hidden for security
+
+  phoneNumber?: string;
+  roles: 'USER' | 'ADMIN' | 'MODERATOR'; // Adjust based on your `Role` enum
+
+  accountLocked: boolean;
+  enabled: boolean;
+
+  createdDate: string; // ISO format from LocalDateTime
+  lastModifiedDate?: string;
+
+  image?: string; // Base64 or image URL
+
+  fullName?: string; // Optional frontend helper
+}
