@@ -1,0 +1,97 @@
+<div class="container">
+    <div class="header">
+      <h2 style="font-size: 1.8rem;">Liste des stages disponibles</h2>
+      <button class="add-button" (click)="showModal = true" style="font-size: 1.4rem;">+ Nouveau stage</button>
+    </div>
+  
+    <div *ngIf="isLoading" class="loader" style="font-size: 1.4rem;">Chargement en cours...</div>
+  
+    <div *ngFor="let stage of stages" class="card" style="font-size: 1.4rem; line-height: 2;">
+      <div class="card-header">
+        <h3 style="font-size: 1.6rem;">{{ stage.type }}</h3>
+        <div class="card-actions">
+          <button class="edit-button" (click)="openModal(stage)" style="font-size: 1.4rem;">✏️</button>
+          <button class="delete-button" (click)="deleteStage(stage.id)" style="font-size: 1.4rem;">&#10005;</button>
+        </div>
+      </div>
+  
+      <p><strong>Domaine:</strong> {{ stage.domaine }}</p>
+      <p><strong>Entreprise:</strong> {{ stage.entreprise }}</p>
+      <p><strong>Période:</strong> {{ stage.dateDebut }} - {{ stage.dateFin }}</p>
+      <p><strong>Email:</strong> {{ stage.email }}</p>
+      <p><strong>Téléphone:</strong> {{ stage.phoneNumber }}</p>
+      <p><strong>Description:</strong> {{ stage.description }}</p>
+  
+      <span class="badge" [ngClass]="stage.payant ? 'paid' : 'unpaid'" style="font-size: 1.2rem;">
+        {{ stage.payant ? 'Rémunéré' : 'Non rémunéré' }}
+      </span>
+    </div>
+  </div>
+  
+  <!-- Modal -->
+  <div class="modal-overlay" *ngIf="showModal">
+    <div class="modal-content enhanced" style="font-size: 1.4rem; line-height: 2;">
+      <div class="modal-header">
+        <h2 style="font-size: 1.6rem;">{{ editMode ? 'Modifier le stage' : 'Créer un nouveau stage' }}</h2>
+        <button class="close-btn" (click)="closeModal()" style="font-size: 1.8rem;">&times;</button>
+      </div>
+  
+      <form [formGroup]="stageForm" (ngSubmit)="onSubmit()">
+        <div class="form-group">
+          <label for="type">Type de stage</label>
+          <input id="type" formControlName="type" placeholder="Ex: PFE, été" style="font-size: 1.4rem;" />
+        </div>
+  
+        <div class="form-group">
+          <label for="domaine">Domaine</label>
+          <input id="domaine" formControlName="domaine" placeholder="Ex: Informatique" style="font-size: 1.4rem;" />
+        </div>
+  
+        <div class="form-group">
+          <label for="entreprise">Entreprise</label>
+          <input id="entreprise" formControlName="entreprise" placeholder="Nom de l'entreprise" style="font-size: 1.4rem;" />
+        </div>
+  
+        <div class="form-row">
+          <div class="form-group half">
+            <label for="dateDebut">Date de début</label>
+            <input id="dateDebut" type="date" formControlName="dateDebut" style="font-size: 1.4rem;" />
+          </div>
+  
+          <div class="form-group half">
+            <label for="dateFin">Date de fin</label>
+            <input id="dateFin" type="date" formControlName="dateFin" style="font-size: 1.4rem;" />
+          </div>
+        </div>
+  
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input id="email" type="email" formControlName="email" placeholder="exemple@entreprise.com" style="font-size: 1.4rem;" />
+        </div>
+  
+        <div class="form-group">
+          <label for="phoneNumber">Numéro de téléphone</label>
+          <input id="phoneNumber" type="text" formControlName="phoneNumber" placeholder="+216 12 345 678" style="font-size: 1.4rem;" />
+        </div>
+  
+        <div class="form-group">
+          <label for="description">Description</label>
+          <textarea id="description" formControlName="description" rows="3" placeholder="Brève description du stage..." style="font-size: 1.4rem;"></textarea>
+        </div>
+  
+        <div class="form-group checkbox">
+          <label>
+            <input type="checkbox" formControlName="payant" />
+            <span>Stage rémunéré</span>
+          </label>
+        </div>
+  
+        <div class="modal-actions">
+          <button type="submit" [disabled]="stageForm.invalid" style="font-size: 1.4rem;">
+            {{ editMode ? 'Mettre à jour' : 'Ajouter le stage' }}
+          </button>
+          <button type="button" class="cancel" (click)="closeModal()" style="font-size: 1.4rem;">Annuler</button>
+        </div>
+      </form>
+    </div>
+  </div>

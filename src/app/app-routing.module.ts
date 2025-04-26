@@ -1,4 +1,5 @@
-import { NgModule } from '@angular/core';
+import { QuizComponent } from './front/quiz/quiz.component';
+​import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { AboutComponent } from './front/about/about.component';
 import { CoursesComponent } from './front/courses/courses.component';
@@ -7,8 +8,7 @@ import { FrontLayoutComponent } from './front/front-layout/front-layout.componen
 import { BackLayoutComponent } from './back/back-layout/back-layout.component';
 import { DashboardComponent } from './back/dashboard/dashboard.component';
 import { CourseSingleComponent } from './front/course-single/course-single.component';
-import { TeachersComponent } from './front/teachers/teachers.component';
-import { EventsComponent } from './front/events/events.component';
+import { StagesComponent } from './front/stages/stages.component';
 import { ContactComponent } from './front/contact/contact.component';
 import { LoginFrontComponent } from './front/login-front/login-front.component';
 import { RegisterFrontComponent } from './front/register-front/register-front.component';
@@ -26,6 +26,8 @@ import { BlogAdminComponent } from './back/blogs/blog-admin/blog-admin.component
 import { GeminiChatComponent } from './front/Blogs/gemini-chat/gemini-chat.component';
 import { BlogDetailsComponent } from './front/Blogs/blog-details/blog-details.component';
 import { MesPostsComponent } from './front/Blogs/mes-posts/mes-posts.component';
+import { QuizzesComponent } from './back/quizzes/quizzes.component';
+import { BstagesComponent } from './back/bstages/bstages.component';
 
 const routes: Routes = [
   {
@@ -35,6 +37,8 @@ const routes: Routes = [
       { path: '', component: DashboardComponent },
       { path: 'listuser', component: UserListComponent },
       { path: 'blog', component: BlogAdminComponent },
+      { path: 'quizzes', component: QuizzesComponent, },
+      { path: 'bstage', component: BstagesComponent, }
     ]
   },
   {
@@ -48,7 +52,8 @@ const routes: Routes = [
 
       { path: 'courses', component: CoursesComponent },
       { path: 'about', component: AboutComponent },
-      { path: 'teachers', component: TeachersComponent },
+      { path: 'quiz', component: QuizComponent },
+      { path: 'quiz/:id', component: QuizComponent },
       { path: 'course-single', component: CourseSingleComponent },
       { path: 'events', component: EventsComponent },
       { path: 'contact', component: ContactComponent },
@@ -56,6 +61,7 @@ const routes: Routes = [
       { path: 'blog-details/:id', component: BlogDetailsComponent },
       { path: 'gemini', component: GeminiChatComponent },
       { path: 'mesPosts', component: MesPostsComponent },
+      { path: 'stages', component: StagesComponent },
       {
         path: 'profil', component: ProfilComponent,
         canActivate: [AuthGuard]
@@ -75,9 +81,10 @@ const routes: Routes = [
   { path: '**', redirectTo: 'home' }
 ];
 
-
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
+  imports: [RouterModule.forRoot(routes,{ onSameUrlNavigation: 'reload' })],
   exports: [RouterModule]
 })
 export class AppRoutingModule { }
+
+

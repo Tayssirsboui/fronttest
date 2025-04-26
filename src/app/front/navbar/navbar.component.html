@@ -3,6 +3,9 @@
     <div class="navbar-header">
       <div class="btn-more js-btn-more visible-xs">
         <a ><i class="icon-dots-three-vertical "></i></a>
+        <button type="button" class="btn-more-toggle">
+          <i class="icon-dots-three-vertical"></i>
+        </button>
       </div>
       <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse" aria-expanded="false" aria-controls="navbar">
         <span class="sr-only">Toggle navigation</span>
@@ -19,6 +22,12 @@
         <li><a routerLink="/teachers">Teachers</a></li>
         <li><a routerLink="/events">Events</a></li>
         <li><a class="active" routerLink="blogs">Blogs</a></li>
+        <li routerLinkActive="active">
+          <a routerLink="quiz">Quizzes</a>
+        </li>
+        <li routerLinkActive="active">
+          <a routerLink="stages">Stages</a>
+        </li>
         <li class="dropdown">
           <a href="#" data-toggle="dropdown" class="dropdown-toggle">Courses</a>
           <ul class="dropdown-menu">

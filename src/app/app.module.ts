@@ -19,9 +19,9 @@ import { FrontLayoutComponent } from './front/front-layout/front-layout.componen
 import { DashboardComponent } from './back/dashboard/dashboard.component';
 import { HeaderBackComponent } from './back/header-back/header-back.component';
 import { SamplePageComponent } from './back/sample-page/sample-page.component';
-import { EventsComponent } from './front/events/events.component';
+import { StagesComponent } from './front/stages/stages.component';
 import { CourseSingleComponent } from './front/course-single/course-single.component';
-import { TeachersComponent } from './front/teachers/teachers.component';
+import { QuizComponent } from './front/quiz/quiz.component';
 import { ContactComponent } from './front/contact/contact.component';
 import { LoginFrontComponent } from './front/login-front/login-front.component';
 import { RegisterFrontComponent } from './front/register-front/register-front.component';
@@ -49,8 +49,14 @@ import { BlogAdminComponent } from './back/blogs/blog-admin/blog-admin.component
 import { MesPostsComponent } from './front/Blogs/mes-posts/mes-posts.component';
 import { NgChartsModule } from 'ng2-charts';
 import { StatPostsComponent } from './back/blogs/stat-posts/stat-posts.component';
+import { LocationStrategy, HashLocationStrategy, PathLocationStrategy } from '@angular/common';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { HttpClientModule } from '@angular/common/http';
+import { QuizzesComponent } from './back/quizzes/quizzes.component';
+import { BstagesComponent } from './back/bstages/bstages.component';
 
 @NgModule({
+  
   declarations: [
     AppComponent,
     FooterComponent,
@@ -66,10 +72,12 @@ import { StatPostsComponent } from './back/blogs/stat-posts/stat-posts.component
     DashboardComponent,
     HeaderBackComponent,
     SamplePageComponent,
-    EventsComponent,
+    StagesComponent,
     CourseSingleComponent,
-    TeachersComponent,
+    QuizComponent,
     ContactComponent,
+    QuizzesComponent,
+    BstagesComponent,
     BlogComponent,
     BlogDetailsComponent,
     FooterBackComponent,
@@ -95,6 +103,9 @@ import { StatPostsComponent } from './back/blogs/stat-posts/stat-posts.component
     
     AppRoutingModule,
     FormsModule,
+    HttpClientModule,
+    ReactiveFormsModule
+    FormsModule,
     WebcamModule,
     CodeInputModule,
     NgbModule,
@@ -119,4 +130,5 @@ import { StatPostsComponent } from './back/blogs/stat-posts/stat-posts.component
   ],
   bootstrap: [AppComponent]
 })
+
 export class AppModule { }
