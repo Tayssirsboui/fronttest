@@ -1,0 +1,118 @@
+/* webcam.component.css */
+
+/* Style pour le conteneur principal */
+:host {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+/* Style pour la webcam */
+webcam {
+  display: block;
+  width: 640px;
+  /* Largeur fixe ou utilisez max-width: 100% pour le responsive */
+  height: 480px;
+  border-radius: 15px;
+  /* Bords arrondis */
+  overflow: hidden;
+  /* Pour que les bords arrondis s'appliquent */
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  margin: 20px auto;
+  background: #000;
+  /* Fond noir si la caméra ne remplit pas tout l'espace */
+  object-fit: cover;
+  /* Pour que l'image remplisse le cadre */
+}
+
+/* Style pour l'image capturée */
+img {
+  display: block;
+  width: 640px;
+  height: 480px;
+  border-radius: 15px;
+  margin: 20px auto;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  object-fit: cover;
+}
+
+/* Style pour les boutons */
+button {
+  padding: 12px 25px;
+  background-color: #4285F4;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  cursor: pointer;
+  margin: 10px;
+  transition: all 0.3s ease;
+}
+
+button:hover {
+  background-color: #3367D6;
+  transform: translateY(-2px);
+}
+
+/* Style pour le message */
+div[style*="font-size: 18px"] {
+  margin-top: 20px;
+  padding: 12px 20px;
+  border-radius: 8px;
+  background-color: #f8f9fa;
+  text-align: center;
+  max-width: 640px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Version responsive */
+@media (max-width: 700px) {
+
+  webcam,
+  img {
+    width: 100%;
+    height: auto;
+    max-height: 60vh;
+  }
+}
+
+.toast {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background-color: #f8d7da;
+  color: #721c24;
+  padding: 10px 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  z-index: 9999;
+  font-size: 16px;
+  max-width: 300px;
+  opacity: 1;
+  animation: fadeOut 4s forwards;
+}
+
+.toast.green {
+  background-color: #28a745;
+  color: white;
+}
+
+.toast.red {
+  background-color: #dc3545;
+  color: white;
+}
+
+@keyframes fadeOut {
+  0% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+}

@@ -1,0 +1,32 @@
+<div class="container mt-4">
+    <h2>Liste des utilisateurs</h2>
+    <table class="table table-striped mt-3" *ngIf="users.length > 0">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Nom</th>
+          <th>Prénom</th>
+          <th>Email</th>
+          <th>Téléphone</th>
+          <th>Rôle</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let user of users">
+            <td>{{ user.idUser }}</td>
+            <td>{{ user.nom }}</td>
+            <td>{{ user.prenom }}</td>
+            <td>{{ user.email }}</td>
+            <td>{{ user.phoneNumber }}</td>
+            <td>{{ user.roles }}</td>
+            
+            
+
+           
+          </tr>
+          
+      </tbody>
+    </table>
+  
+    <p *ngIf="users.length === 0">Aucun utilisateur trouvé.</p>
+  </div>

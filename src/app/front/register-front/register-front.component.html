@@ -1,0 +1,214 @@
+<!-- register.component.html -->
+<section class="form-section">
+  <style>
+    .form-section {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      background: linear-gradient(135deg, #fdfcfb, #e2d1c3);
+      font-family: 'Segoe UI', sans-serif;
+      padding: 1rem;
+    }
+
+    .register-card {
+      background-color: #ffffff;
+      padding: 2rem;
+      border-radius: 12px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+      width: 100%;
+      max-width: 420px;
+    }
+
+    .register-card h2 {
+      margin-bottom: 1.5rem;
+      text-align: center;
+      color: #2d2d2d;
+    }
+
+    .form-input {
+      margin-bottom: 1.2rem;
+    }
+
+    .form-input label {
+      display: block;
+      margin-bottom: 0.4rem;
+      font-weight: 600;
+      color: #444;
+    }
+
+    .form-input input {
+      width: 100%;
+      padding: 0.7rem;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 1rem;
+      transition: border-color 0.3s ease;
+    }
+
+    .form-input input:focus {
+      border-color: #6610f2;
+      outline: none;
+    }
+
+    .btn-submit {
+      width: 100%;
+      padding: 0.8rem;
+      border: none;
+      background: #6610f2;
+      color: white;
+      font-size: 1rem;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+      margin-bottom: 1rem;
+    }
+
+    .btn-submit:hover {
+      background: #5a0dd3;
+    }
+
+    .btn-google {
+      width: 100%;
+      padding: 0.8rem;
+      border: 1px solid #ddd;
+      background: white;
+      color: #444;
+      font-size: 1rem;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .btn-google:hover {
+      background: #f5f5f5;
+    }
+
+    .login-link {
+      margin-top: 1rem;
+      text-align: center;
+      font-size: 0.9rem;
+    }
+
+    .login-link span {
+      color: #6610f2;
+      cursor: pointer;
+      font-weight: 600;
+    }
+
+    .alert {
+      margin-bottom: 1rem;
+      background: #ffe6e6;
+      color: #d8000c;
+      padding: 0.8rem;
+      border-radius: 6px;
+    }
+
+    .password-container {
+      position: relative;
+    }
+
+    .toggle-visibility {
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      cursor: pointer;
+      color: #6610f2;
+    }
+
+    .divider {
+      display: flex;
+      align-items: center;
+      margin: 1.5rem 0;
+      color: #777;
+      font-size: 0.9rem;
+    }
+
+    .divider::before,
+    .divider::after {
+      content: "";
+      flex: 1;
+      border-bottom: 1px solid #ddd;
+    }
+
+    .divider::before {
+      margin-right: 1rem;
+    }
+
+    .divider::after {
+      margin-left: 1rem;
+    }
+  </style>
+  <div class="register-card">
+    <h2>Create Account</h2>
+
+    <div class="alert" *ngIf="errorMsg.length">
+      <p *ngFor="let msg of errorMsg">{{ msg }}</p>
+    </div>
+
+    <form (ngSubmit)="register()" #registrationForm="ngForm">
+      <div class="form-input">
+        <label for="nom">Full Name</label>
+        <input type="text" id="nom" name="nom" [(ngModel)]="registerRequest.nom" required>
+      </div>
+
+      <div class="form-input">
+        <label for="prenom">Last Name</label>
+        <input type="text" id="prenom" name="prenom" [(ngModel)]="registerRequest.prenom" required>
+      </div>
+
+      <div class="form-input">
+        <label for="email">Email</label>
+        <input type="email" id="email" name="email" [(ngModel)]="registerRequest.email" required>
+      </div>
+
+      <div class="form-input">
+        <label for="phoneNumber">Phone Number</label>
+        <input type="text" id="phoneNumber" name="phoneNumber" [(ngModel)]="registerRequest.phoneNumber" required>
+      </div>
+
+      <div class="form-input password-container">
+        <label for="motDePasse">Password</label>
+        <input [type]="passwordVisible ? 'text' : 'password'" id="motDePasse" name="motDePasse"
+          [(ngModel)]="registerRequest.motDePasse" required>
+        <span class="toggle-visibility" (click)="togglePasswordVisibility()">
+          {{ passwordVisible ? '🙈' : '👁️' }}
+        </span>
+      </div>
+
+      <div class="form-input">
+        <label for="image">Profile Image</label>
+        <input type="file" id="image" (change)="onFileSelected($event)" accept="image/*">
+      </div>
+
+      <button type="submit" class="btn-submit" [disabled]="isLoading">
+        {{ isLoading ? 'Registering...' : 'Register' }}
+      </button>
+
+      <div class="divider">OR</div>
+
+      <button type="button" class=" btn-submit" (click)="loginWithGoogle()">
+        <img src="https://www.svgrepo.com/show/303108/google-icon-logo.svg" alt="Google logo">
+        Continue with Google
+      </button>
+
+      <button type="button" class=" btn-submit" (click)="loginWithGithub()">
+        <img src="https://www.svgrepo.com/show/217753/github.svg" alt="GitHub logo">
+        Continue with GitHub
+      </button>
+      <button type="button" class="btn-submit" (click)="loginWithFacebook()">
+        <img src="https://www.svgrepo.com/show/475700/facebook-color.svg" alt="Facebook logo">
+        Continue with Facebook
+      </button>
+    </form>
+
+    <div class="login-link">
+      Already have an account? <span (click)="navigateToLogin()">Log In</span>
+    </div>
+  </div>
+</section>

@@ -10,34 +10,38 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="index.html" title="ProBootstrap:Enlight">GENIUS</a>
+      <a class="navbar-brand" routerLink="/">GENIUS</a>
     </div>
 
     <div id="navbar-collapse" class="navbar-collapse collapse">
       <ul class="nav navbar-nav navbar-right">
-        <li class="active"><a routerLink="/front/home">Home</a></li>
-        <li><a routerLink="/front/teachers">Teachers</a></li>
-        <li><a routerLink="/front/events">Events</a></li>
+        <li><a routerLink="/">Home</a></li>
+        <li><a routerLink="/teachers">Teachers</a></li>
+        <li><a routerLink="/events">Events</a></li>
         <li class="dropdown">
           <a href="#" data-toggle="dropdown" class="dropdown-toggle">Courses</a>
           <ul class="dropdown-menu">
-            <li><a routerLink="/front/courses">Courses</a></li>
-            <li><a routerLink="/front/course-single">Course Single</a></li>
-            
-            <!-- <li class="dropdown-submenu dropdown">
-              <a href="#" data-toggle="dropdown" class="dropdown-toggle"><span>Sub Menu</span></a>
-              <ul class="dropdown-menu">
-                <li><a href="#">Second Level Menu</a></li>
-                <li><a href="#">Second Level Menu</a></li>
-                <li><a href="#">Second Level Menu</a></li>
-                <li><a href="#">Second Level Menu</a></li>
-              </ul>
-            </li> -->
-            
+            <li><a routerLink="/courses">Courses</a></li>
+            <li><a routerLink="/course-single">Course Single</a></li>
           </ul>
         </li>
-        <li><a routerLink="/front/about">About Us</a></li>
-        <li><a routerLink="/front/contact">Contact</a></li>
+        <li><a routerLink="/about">About Us</a></li>
+        <li><a routerLink="/contact">Contact</a></li>
+        
+        <!-- Profile icon (visible only if logged in) -->
+        <li *ngIf="isLoggedIn()" class="profile-icon">
+          <a (click)="goToProfile()" title="Profile">
+            <i class="fa fa-user-circle fa-lg"></i>
+          </a>
+        </li>
+
+        <!-- Join/Login buttons (visible only if not logged in) -->
+        <li *ngIf="!isLoggedIn()" class="button-header margin-left">
+          <a routerLink="/register" class="btn">Join</a>
+        </li>
+        <li *ngIf="!isLoggedIn()" class="button-header">
+          <a routerLink="/login" class="btn btn3">Log in</a>
+        </li>
       </ul>
     </div>
   </div>

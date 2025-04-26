@@ -18,13 +18,14 @@
           <span class="hide-menu">Home</span>
         </li>
         <li class="sidebar-item">
-          <a class="sidebar-link" href="./index.html" aria-expanded="false">
+          <a class="sidebar-link" [routerLink]="['/back/listuser']" routerLinkActive="active" aria-expanded="false">
             <span>
-              <i class="ti ti-layout-dashboard"></i>
+              <i class="ti ti-users"></i> <!-- Icône mise à jour pour refléter la liste des users -->
             </span>
-            <span class="hide-menu">Dashboard</span>
+            <span class="hide-menu">Liste des Utilisateurs</span>
           </a>
         </li>
+        
         <li class="nav-small-cap">
           <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
           <span class="hide-menu">UI COMPONENTS</span>

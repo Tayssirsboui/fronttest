@@ -10,6 +10,16 @@ import { CourseSingleComponent } from './front/course-single/course-single.compo
 import { TeachersComponent } from './front/teachers/teachers.component';
 import { EventsComponent } from './front/events/events.component';
 import { ContactComponent } from './front/contact/contact.component';
+import { LoginFrontComponent } from './front/login-front/login-front.component';
+import { RegisterFrontComponent } from './front/register-front/register-front.component';
+import { ActivateAcountComponent } from './activate-acount/activate-acount.component';
+import { UserListComponent } from './back/user-list/user-list.component';
+import { ProfilComponent } from './front/profil/profil.component';
+import { AuthGuard } from './front/guards/auth.guard';
+import { WebcamComponent } from './front/webcam/webcam.component';
+import { ForgotPasswordComponent } from './front/forgot-password/forgot-password.component';
+import { ResetPasswordComponent } from './front/reset-password/reset-password.component';
+
 
 const routes: Routes = [
   {
@@ -17,26 +27,41 @@ const routes: Routes = [
     component: BackLayoutComponent,
     children: [
       { path: '', component: DashboardComponent },
+      { path: 'listuser', component: UserListComponent },
     ]
   },
   {
-    path: 'front',
+    path: '',
     component: FrontLayoutComponent,
     children: [
+      { path: '', component: HomeComponent },
       { path: 'home', component: HomeComponent },
+      { path: 'cam', component: WebcamComponent },
+
       { path: 'courses', component: CoursesComponent },
       { path: 'about', component: AboutComponent },
       { path: 'teachers', component: TeachersComponent },
       { path: 'course-single', component: CourseSingleComponent },
       { path: 'events', component: EventsComponent },
-      { path: 'contact', component: ContactComponent }
+      { path: 'contact', component: ContactComponent },
+      {
+        path: 'profil', component: ProfilComponent,
+        canActivate: [AuthGuard]
+      },
+      { path: 'login', component: LoginFrontComponent },
+      { path: 'register', component: RegisterFrontComponent },
+      { path: 'activate-acount', component: ActivateAcountComponent },
+      { path: 'forgot-password', component: ForgotPasswordComponent },
+      { path: 'reset-password', component: ResetPasswordComponent },
+
 
 
 
     ]
   },
-  { path: '', redirectTo: 'front/home', pathMatch: 'full' },
-  { path: '**', redirectTo: 'front/home' }
+  { path: 'reset-password', component: ResetPasswordComponent },
+
+  { path: '**', redirectTo: 'home' }
 ];
 
 
