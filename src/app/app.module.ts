@@ -56,6 +56,7 @@ import { AdminGestionEvenementsComponent } from './back/admin-gestion-evenements
 import { StatsEvenementModalComponent } from './back/stats-evenement-modal/stats-evenement-modal.component';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { NgChartsModule } from 'ng2-charts';
+import { ListeParticipationsComponent } from './back/liste-participations/liste-participations.component';
 
 
 
@@ -91,6 +92,7 @@ import { NgChartsModule } from 'ng2-charts';
     EvenementDetailsModalComponent,
     AdminGestionEvenementsComponent,
     StatsEvenementModalComponent,
+    ListeParticipationsComponent,
   
     
   ],

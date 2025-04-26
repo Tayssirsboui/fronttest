@@ -13,7 +13,7 @@
         <div class="col-md-6" *ngFor="let e of groupe">
           <div class="p-3 border rounded bg-white h-100">
             <img *ngIf="e.image"
-                 [src]="'http://localhost:5500/' + e.image"
+                 [src]="'http://localhost:8222/' + e.image"
                  class="rounded w-100 mb-3"
                  style="height: 160px; object-fit: cover;" />
   
@@ -87,7 +87,7 @@
             <tr *ngFor="let e of evenementsApprouves">
               <td>
                 <img *ngIf="e.image"
-                     [src]="'http://localhost:5500/' + e.image"
+                     [src]="'http://localhost:8222/' + e.image"
                      alt="img"
                      style="width: 100px; height: 70px; object-fit: cover; border-radius: 6px;">
               </td>

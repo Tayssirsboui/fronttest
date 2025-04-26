@@ -10,7 +10,7 @@ import { Evenement } from '../models/evenement.model';
 export class EvenementService {
 
   
-   private apiUrl = 'http://localhost:5500/evenements';
+   private apiUrl = 'http://localhost:8222/evenements';
   
     constructor(private http: HttpClient) { }
     
@@ -40,7 +40,7 @@ export class EvenementService {
       return this.http.put(`${this.apiUrl}/modify-evenement`, formData);
     }
     getEvenementsParUtilisateur(utilisateurId: number): Observable<Evenement[]> {
-      return this.http.get<Evenement[]>(`http://localhost:5500/participations/evenements-par-utilisateur/${utilisateurId}`);
+      return this.http.get<Evenement[]>(`http://localhost:8222/participations/evenements-par-utilisateur/${utilisateurId}`);
     }
     
     
@@ -65,7 +65,7 @@ export class EvenementService {
   }
   
   downloadPdf(): void {
-    const url = 'http://localhost:5500/evenements/export/pdf';
+    const url = 'http://localhost:8222/evenements/export/pdf';
     window.open(url, '_blank');
   }
 

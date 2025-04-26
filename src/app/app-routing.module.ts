@@ -13,6 +13,7 @@ import { ContactComponent } from './front/contact/contact.component';
 import { EvenementListComponent } from './front/gestion-evenements/evenement-list/evenement-list.component';
 import { CalendrierUtilisateurComponent } from './front/gestion-evenements/calendrier-utilisateur/calendrier-utilisateur.component';
 import { AdminGestionEvenementsComponent } from './back/admin-gestion-evenements/admin-gestion-evenements.component';
+import { ListeParticipationsComponent } from './back/liste-participations/liste-participations.component';
 
 const routes: Routes = [
   {
@@ -20,7 +21,8 @@ const routes: Routes = [
     component: BackLayoutComponent,
     children: [
       { path: '', component: DashboardComponent },
-      {path:'evenement', component: AdminGestionEvenementsComponent}
+      {path:'evenement', component: AdminGestionEvenementsComponent},
+      {path:'participation', component: ListeParticipationsComponent}
     ]
   },
   {

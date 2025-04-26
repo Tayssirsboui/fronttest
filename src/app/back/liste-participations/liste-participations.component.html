@@ -1,0 +1,36 @@
+<div class="container mt-4">
+    <h2 class="fw-bold mb-4">📋 Liste des Événements et Participations</h2>
+  
+    <div *ngFor="let evenement of evenements" class="mb-5">
+      <div class="card p-3 shadow-sm border-0">
+        <h4 class="fw-bold">{{ evenement.titre }}</h4>
+        <p><strong>Lieu:</strong> {{ evenement.lieu }}</p>
+        <p><strong>Date:</strong> {{ evenement.dateDebut | date:'short' }}</p>
+        <p><strong>Description:</strong> {{ evenement.description }}</p>
+  
+        <div *ngIf="participationsParEvenement[evenement.id]?.length > 0; else noParticipation">
+          <table class="table table-sm table-bordered mt-3">
+            <thead class="table-light">
+              <tr>
+                <th>Nom Utilisateur</th>
+                <th>Email</th>
+                <th>Statut</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let p of participationsParEvenement[evenement.id]">
+                <td>{{ p.nomUtilisateur }}</td>
+                <td>{{ p.emailUtilisateur }}</td>
+                <td>{{ p.statut }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+  
+        <ng-template #noParticipation>
+          <p class="text-muted">Aucune participation pour cet événement.</p>
+        </ng-template>
+      </div>
+    </div>
+  </div>
+  

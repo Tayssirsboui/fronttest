@@ -3,13 +3,16 @@ import { Injectable } from '@angular/core';
 import { Participation } from '../models/participation.model';
 import { Observable } from 'rxjs';
 import { Evenement } from '../models/evenement.model';
+import { ParticipationDetails } from '../models/participation-details.model';
+
+
 
 @Injectable({
   providedIn: 'root'
 })
 export class ParticipationService {
-  private apiUrl = 'http://localhost:5500/participations';
-  private evenementUrl = 'http://localhost:5500/evenements';
+  private apiUrl = 'http://localhost:8222/participations';
+  private evenementUrl = 'http://localhost:8222/evenements';
 
   constructor(private http: HttpClient) {}
 
@@ -36,4 +39,8 @@ export class ParticipationService {
    countByEvent(eventId: number): Observable<number> {
     return this.http.get<number>(`${this.apiUrl}/count-by-evenement/${eventId}`);
   }
+  getParticipationDetailsByEvenement(evenementId: number): Observable<ParticipationDetails[]> {
+    return this.http.get<ParticipationDetails[]>(`${this.apiUrl}/evenement/${evenementId}/participations-details`);
+  }
+  
 }
