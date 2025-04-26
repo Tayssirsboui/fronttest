@@ -1,0 +1,139 @@
+/* Espace entre navbar et les cards */
+#events {
+  margin-top: 80px;
+}
+
+.events .card {
+  background-color: #ffffff;
+  border: none;
+  padding: 0;
+  margin-bottom: 40px;
+  position: relative;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.05);
+  border-radius: 15px;
+  transition: all 0.3s ease;
+}
+
+.events .card-img {
+  height: 220px;
+  width: 100%;
+  overflow: hidden;
+  border-top-left-radius: 15px;
+  border-top-right-radius: 15px;
+}
+
+.events .card-img img {
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+  transition: transform 0.4s ease;
+}
+
+.events .card-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 25px;
+  border-top: 4px solid #ffffff;
+  background: #ffffff;
+}
+
+.events .card-title {
+  font-weight: 600;
+  text-align: center;
+  font-size: 1.1rem;
+  margin-bottom: 15px;
+}
+
+.events .card-body span,
+.events .card-body p {
+  color: #666;
+  font-size: 0.95rem;
+  margin-bottom: 6px;
+}
+
+.events .card-body .bi {
+  margin-right: 6px;
+}
+
+.events .btn-outline-primary {
+  margin-top: 10px;
+  align-self: center;
+  padding: 6px 20px;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  color: #5fcf80;
+  border-color: #5fcf80;
+  transition: 0.3s;
+}
+
+.events .btn-outline-primary:hover {
+  background-color: #5fcf80;
+  color: white;
+  border-color: #5fcf80;
+}
+
+.events .card:hover img {
+  transform: scale(1.05);
+}
+
+.events .card:hover .card-body {
+  border-color: #5fcf80;
+}
+
+.badge-gold {
+  background-color: gold;
+  color: black;
+  font-weight: 600;
+  padding: 0.4em 0.7em;
+  font-size: 0.9rem;
+  border-radius: 0.8rem;
+}
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px; /* Espace entre les boutons */
+}
+
+.pagination .page-item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.pagination .page-link {
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  font-weight: bold;
+  color: #495057;
+  background-color: #f8f9fa;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.3s, color 0.3s, box-shadow 0.3s;
+}
+
+.pagination .page-item.active .page-link {
+  background-color: #4ed672;
+  color: white;
+  box-shadow: 0 0 10px rgba(60, 202, 96, 0.5);
+}
+
+.pagination .page-link:hover {
+  background-color: #e2e6ea;
+  text-decoration: none;
+}
+
+.pagination .page-item.disabled .page-link {
+  opacity: 0.6;
+  cursor: not-allowed;
+  pointer-events: none;
+}

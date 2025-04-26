@@ -9,6 +9,7 @@ import { BackLayoutComponent } from './back/back-layout/back-layout.component';
 import { DashboardComponent } from './back/dashboard/dashboard.component';
 import { CourseSingleComponent } from './front/course-single/course-single.component';
 import { StagesComponent } from './front/stages/stages.component';
+import { TeachersComponent } from './front/teachers/teachers.component';
 import { ContactComponent } from './front/contact/contact.component';
 import { LoginFrontComponent } from './front/login-front/login-front.component';
 import { RegisterFrontComponent } from './front/register-front/register-front.component';
@@ -28,6 +29,10 @@ import { BlogDetailsComponent } from './front/Blogs/blog-details/blog-details.co
 import { MesPostsComponent } from './front/Blogs/mes-posts/mes-posts.component';
 import { QuizzesComponent } from './back/quizzes/quizzes.component';
 import { BstagesComponent } from './back/bstages/bstages.component';
+import { EvenementListComponent } from './front/gestion-evenements/evenement-list/evenement-list.component';
+import { CalendrierUtilisateurComponent } from './front/gestion-evenements/calendrier-utilisateur/calendrier-utilisateur.component';
+import { AdminGestionEvenementsComponent } from './back/admin-gestion-evenements/admin-gestion-evenements.component';
+import { ListeParticipationsComponent } from './back/liste-participations/liste-participations.component';
 
 const routes: Routes = [
   {
@@ -39,6 +44,8 @@ const routes: Routes = [
       { path: 'blog', component: BlogAdminComponent },
       { path: 'quizzes', component: QuizzesComponent, },
       { path: 'bstage', component: BstagesComponent, }
+      {path:'evenement', component: AdminGestionEvenementsComponent},
+      {path:'participation', component: ListeParticipationsComponent}
     ]
   },
   {
@@ -47,7 +54,6 @@ const routes: Routes = [
     component: FrontLayoutComponent,
     children: [
       { path: '', component: HomeComponent },
-      { path: 'home', component: HomeComponent },
       { path: 'cam', component: WebcamComponent },
 
       { path: 'courses', component: CoursesComponent },
@@ -61,6 +67,9 @@ const routes: Routes = [
       { path: 'gemini', component: GeminiChatComponent },
       { path: 'mesPosts', component: MesPostsComponent },
       { path: 'stages', component: StagesComponent },
+      { path: 'evenement', component: EvenementListComponent },
+      { path: 'calendrier', component: CalendrierUtilisateurComponent },
+
       {
         path: 'profil', component: ProfilComponent,
         canActivate: [AuthGuard]

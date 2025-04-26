@@ -1,0 +1,34 @@
+/* Pour le container qui se déplie */
+.smooth-collapse {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.4s ease;
+}
+
+/* Quand c'est étendu */
+.smooth-collapse.show {
+  max-height: 500px; /* Tu peux ajuster selon le contenu maximum */
+}
+
+
+.smooth-collapse {
+    transition: all 0.3s ease;
+    overflow: hidden;
+  }
+  
+  .smooth-collapse.show {
+    max-height: 1000px;
+    opacity: 1;
+  }
+  
+  .smooth-collapse:not(.show) {
+    max-height: 0;
+    opacity: 0;
+  }
+  
+  .badge {
+    font-size: 12px;
+    padding: 6px 10px;
+    border-radius: 12px;
+  }
+  

@@ -1,0 +1,49 @@
+.modal-content {
+  border-radius: 1rem;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+  padding: 10px;
+  background-color: #fff;
+}
+
+.modal-body {
+  padding: 24px;
+}
+
+.form-control {
+  padding: 0.9rem 1.1rem;
+}
+
+/* Placeholder stylé */
+::placeholder {
+  font-size: 1rem;
+  color: #6c757d;
+  font-style: italic;
+  opacity: 0.85;
+}
+
+.toast-success-custom {
+  background-color: #198754 !important;
+  color: white;
+  border-radius: 1rem;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+  font-weight: 600;
+  min-width: 380px;
+  max-width: 480px;
+}
+
+mat-dialog-content {
+  max-width: 100%;
+  overflow: hidden;
+  padding-bottom: 20px;
+}
+
+mat-form-field {
+  font-size: 14px;
+}
+
+mat-dialog-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+}
+

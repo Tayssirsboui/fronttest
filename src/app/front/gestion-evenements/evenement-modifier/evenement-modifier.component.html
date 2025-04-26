@@ -1,0 +1,61 @@
+<div class="modal-header">
+    <h5 class="modal-title">Modifier l'Événement</h5>
+    <button type="button" class="btn-close" (click)="activeModal.dismiss()"></button>
+  </div>
+  
+  <div class="modal-body">
+    <form [formGroup]="form" (ngSubmit)="submit()">
+      <div class="mb-3">
+        <label for="titre" class="form-label fw-semibold">Titre</label>
+        <input id="titre" type="text" class="form-control" formControlName="titre" />
+      </div>
+  
+      <div class="mb-3">
+        <label for="description" class="form-label fw-semibold">Description</label>
+        <textarea id="description" class="form-control" formControlName="description" rows="3"></textarea>
+      </div>
+  
+      <div class="mb-3">
+        <label for="lieu" class="form-label fw-semibold">Lieu</label>
+        <input id="lieu" type="text" class="form-control" formControlName="lieu" />
+      </div>
+  
+      <div class="row">
+        <div class="col-md-6 mb-3">
+          <label for="dateDebut" class="form-label fw-semibold">Date de début</label>
+          <input id="dateDebut" type="datetime-local" class="form-control" formControlName="dateDebut" />
+        </div>
+        <div class="col-md-6 mb-3">
+          <label for="dateFin" class="form-label fw-semibold">Date de fin</label>
+          <input id="dateFin" type="datetime-local" class="form-control" formControlName="dateFin" />
+        </div>
+      </div>
+  
+      <div class="mb-3">
+        <label for="categorie" class="form-label fw-semibold">Catégorie</label>
+        <input id="categorie" type="text" class="form-control" formControlName="categorie" />
+      </div>
+  
+      <div class="mb-3">
+        <label for="nbMaxParticipants" class="form-label fw-semibold">Nombre max de participants</label>
+        <input id="nbMaxParticipants" type="number" class="form-control" formControlName="nbMaxParticipants" />
+      </div>
+  
+      <!-- ✅ Image -->
+      <div class="mb-3">
+        <label for="image" class="form-label fw-semibold">Image</label>
+        <input type="file" id="image" class="form-control" (change)="onFileSelected($event)" />
+      </div>
+  
+      <div *ngIf="imagePreview" class="mb-3">
+        <label class="form-label">Aperçu de l’image sélectionnée :</label><br />
+        <img [src]="imagePreview" class="img-thumbnail" style="max-width: 250px;">
+      </div>
+  
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline-secondary" (click)="activeModal.dismiss()">Annuler</button>
+        <button type="submit" class="btn btn-primary" [disabled]="form.invalid">Enregistrer</button>
+      </div>
+    </form>
+  </div>
+  
