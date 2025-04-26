@@ -1,5 +1,4 @@
 /* Dans votre fichier CSS */
-@import "~@ctrl/ngx-emoji-mart/picker"; 
 @import "ngx-toastr/toastr";
 .fullscreen-loader {
   position: fixed;

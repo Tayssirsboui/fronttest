@@ -9,7 +9,7 @@ import { BackLayoutComponent } from './back/back-layout/back-layout.component';
 import { DashboardComponent } from './back/dashboard/dashboard.component';
 import { CourseSingleComponent } from './front/course-single/course-single.component';
 import { StagesComponent } from './front/stages/stages.component';
-import { TeachersComponent } from './front/teachers/teachers.component';
+
 import { ContactComponent } from './front/contact/contact.component';
 import { LoginFrontComponent } from './front/login-front/login-front.component';
 import { RegisterFrontComponent } from './front/register-front/register-front.component';
@@ -43,7 +43,7 @@ const routes: Routes = [
       { path: 'listuser', component: UserListComponent },
       { path: 'blog', component: BlogAdminComponent },
       { path: 'quizzes', component: QuizzesComponent, },
-      { path: 'bstage', component: BstagesComponent, }
+      { path: 'bstage', component: BstagesComponent, },
       {path:'evenement', component: AdminGestionEvenementsComponent},
       {path:'participation', component: ListeParticipationsComponent}
     ]
