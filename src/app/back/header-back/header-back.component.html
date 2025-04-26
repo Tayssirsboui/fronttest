@@ -6,12 +6,22 @@
             <i class="ti ti-menu-2"></i>
           </a>
         </li>
+        
         <li class="nav-item">
-          <a class="nav-link nav-icon-hover" href="javascript:void(0)">
+          <a class="nav-link nav-icon-hover" href="javascript:void(0)" (click)="toggleNotifications()">
             <i class="ti ti-bell-ringing"></i>
             <div class="notification bg-primary rounded-circle"></div>
           </a>
+          <div *ngIf="showNotifications" class="notification-card">
+            <h5>Notifications</h5>
+            <ul>
+              <li *ngFor="let notif of notifications">
+                {{ notif.message }} - {{ notif.date | date:'dd/MM/yyyy HH:mm' }}
+              </li>
+            </ul>
+          </div>
         </li>
+        
       </ul>
       <div class="navbar-collapse justify-content-end px-0" id="navbarNav">
         <ul class="navbar-nav flex-row ms-auto align-items-center justify-content-end">

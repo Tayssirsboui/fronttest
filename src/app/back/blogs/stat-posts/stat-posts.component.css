@@ -1,0 +1,122 @@
+/* Modal styles chartgraphique  */
+/* General Card Styles */
+.card {
+    background-color: #ffffff; /* Light background for better contrast */
+    border-radius: 15px; /* Rounded corners for a soft look */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Soft shadow for 3D effect */
+    transition: transform 0.3s ease-in-out; /* Smooth transform for hover effect */
+  }
+  
+  .card:hover {
+    transform: translateY(-5px); /* Subtle hover effect */
+  }
+  
+  /* Stat Cards */
+  .stat-card {
+    transition: box-shadow 0.3s ease-in-out;
+  }
+  
+  .stat-card:hover {
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1); /* Bigger shadow on hover */
+  }
+  
+  /* Dropdown Button Styling */
+  .btn-outline-primary {
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+  
+  .btn-outline-primary:hover {
+    background-color: #0d6efd;
+    color: white;
+  }
+  
+  /* Card Header */
+  .card-header {
+    background-color: #f8f9fa;
+    border-bottom: 2px solid #e1e1e1;
+    padding: 1rem 1.5rem;
+  }
+  
+  /* Chart Canvas */
+  #chart canvas {
+    max-width: 100%; /* Make sure chart is responsive */
+    height: 300px; /* Set a height for the chart */
+    border-radius: 10px; /* Rounded corners for chart */
+  }
+  
+  /* Custom Select */
+  .form-select {
+    border-radius: 0.25rem; /* Rounded edges for the dropdown */
+    border: 1px solid #ced4da; /* Border color */
+    background-color: #f8f9fa; /* Background color */
+  }
+  
+  /* Responsive Adjustments */
+  @media (max-width: 767px) {
+    .card {
+      margin-bottom: 1rem;
+    }
+  
+    .col-lg-8 {
+      flex: 0 0 100%;
+      max-width: 100%;
+    }
+  }
+  
+.stat-card {
+    transition: transform 0.2s ease;
+    border-radius: 12px;
+  }
+  
+  .stat-card:hover {
+    transform: scale(1.03);
+  }
+  .stat-card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border-radius: 10px;
+    border: none;
+  }
+  
+  .stat-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1) !important;
+  }
+  
+  .card {
+    border: none;
+    border-radius: 12px;
+    width: 100%;
+
+  }
+  
+  .dropdown-toggle::after {
+    margin-left: 0.5em;
+  }.dropdown-toggle svg {
+    margin-bottom: 2px;
+  }
+  
+  .dropdown-menu {
+    min-width: 180px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    border: none;
+    border-radius: 8px;
+    padding: 0.5rem 0;
+  }
+  
+  .dropdown-item {
+    padding: 0.5rem 1.5rem;
+    font-size: 0.875rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  
+  .dropdown-item:hover {
+    background-color: #f8f9fa;
+    color: #0d6efd;
+  }
+  
+  .dropdown-item svg {
+    width: 14px;
+    height: 14px;
+  }

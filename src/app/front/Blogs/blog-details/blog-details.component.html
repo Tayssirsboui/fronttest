@@ -1,0 +1,150 @@
+<!-- Loader IA avec SVG animé -->
+<div *ngIf="loadingEnhancement" class="fullscreen-loader">
+  <div class="loader-content">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" class="ai-svg">
+      <circle cx="100" cy="100" r="90" fill="none" stroke="#6610f2" stroke-width="12" />
+      <circle cx="100" cy="100" r="60" fill="none" stroke="#0d6efd" stroke-width="12" />
+      <circle cx="100" cy="100" r="30" fill="none" stroke="#28a745" stroke-width="12" />
+      <circle cx="100" cy="100" r="5" fill="none" stroke="#dc3545" stroke-width="12" />
+    </svg>
+    <p>Génération IA en cours...</p>
+  </div>
+</div>
+
+
+<main>
+   
+  
+    <!--? Blog Area Start -->
+    <section id="blog-details" class="blog-details section">
+        <div class="container">
+            <article class="article">
+                <!-- Image de l'article -->
+                <div class="hero-img">
+                    <img [src]="'http://localhost:5100/posts/images/' + post?.imageUrl" alt=" image" class="img-fluid" loading="lazy" style="margin-top: 160px;">
+                    <div class="meta-overlay">
+                        <div class="meta-categories">
+                            <a href="#" class="category">Genuis</a>
+                            <span class="divider">•</span>
+                            <span class="reading-time"><i class="bi bi-clock"></i> 6 min read</span>
+                        </div>
+                    </div>
+                </div>
+  
+                <!-- Contenu de l'article -->
+                <div class="article-content" delay="100">
+                    <div class="content-header">
+                        <h1 class="title">{{ post?.title }}</h1>
+  
+                        <!-- Infos de l'auteur -->
+                        <div class="author-info">
+                            <div class="author-details">
+                                <img src="assets/img/blog/person-f-8.webp" alt="Author" class="author-img">
+                                <div class="info">
+                                    <h4>{{post.createdBy}}</h4>
+                                    <span class="role">Senior Web Developer</span>
+                                </div>
+                            </div>
+                            <div class="post-meta">
+                                <span class="date"><i class="bi bi-calendar3"></i>{{ post.createdAt | date:'d MMM yyyy' }}</span>
+                                <span class="divider">•</span>
+                                <span class="comments"><i class="bi bi-chat-text"></i> ({{ post?.commentsCount || 0 }}) Comments</span>
+                            </div>
+                        </div>
+                    </div>
+  
+                    <!-- Contenu principal -->
+                    <p>{{post.content}}</p>
+                </div>
+            </article>
+  
+            <!-- Section des commentaires -->
+            <section class="blog-comments section">
+                <div class="container">
+                    <div class="blog-comments-3">
+                        <div class="section-header">
+                            <h3>Nombre de commentaires: <span class="comment-count">({{ post?.commentsCount || 0 }})</span></h3>
+                        </div>
+  
+                        <div class="comments-wrapper">
+                            <!-- Commentaire 1 -->
+                            <article class="comment-card" *ngFor="let comment of comments">
+                                <div class="comment-header">
+                                    <div class="user-info">
+                                        <img src="assets/img/blog/person-f-9.webp" alt="User avatar" loading="lazy">
+                                        <div class="meta">
+                                            <h4 class="name">{{comment.createdBy}}</h4>
+                                            <span class="date"><i class="bi bi-calendar3"></i> {{ comment.createdAt | date:'d MMM yyyy' }}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <button *ngIf="comment.userId === userId" class="btn-edit" (click)="editComment(comment)">
+                                    <i class="fas fa-pencil-alt"> ✏️</i>
+                                  </button>
+                                  
+                                <div class="comment-actions flex gap-2 mt-2">
+                                    <!-- Like Button -->
+                                    <button (click)="likeComment(comment.idComment)"
+                                            class="action-btn flex items-center gap-1 px-3 py-1.5 bg-gray-100 hover:bg-blue-100 text-gray-700 hover:text-blue-600 rounded-full text-sm transition duration-200"
+                                            [ngClass]="{'bg-blue-100 text-blue-600': comment.userReaction === 'like'}">
+                                        <i class="bi bi-hand-thumbs-up"></i>
+                                        <span >{{ comment.likes }}</span>
+                                    </button>
+                                
+
+                                </div>
+                            </article>
+  
+                            <!-- Formulaire de commentaire avec emoji picker -->
+                            <div class="container my-5">
+                                <div class="card shadow-lg border-0 custom-comment-card">
+                                    <form [formGroup]="commentForm" method="post" class="p-5">
+                                        <h3 class="mb-4 text-center fw-bold comment-title">Share Your Comments</h3>
+                                
+                                        <div  >
+                                            <label for="comment" >Your Comment *</label>
+                                            <textarea class="form-control form-control-lg comment-textarea" 
+                                                    id="comment" name="comment" rows="6" 
+                                                    placeholder="Write your thoughts here..." 
+                                                    formControlName="description"></textarea>
+                                            
+                                            <!-- Bouton emoji -->
+                                            <button  class=" btn-emoji" 
+                                                    (click)="toggleEmojiPicker()">
+                                                <i class=" bi-emoji-smile"></i>
+                                            </button>
+                                            
+                                            <!-- Emoji Picker -->
+                                            <div class="emoji-picker-container" *ngIf="showEmojiPicker">
+                                              <emoji-mart class="emoji-picker"
+                                              title="Rechercher un emoji"
+                                                [emoji]="''"
+                                                [style]="{ width: '120%',height: '450px' }"
+                                                [set]="'facebook'"
+                                                (emojiClick)="onSelectEmojis($event)">
+                                              </emoji-mart>
+                                            </div>
+                                            
+                                        </div>
+                                        <button type="button" (click)="enhanceComment()" [disabled]="loadingEnhancement">
+                                            ✨ {{ loadingEnhancement ? 'Génération avec IA...' : 'Améliorer' }}
+                                          </button>
+                                        
+                                
+                                        <div class="col-12 text-center">
+                                            <button type="submit" class="btn btn-primary" (click)="addComment()">
+                                                {{ editMode ? 'Mettre à jour' : 'Poster un commentaire' }}
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </section>
+  </main>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+  

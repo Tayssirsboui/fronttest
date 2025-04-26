@@ -6,5 +6,17 @@ import { Component } from '@angular/core';
   styleUrls: ['./header-back.component.css']
 })
 export class HeaderBackComponent {
+  showNotifications = false;
 
+  notifications = [
+    { message: "Nouvelle commande reçue", date: new Date() },
+    { message: "Nouveau message client", date: new Date() },
+    { message: "Mise à jour disponible", date: new Date() }
+  ];
+  
+  
+  toggleNotifications() {
+    this.showNotifications = !this.showNotifications;
+  }
+  
 }

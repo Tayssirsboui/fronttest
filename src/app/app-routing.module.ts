@@ -20,6 +20,12 @@ import { WebcamComponent } from './front/webcam/webcam.component';
 import { ForgotPasswordComponent } from './front/forgot-password/forgot-password.component';
 import { ResetPasswordComponent } from './front/reset-password/reset-password.component';
 
+import { BlogComponent } from './front/Blogs/blog/blog.component';
+import { BlogAdminComponent } from './back/blogs/blog-admin/blog-admin.component';
+
+import { GeminiChatComponent } from './front/Blogs/gemini-chat/gemini-chat.component';
+import { BlogDetailsComponent } from './front/Blogs/blog-details/blog-details.component';
+import { MesPostsComponent } from './front/Blogs/mes-posts/mes-posts.component';
 
 const routes: Routes = [
   {
@@ -28,10 +34,12 @@ const routes: Routes = [
     children: [
       { path: '', component: DashboardComponent },
       { path: 'listuser', component: UserListComponent },
+      { path: 'blog', component: BlogAdminComponent },
     ]
   },
   {
     path: '',
+   
     component: FrontLayoutComponent,
     children: [
       { path: '', component: HomeComponent },
@@ -43,7 +51,14 @@ const routes: Routes = [
       { path: 'teachers', component: TeachersComponent },
       { path: 'course-single', component: CourseSingleComponent },
       { path: 'events', component: EventsComponent },
+      { path: 'contact', component: ContactComponent }
+      { path: 'blogs', component: BlogComponent },
       { path: 'contact', component: ContactComponent },
+      { path: 'blog-details/:id', component: BlogDetailsComponent },
+      // { path: 'add-post', component: AddPostComponent },
+      // { path: 'add-post/:id', component: AddPostComponent },
+      { path: 'gemini', component: GeminiChatComponent },
+      { path: 'mesPosts', component: MesPostsComponent },
       {
         path: 'profil', component: ProfilComponent,
         canActivate: [AuthGuard]
@@ -54,13 +69,13 @@ const routes: Routes = [
       { path: 'forgot-password', component: ForgotPasswordComponent },
       { path: 'reset-password', component: ResetPasswordComponent },
 
-
-
-
     ]
+    
   },
-  { path: 'reset-password', component: ResetPasswordComponent },
 
+{ path: 'reset-password', component: ResetPasswordComponent },
+
+  { path: '', redirectTo: 'home', pathMatch: 'full' },
   { path: '**', redirectTo: 'home' }
 ];
 

@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { HTTP_INTERCEPTORS, HttpClient, HttpClientModule } from '@angular/common/http';
@@ -39,6 +39,20 @@ import { TokenInterceptor } from './tokenInterceptor';
 
 
 
+import { BlogComponent } from './front/Blogs/blog/blog.component';
+import { BlogDetailsComponent } from './front/Blogs/blog-details/blog-details.component';
+import { HttpClientModule } from '@angular/common/http';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { ToastrModule } from 'ngx-toastr';
+import { CommonModule } from '@angular/common';
+import { GeminiChatComponent } from './front/Blogs/gemini-chat/gemini-chat.component';
+import { PickerModule } from '@ctrl/ngx-emoji-mart';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { BlogAdminComponent } from './back/blogs/blog-admin/blog-admin.component';
+import { MesPostsComponent } from './front/Blogs/mes-posts/mes-posts.component';
+import { NgChartsModule } from 'ng2-charts';
+import { StatPostsComponent } from './back/blogs/stat-posts/stat-posts.component';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -59,6 +73,13 @@ import { TokenInterceptor } from './tokenInterceptor';
     CourseSingleComponent,
     TeachersComponent,
     ContactComponent,
+    BlogComponent,
+    BlogDetailsComponent,
+    FooterBackComponent,
+    GeminiChatComponent,
+    BlogAdminComponent,
+    MesPostsComponent,
+    StatPostsComponent,
     LoginFrontComponent,
     RegisterFrontComponent,
     ActivateAcountComponent,
@@ -67,19 +88,33 @@ import { TokenInterceptor } from './tokenInterceptor';
     WebcamComponent,
     ForgotPasswordComponent,
     ResetPasswordComponent,
-
   ],
   imports: [
     HttpClientModule,
     BrowserModule,
+    
+    NgChartsModule,
+    ReactiveFormsModule, 
+    HttpClientModule,
     AppRoutingModule,
     FormsModule,
     WebcamModule,
     CodeInputModule,
-    ReactiveFormsModule
+    NgbModule,
+    CommonModule,
+    PickerModule,
+    BrowserAnimationsModule,
+    ToastrModule.forRoot({
+      progressBar:true,
+      closeButton:true,
+      newestOnTop:true,
+      tapToDismiss:true,
+      positionClass:'toast-top-right',
+      timeOut: 8000,
 
-
+    }),
   ],
+  
   providers: [{ provide: LocationStrategy, useClass: HashLocationStrategy },
   { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true },
 
