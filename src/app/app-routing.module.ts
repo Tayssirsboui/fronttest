@@ -7,9 +7,12 @@ import { FrontLayoutComponent } from './front/front-layout/front-layout.componen
 import { BackLayoutComponent } from './back/back-layout/back-layout.component';
 import { DashboardComponent } from './back/dashboard/dashboard.component';
 import { CourseSingleComponent } from './front/course-single/course-single.component';
-import { TeachersComponent } from './front/teachers/teachers.component';
 import { EventsComponent } from './front/events/events.component';
 import { ContactComponent } from './front/contact/contact.component';
+import { AffichageCategorieComponent } from './front/affichage-categorie/affichage-categorie.component';
+import { RessourcesComponent } from './front/ressources/ressources.component';
+import { DetailRessourceComponent } from './front/detail-ressource/detail-ressource.component';
+
 
 const routes: Routes = [
   {
@@ -20,28 +23,29 @@ const routes: Routes = [
     ]
   },
   {
-    path: 'front',
-    component: FrontLayoutComponent,
+    path: '',
+    component: FrontLayoutComponent,  // Removed 'front' path
     children: [
-      { path: 'home', component: HomeComponent },
+      { path: '', component: HomeComponent },
       { path: 'courses', component: CoursesComponent },
       { path: 'about', component: AboutComponent },
-      { path: 'teachers', component: TeachersComponent },
+      { path: 'categories', component: AffichageCategorieComponent },
       { path: 'course-single', component: CourseSingleComponent },
       { path: 'events', component: EventsComponent },
-      { path: 'contact', component: ContactComponent }
 
-
-
+      { path: 'contact', component: ContactComponent },
+      { path: 'detail-ressource/:id', component: DetailRessourceComponent },
+      { path: 'ressource/:idCategorie', component: RessourcesComponent},
     ]
   },
-  { path: '', redirectTo: 'front/home', pathMatch: 'full' },
-  { path: '**', redirectTo: 'front/home' }
+  { path: '', redirectTo: 'home', pathMatch: 'full' },  // Updated redirect
+  { path: '**', redirectTo: 'home' }  // Updated wildcard
 ];
-
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule]
 })
 export class AppRoutingModule { }
+
+

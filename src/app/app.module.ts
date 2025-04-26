@@ -20,6 +20,31 @@ import { EventsComponent } from './front/events/events.component';
 import { CourseSingleComponent } from './front/course-single/course-single.component';
 import { TeachersComponent } from './front/teachers/teachers.component';
 import { ContactComponent } from './front/contact/contact.component';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { PdfViewerModule } from 'ng2-pdf-viewer';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatDialogModule } from '@angular/material/dialog';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { AffichageCategorieComponent } from './front/affichage-categorie/affichage-categorie.component';
+
+import { AddCategorieComponent } from './front/add-categorie/add-categorie.component';
+import { RessourcesComponent } from './front/ressources/ressources.component';
+import { AjoutRessourcesComponent } from './front/ajout-ressources/ajout-ressources.component';
+import { DetailRessourceComponent } from './front/detail-ressource/detail-ressource.component';
+import { ConfirmationDialogComponent } from './front/shared/confirmation-dialog/confirmation-dialog.component';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatButtonModule } from '@angular/material/button';
+import { MatSelectModule } from '@angular/material/select';
+import { MatRadioModule } from '@angular/material/radio';
+import { MatIconModule } from '@angular/material/icon';
+import { MatListModule } from '@angular/material/list';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';  // Importer ici
+import { HashLocationStrategy, LocationStrategy } from '@angular/common';
+import { HttpClientModule } from '@angular/common/http';
+import { MatGridListModule } from '@angular/material/grid-list';
+import { MatPaginatorModule } from '@angular/material/paginator';
 
 @NgModule({
   declarations: [
@@ -40,13 +65,41 @@ import { ContactComponent } from './front/contact/contact.component';
     EventsComponent,
     CourseSingleComponent,
     TeachersComponent,
-    ContactComponent
+    ContactComponent,
+    AffichageCategorieComponent,
+   
+    AddCategorieComponent,
+    RessourcesComponent,
+    AjoutRessourcesComponent,
+    DetailRessourceComponent,
+    ConfirmationDialogComponent,
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule
+    AppRoutingModule,
+    BrowserAnimationsModule,
+    HttpClientModule,
+    FormsModule, 
+    ReactiveFormsModule,
+    NgbModule,
+        // Material Modules
+        MatSnackBarModule,
+        MatDialogModule,
+        MatFormFieldModule,
+        MatInputModule,
+        MatButtonModule,
+        MatSelectModule,
+        MatRadioModule,
+        MatIconModule,
+        MatListModule,
+        MatGridListModule,
+        MatButtonModule,
+        MatPaginatorModule,
+        // Third-party Modules
+        PdfViewerModule,
+       
   ],
-  providers: [],
+  providers: [{ provide: LocationStrategy, useClass: HashLocationStrategy }],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

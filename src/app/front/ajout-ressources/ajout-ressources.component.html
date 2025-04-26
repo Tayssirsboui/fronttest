@@ -1,0 +1,123 @@
+<h2 mat-dialog-title>{{ isEditMode ? 'Modifier une ressource' : 'Ajouter une ressource' }}</h2>
+
+<div mat-dialog-content>
+  <form [formGroup]="form">
+
+    <!-- Titre -->
+    <mat-form-field appearance="outline" class="w-100 mb-3">
+      <mat-label>Titre</mat-label>
+      <input matInput formControlName="titre" placeholder="Titre de la ressource" />
+      <mat-error *ngIf="form.get('titre')?.invalid">
+        <small *ngIf="form.get('titre')?.hasError('required')">Requis</small>
+        <small *ngIf="form.get('titre')?.hasError('minlength')">Minimum 3 caractères</small>
+      </mat-error>
+    </mat-form-field>
+
+    <!-- Description -->
+    <mat-form-field appearance="outline" class="w-100 mb-3">
+      <mat-label>Description</mat-label>
+      <textarea matInput formControlName="description" placeholder="Description" rows="3"></textarea>
+      <mat-error *ngIf="form.get('description')?.invalid">
+        <small *ngIf="form.get('description')?.hasError('required')">Requis</small>
+        <small *ngIf="form.get('description')?.hasError('minlength')">Minimum 3 caractères</small>
+      </mat-error>
+    </mat-form-field>
+
+    <!-- Statut : Gratuit ou Payant -->
+    <div class="mb-3">
+      <mat-label>Statut</mat-label>
+      <mat-radio-group (change)="onTypeChange($event.value)" [value]="form.get('statut')?.value">
+        <mat-radio-button value="Gratuit">Gratuit</mat-radio-button>
+        <mat-radio-button value="Payant">Payant</mat-radio-button>
+      </mat-radio-group>
+    </div>
+
+    <!-- Montant (si payant) -->
+    <mat-form-field appearance="outline" class="w-100 mb-3" *ngIf="isPayantSelected">
+      <mat-label>Montant</mat-label>
+      <input matInput type="number" formControlName="montant" placeholder="Montant" />
+      <mat-error *ngIf="form.get('montant')?.invalid">
+        <small>Nombre valide requis</small>
+      </mat-error>
+    </mat-form-field>
+
+    <!-- Upload d'image -->
+    <div class="file-upload-container">
+      <!-- Bouton principal -->
+      <button mat-raised-button color="primary" type="button" (click)="triggerFileInput()">
+        <mat-icon>image</mat-icon>
+        {{ existingImage ? 'Changer l\'image' : 'Sélectionner une image' }}
+      </button>
+    
+      <!-- Input caché -->
+      <input type="file" id="fileInput" (change)="onFileSelected($event)" accept="image/*" hidden />
+    
+      <!-- Aperçu et informations -->
+      <div *ngIf="imagePreview" class="preview-container">
+        <div class="image-preview">
+          <img [src]="imagePreview" alt="Preview" class="preview-image">
+          <div class="image-info">
+            <span class="file-name">{{ selectedFileName }}</span>
+            <button mat-icon-button color="warn" (click)="removeImage()" class="remove-btn">
+              <mat-icon>close</mat-icon>
+            </button>
+          </div>
+        </div>
+      </div>
+   </div>
+
+   <br>
+   <br>
+    <!-- Type de contenu -->
+    <mat-form-field appearance="outline" class="w-100 mb-3">
+      <mat-label>Type de contenu</mat-label>
+      <mat-select (selectionChange)="onOptionChange($event.value)" [value]="selectedOption">
+        <mat-option *ngFor="let option of statusOptions" [value]="option">{{ option }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <!-- LIEN -->
+    <mat-form-field appearance="outline" class="w-100 mb-3" *ngIf="selectedOption === 'LIEN'">
+      <mat-label>Lien</mat-label>
+      <input matInput formControlName="lien" placeholder="URL" />
+    </mat-form-field>
+
+    <!-- ARTICLE -->
+    <mat-form-field appearance="outline" class="w-100 mb-3" *ngIf="selectedOption === 'ARTICLE'">
+      <mat-label>Article</mat-label>
+      <textarea matInput formControlName="article" placeholder="Contenu" rows="5"></textarea>
+    </mat-form-field>
+
+    <!-- Fichiers pour PDF/IMAGE -->
+    <div 
+    class="file-upload-container" *ngIf="selectedOption === 'PDF' || selectedOption === 'IMAGE'">
+      <button mat-raised-button color="primary" (click)="triggerMultipleFileInput()">
+        Sélectionner des fichiers
+      </button>
+      <input type="file" id="multiFileInput" (change)="onFilesSelected($event)"  hidden />
+      
+      <div 
+        *ngIf="fileNames.length > 0" class="mt-2"
+        >
+        <mat-list dense>
+          <mat-list-item *ngFor="let fileName of fileNames">
+            <mat-icon mat-list-icon>insert_drive_file</mat-icon>
+            <div mat-line>{{ fileName }}</div>
+          </mat-list-item>
+        </mat-list>
+      </div>
+    </div>
+
+    <!-- Message -->
+    <div *ngIf="message" class="mb-3" [class.error]="message.includes('Erreur')">
+      {{ message }}
+    </div>
+  </form>
+</div>
+
+<div mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close>Annuler</button>
+  <button mat-flat-button color="primary" (click)="onSubmit()" [disabled]="form.invalid">
+    {{ isEditMode ? 'Modifier' : 'Ajouter' }}
+  </button>
+</div>
