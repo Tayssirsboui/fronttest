@@ -51,12 +51,9 @@ const routes: Routes = [
       { path: 'teachers', component: TeachersComponent },
       { path: 'course-single', component: CourseSingleComponent },
       { path: 'events', component: EventsComponent },
-      { path: 'contact', component: ContactComponent }
-      { path: 'blogs', component: BlogComponent },
       { path: 'contact', component: ContactComponent },
+      { path: 'blogs', component: BlogComponent },
       { path: 'blog-details/:id', component: BlogDetailsComponent },
-      // { path: 'add-post', component: AddPostComponent },
-      // { path: 'add-post/:id', component: AddPostComponent },
       { path: 'gemini', component: GeminiChatComponent },
       { path: 'mesPosts', component: MesPostsComponent },
       {
@@ -73,9 +70,8 @@ const routes: Routes = [
     
   },
 
-{ path: 'reset-password', component: ResetPasswordComponent },
+// { path: 'reset-password', component: ResetPasswordComponent },
 
-  { path: '', redirectTo: 'home', pathMatch: 'full' },
   { path: '**', redirectTo: 'home' }
 ];
 

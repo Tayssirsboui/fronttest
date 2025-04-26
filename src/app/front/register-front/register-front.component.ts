@@ -5,7 +5,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { AuthentificationResponse, RegistrationRequest } from 'src/app/services/models';
-import { AuthentificationService } from 'src/app/services/services';
+import { AuthentificationService } from 'src/app/services/services/authentification.service';
 import { TokenService } from 'src/app/services/token/token.service';
 import { FacialRecognitionControllerService } from 'src/app/services/services/facial-recognition-controller.service';
 

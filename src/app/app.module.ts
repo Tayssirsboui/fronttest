@@ -27,27 +27,24 @@ import { LoginFrontComponent } from './front/login-front/login-front.component';
 import { RegisterFrontComponent } from './front/register-front/register-front.component';
 import { ActivateAcountComponent } from './activate-acount/activate-acount.component';
 import { CodeInputModule } from 'angular-code-input';
-import { HashLocationStrategy, LocationStrategy } from '@angular/common';
+import {  HashLocationStrategy, LocationStrategy, PathLocationStrategy } from '@angular/common';
 import { UserListComponent } from './back/user-list/user-list.component';
 import { ProfilComponent } from './front/profil/profil.component';
 import { WebcamComponent } from './front/webcam/webcam.component';
 import { WebcamModule } from 'ngx-webcam';
 import { ForgotPasswordComponent } from './front/forgot-password/forgot-password.component';
 import { ResetPasswordComponent } from './front/reset-password/reset-password.component'; // Import WebcamModule
-import { JwtInterceptor } from '@auth0/angular-jwt';
 import { TokenInterceptor } from './tokenInterceptor';
 
 
 
 import { BlogComponent } from './front/Blogs/blog/blog.component';
 import { BlogDetailsComponent } from './front/Blogs/blog-details/blog-details.component';
-import { HttpClientModule } from '@angular/common/http';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrModule } from 'ngx-toastr';
 import { CommonModule } from '@angular/common';
 import { GeminiChatComponent } from './front/Blogs/gemini-chat/gemini-chat.component';
 import { PickerModule } from '@ctrl/ngx-emoji-mart';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BlogAdminComponent } from './back/blogs/blog-admin/blog-admin.component';
 import { MesPostsComponent } from './front/Blogs/mes-posts/mes-posts.component';
 import { NgChartsModule } from 'ng2-charts';
@@ -95,7 +92,7 @@ import { StatPostsComponent } from './back/blogs/stat-posts/stat-posts.component
     
     NgChartsModule,
     ReactiveFormsModule, 
-    HttpClientModule,
+    
     AppRoutingModule,
     FormsModule,
     WebcamModule,
@@ -118,7 +115,7 @@ import { StatPostsComponent } from './back/blogs/stat-posts/stat-posts.component
   providers: [{ provide: LocationStrategy, useClass: HashLocationStrategy },
   { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true },
 
-    HttpClient
+    //HttpClient
   ],
   bootstrap: [AppComponent]
 })
