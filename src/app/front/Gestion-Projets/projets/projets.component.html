@@ -1,0 +1,126 @@
+<div class="probootstrap-search" id="probootstrap-search">
+  <a href="#" class="probootstrap-close js-probootstrap-close"><i class="icon-cross"></i></a>
+  <form action="#">
+    <input type="search" name="s" id="search" placeholder="Search a keyword and hit enter...">
+  </form>
+</div>
+
+<div class="probootstrap-page-wrapper">
+ 
+<section class="probootstrap-section probootstrap-section-colored">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12 text-left section-heading probootstrap-animate">
+          <h1>Nos Projets</h1>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="probootstrap-section">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="probootstrap-flex-block">
+            <div class="probootstrap-text probootstrap-animate">
+              <div class="text-uppercase probootstrap-uppercase">Nos Projets</div>
+              <h3>Découvrez et Collaborez sur des Projets Innovants</h3>
+              <p>Bienvenue dans l’espace dédié à nos projets. Vous y trouverez une variété d’initiatives éducatives, technologiques et communautaires portées par nos étudiants et partenaires. N’hésitez pas à explorer, contribuer ou même proposer votre propre projet !</p>
+              <p><button class="btn btn-primary" (click)="openModal()">➕ Ajouter un projet</button></p>
+            </div>
+            
+            <div class="probootstrap-image probootstrap-animate" style="background-image: url(../../../assets/img/slider_4.jpg)">
+              <a href="https://vimeo.com/45830194" class="btn-video popup-vimeo"><i class="icon-play3"></i></a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+ <div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center flex-wrap mb-3">
+      <input
+  type="text"
+  [(ngModel)]="searchTerm"
+  (input)="applyFilters()"
+  class="form-control search-bar-custom"
+  placeholder="🔍 Rechercher un projet...">
+
+     
+    </div>
+  
+    <div class="filter-bar filter-bar-large px-4 py-2 rounded-pill shadow-sm">
+        <button class="filter-btn" [class.active]="selectedCategory === ''" (click)="filterBy('')">Tous</button>
+        <button
+          class="filter-btn"
+          *ngFor="let cat of categories"
+          [class.active]="selectedCategory === cat"
+          (click)="filterBy(cat)">
+          {{ cat }}
+        </button>
+      </div>
+      
+  
+    <div
+class="projet-wrapper mb-4"
+      *ngFor="let projet of projetsFiltres | filter: searchTerm"
+      [hidden]="selectedCategory && projet.categorie !== selectedCategory">
+      
+      <div class="image-outer">
+        <img src="assets/img/about3.png" alt="Projet">
+      </div>
+      
+      <div class="projet-card border border-light border-2">
+        <div class="content-container">
+          <div class="d-flex justify-content-between">
+            <div class="projet-categorie">{{ projet.categorie }}</div>
+            <span class="badge" [ngClass]="getBadgeClass(getStatut(projet))">
+              {{ getStatut(projet) }}
+            </span>
+          </div>
+  
+          <h4 class="projet-title">{{ projet.titre }}</h4>
+          <div class="projet-info">
+            <span><strong>Date :</strong> {{ projet.dateCreation | date:'dd MMM yyyy' }}</span>
+            <span><strong>Fin prévue :</strong> {{ projet.dateFinPrevue | date:'dd MMM yyyy' }}</span>
+            <span><strong>Collab :</strong> {{ getCollaborateursActuels(projet) }} / {{ projet.nombreMaxCollaborateurs }}</span>
+          </div>
+  
+          <div class="projet-actions d-flex justify-content-end mt-3 gap-2">
+            <button class="btn btn-sm btn-outline-custom-secondary" (click)="openModal(projet)" title="Modifier">
+              ✏️
+            </button>
+            <button class="btn btn-sm btn-outline-custom-danger" (click)="supprimerProjet(projet.id)" title="Supprimer">
+              🗑️
+            </button>
+            <button 
+              class="btn btn-sm btn-outline-custom-success" 
+              (click)="onCollaborer(projet.id)" 
+              [disabled]="projet.collaborations?.length >= projet.nombreMaxCollaborateurs"
+              title="Collaborer">
+              🤝 Collaborer
+            </button>
+
+          <span *ngIf="projet.collaborations?.length >= projet.nombreMaxCollaborateurs" 
+            class="badge bg-danger ms-2">
+            Complet
+          </span>
+
+          </div>
+          
+        </div>
+  
+        <div class="arrow-container">
+          <div class="arrow-circle">
+            <span class="arrow">&gt;</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="pagination-controls d-flex justify-content-center mt-4 gap-3">
+    <button class="btn btn-outline-primary" [disabled]="currentPage === 1" (click)="prevPage()">Précédent</button>
+    <span class="align-self-center">Page {{ currentPage }} / {{ totalPages }}</span>
+    <button class="btn btn-outline-primary" [disabled]="currentPage === totalPages" (click)="nextPage()">Suivant</button>
+  </div>
+  

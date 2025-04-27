@@ -1,0 +1,128 @@
+<div class="header-bar">
+  <mat-progress-bar mode="determinate" [value]="progressValue"></mat-progress-bar>
+  <button mat-raised-button color="primary" (click)="openAddTaskDialog()">➕ Ajouter une tâche</button>
+</div>
+
+<ejs-kanban
+  [dataSource]="dataSource"
+  keyField="statut"
+  (actionComplete)="onKanbanAction($event)"
+  [cardSettings]="{ contentField: 'description', headerField: 'titre', template: cardTemplate }"
+  height="600px"
+  width="100%"
+>
+  <e-columns>
+    <e-column headerText="À faire" keyField="À faire"></e-column>
+    <e-column headerText="En cours" keyField="En cours"></e-column>
+    <e-column headerText="Terminé" keyField="Terminé"></e-column>
+  </e-columns>
+
+  <ng-template #cardTemplate let-data>
+    <div class="kanban-card">
+     
+      <h4 class="card-title">{{ data.titre }}</h4>
+      <p class="card-summary">{{ data.description }}</p>
+      <div class="card-footer">
+        <span class="priority" [ngClass]="getPriorityClass(data.priorite)">Priorité : {{ data.priorite }}</span>
+        <span class="estimation">Estimation : {{ data.estimation }}</span>
+      </div>
+      <button mat-icon-button color="primary" (click)="openEditTaskDialog(data)">
+        <mat-icon>edit</mat-icon>
+      </button>
+      <button mat-icon-button color="warn" (click)="deleteTask(data.id)">
+        <mat-icon>delete</mat-icon>
+      </button>
+    </div>
+  </ng-template>
+</ejs-kanban>
+
+<ng-template #addTaskDialog>
+  <h2 mat-dialog-title>Ajouter une tâche</h2>
+  <mat-dialog-content [formGroup]="taskForm" class="form-dialog">
+    <!-- Champ caché projetId -->
+    <input type="hidden" formControlName="projetId" />
+
+    <mat-form-field appearance="fill">
+      <mat-label>Titre</mat-label>
+      <input matInput formControlName="titre" />
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <mat-label>Description</mat-label>
+      <textarea matInput formControlName="description"></textarea>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <mat-label>Estimation</mat-label>
+      <input matInput formControlName="estimation" />
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <mat-label>Priorité</mat-label>
+      <mat-select formControlName="priorite">
+        <mat-option value="Haute">Haute</mat-option>
+        <mat-option value="Moyenne">Moyenne</mat-option>
+        <mat-option value="Faible">Faible</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <mat-label>Statut</mat-label>
+      <mat-select formControlName="statut">
+        <mat-option value="À faire">À faire</mat-option>
+        <mat-option value="En cours">En cours</mat-option>
+        <mat-option value="Terminé">Terminé</mat-option>
+      </mat-select>
+    </mat-form-field>
+  </mat-dialog-content>
+
+  <mat-dialog-actions align="end">
+    <button mat-button mat-dialog-close>Annuler</button>
+    <button mat-button color="primary" (click)="submitTask()" [disabled]="taskForm.invalid">Ajouter</button>
+  </mat-dialog-actions>
+</ng-template>
+
+<ng-template #editTaskDialog>
+  <h2 mat-dialog-title>Modifier la tâche</h2>
+  <mat-dialog-content [formGroup]="taskForm" class="form-dialog">
+    <input type="hidden" formControlName="projetId" />
+
+    <mat-form-field appearance="fill">
+      <mat-label>ID du Projet</mat-label>
+      <input matInput [value]="projectId" disabled />
+    </mat-form-field>
+    
+    <mat-form-field appearance="fill">
+      <mat-label>Titre</mat-label>
+      <input matInput formControlName="titre" />
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Description</mat-label>
+      <textarea matInput formControlName="description"></textarea>
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Estimation</mat-label>
+      <input matInput formControlName="estimation" />
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Priorité</mat-label>
+      <mat-select formControlName="priorite">
+        <mat-option value="Haute">Haute</mat-option>
+        <mat-option value="Moyenne">Moyenne</mat-option>
+        <mat-option value="Faible">Faible</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Statut</mat-label>
+      <mat-select formControlName="statut">
+        <mat-option value="À faire">À faire</mat-option>
+        <mat-option value="En cours">En cours</mat-option>
+        <mat-option value="Terminé">Terminé</mat-option>
+      </mat-select>
+    </mat-form-field>
+  </mat-dialog-content>
+  <mat-dialog-actions align="end">
+    <button mat-button mat-dialog-close>Annuler</button>
+    <button mat-button color="primary" (click)="submitEditTask()" [disabled]="taskForm.invalid">Enregistrer</button>
+  </mat-dialog-actions>
+</ng-template>

@@ -1,0 +1,228 @@
+/* Nouveau design CSS pour les cartes de projets inspiré du design souhaité */
+
+.ajouter-btn {
+  border-radius: 40px;
+  padding: 10px 20px;
+  font-size: 16px;
+  background-color: #7c3aed;
+  color: white;
+  font-weight: 600;
+  border: none;
+  transition: background-color 0.3s ease;
+  margin-bottom: 30px;
+}
+
+.ajouter-btn:hover {
+  background-color: #6d28d9;
+}
+
+.search-bar-custom {
+  height: 50px;
+  font-size: 16px;
+  border-radius: 30px;
+  padding: 12px 24px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+  margin-bottom: 20px;
+}
+
+.filter-bar-large {
+  background-color: #f4f3fd;
+  border-radius: 30px;
+  padding: 12px 30px;
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  font-size: 15px;
+  margin-bottom: 30px;
+}
+
+.filter-btn {
+  border: none;
+  background: transparent;
+  font-weight: 500;
+  color: #4b5563;
+  padding: 8px 16px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border-radius: 20px;
+}
+
+.filter-btn:hover,
+.filter-btn.active {
+  background-color: #a78bfa;
+  color: white;
+}
+
+.projet-wrapper {
+  display: flex;
+  align-items: center;
+  margin-bottom: 30px;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+
+.image-outer img {
+  width: 130px;
+  height: 130px;
+  border-radius: 20px;
+  object-fit: cover;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.projet-card {
+  flex: 1;
+  background-color: #f6f5ff;
+  border-radius: 30px;
+  padding: 30px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: 0 10px 25px rgba(38, 7, 242, 0.06);
+  border-left: 8px solid #8b5cf6;
+  margin-left: -50px;
+  z-index: 1;
+  padding-left: 80px !important;
+  
+}
+
+.content-container {
+  flex-grow: 1;
+}
+
+.projet-categorie {
+  background-color: #e0d8ff;
+  color: #6d28d9;
+  padding: 5px 14px;
+  border-radius: 16px;
+  font-size: 12px;
+  font-weight: 600;
+  display: inline-block;
+  margin-bottom: 10px;
+}
+
+.projet-title {
+  font-size: 20px;
+  font-weight: bold;
+  color: #1f2937;
+  margin-bottom: 10px;
+}
+
+.projet-info {
+  font-size: 14px;
+  color: #4b5563;
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-bottom: 10px;
+}
+
+.projet-actions .btn {
+  font-size: 13px;
+  padding: 6px 12px;
+  border-radius: 10px;
+  background-color: white;
+  border: 1px solid #ddd;
+  transition: all 0.3s ease;
+}
+
+.btn-outline-custom-secondary {
+  border: 1px solid #9ca3af;
+  color: #6b7280;
+}
+
+.btn-outline-custom-secondary:hover {
+  background-color: #9ca3af;
+  color: #fff;
+}
+
+.btn-outline-custom-danger {
+  border: 1px solid #fca5a5;
+  color: #dc2626;
+}
+
+.btn-outline-custom-danger:hover {
+  background-color: #fca5a5;
+  color: #fff;
+}
+
+.btn-outline-custom-success {
+  border: 1px solid #a7f3d0;
+  color: #047857;
+}
+
+.btn-outline-custom-success:hover {
+  background-color: #a7f3d0;
+  color: #fff;
+}
+
+.arrow-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #7c3aed;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  color: white;
+  font-weight: bold;
+  font-size: 20px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.arrow-container:hover {
+  background-color: #6d28d9;
+}
+/* Superposition de l’image à gauche */
+.projet-wrapper {
+  display: flex;
+  align-items: center;
+  position: relative;
+  gap: 20px;
+}
+
+.image-outer {
+  position: relative;
+  z-index: 2;
+  margin-left: 10px;
+}
+
+.image-outer img {
+  width: 180px;
+  height: 180px;
+  border-radius: 20px;
+  object-fit: cover;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  position: relative;
+  top: 0;
+  left: 0;
+}
+
+
+.badge.bg-danger {
+  background: linear-gradient(135deg, #ff4e50 0%, #f9d423 100%);
+  color: white;
+  font-weight: bold;
+  padding: 5px 10px;
+  font-size: 12px;
+  border-radius: 20px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+  animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(255, 78, 80, 0.7);
+  }
+  70% {
+    transform: scale(1.05);
+    box-shadow: 0 0 10px 10px rgba(255, 78, 80, 0);
+  }
+  100% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(255, 78, 80, 0);
+  }
+}

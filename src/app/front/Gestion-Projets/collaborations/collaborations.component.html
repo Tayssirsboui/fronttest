@@ -1,0 +1,103 @@
+<div class="probootstrap-search" id="probootstrap-search">
+  <a href="#" class="probootstrap-close js-probootstrap-close"><i class="icon-cross"></i></a>
+  <form action="#">
+    <input type="search" name="s" id="search" placeholder="Search a keyword and hit enter...">
+  </form>
+</div>
+
+<div class="probootstrap-page-wrapper">
+ 
+<section class="probootstrap-section probootstrap-section-colored">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12 text-left section-heading probootstrap-animate">
+          <h1>Mes Collaborations</h1>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="probootstrap-section">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="probootstrap-flex-block">
+            <div class="probootstrap-text probootstrap-animate">
+              <div class="text-uppercase probootstrap-uppercase">Nos Projets</div>
+              <h3>Découvrez et Collaborez sur des Projets Innovants</h3>
+              <p>Bienvenue dans l’espace dédié à nos projets. Vous y trouverez une variété d’initiatives éducatives, technologiques et communautaires portées par nos étudiants et partenaires. N’hésitez pas à explorer, contribuer ou même proposer votre propre projet !</p>
+            </div>
+            
+            <div class="probootstrap-image probootstrap-animate" style="background-image: url(../../../assets/img/slider_4.jpg)">
+              <a href="https://vimeo.com/45830194" class="btn-video popup-vimeo"><i class="icon-play3"></i></a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+<!-- Barre de recherche -->
+<div class="search-wrapper mb-3">
+  <input type="text" [(ngModel)]="searchTerm" (input)="applyFilters()" class="form-control custom-search" placeholder="Rechercher une collaboration...">
+</div>
+
+<!-- Filtres statut -->
+<div class="status-filter mb-4 d-flex flex-wrap gap-2 justify-content-center">
+  <button *ngFor="let s of statuts"
+          class="btn custom-badge"
+          [ngClass]="{ 'selected': selectedStatut === s }"
+          (click)="selectedStatut = s; applyFilters()">
+    {{ s }}
+  </button>
+</div>
+
+
+  
+  <div class="services section" id="services">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-4 col-md-6" *ngFor="let collab of paginatedCollaborations">
+          <div class="service-item">
+            <div class="icon">
+              <img src="assets/img/deal.png" alt="collaboration icon">
+            </div>
+            <div class="main-content">
+              <h4>{{ collab.role }}</h4>
+              <p>
+                <strong>Statut:</strong>
+                <span class="badge"
+                  [ngClass]="{
+                    'bg-secondary': collab.statut === 'Non traité',
+                    'bg-success': collab.statut === 'Accepté',
+                    'bg-danger': collab.statut === 'Refusé'
+                  }">
+                  {{ collab.statut }}
+                </span><br>
+                <strong>Date demande:</strong> {{ collab.dateDemande | date:'dd MMM yyyy' }}<br>
+                <strong>Projet:</strong> {{ collab.projet?.titre || '---' }}
+              </p>
+              <div class="main-button d-flex gap-2 justify-content-center mt-3">
+                <button *ngIf="collab.statut === 'Non traité'" class="btn btn-sm btn-outline-success" (click)="onAccepter(collab.id)">✔️ Accepter</button>
+                <button *ngIf="collab.statut === 'Non traité'" class="btn btn-sm btn-outline-warning" (click)="onModifier(collab)">✏️ Modifier</button>
+                <button *ngIf="collab.statut === 'Non traité'" class="btn btn-sm btn-outline-danger" (click)="onAnnuler(collab.id)">🗑️ Annuler</button>
+              </div>
+              <!-- Ajoute ce bouton dans chaque carte de collaboration-->
+<button *ngIf="collab.statut === 'Accepté'" class="btn btn-sm btn-outline-info" (click)="openRoadmapModal(collab)">
+  👁️ Voir détails
+</button> 
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+  </div>
+ <!-- Pagination -->
+<div class="pagination-controls d-flex justify-content-center mt-4 gap-3">
+  <button class="btn btn-outline-primary" [disabled]="currentPage === 1" (click)="prevPage()">Précédent</button>
+  <span>Page {{ currentPage }} / {{ totalPages }}</span>
+  <button class="btn btn-outline-primary" [disabled]="currentPage === totalPages" (click)="nextPage()">Suivant</button>
+</div>
+
+  

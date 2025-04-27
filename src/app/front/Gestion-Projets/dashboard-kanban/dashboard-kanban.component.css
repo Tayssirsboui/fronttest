@@ -1,0 +1,102 @@
+/* ejs-kanban {
+    margin: 20px;
+  }
+  .w-full {
+    width: 100%;
+  }
+  .mb-3 {
+    margin-bottom: 1rem;
+  }
+  .mb-4 {
+    margin-bottom: 1.5rem;
+  }
+  .flex {
+    display: flex;
+  }
+  .justify-end {
+    justify-content: flex-end;
+  }
+  .gap-2 {
+    gap: 0.5rem;
+  }
+  .mt-4 {
+    margin-top: 1rem;
+  }
+  .text-right {
+    text-align: right;
+  }
+   */
+   /* Kanban Board spacing */
+   .kanban-card {
+    padding: 10px;
+    border-radius: 8px;
+    background-color: #ffffff;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  }
+  
+  .card-title {
+    font-size: 16px;
+    font-weight: bold;
+    margin: 0 0 4px 0;
+  }
+  
+  .card-summary {
+    font-size: 14px;
+    margin-bottom: 6px;
+  }
+  
+  .card-footer {
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+  }
+  
+  .priority {
+    padding: 2px 6px;
+    border-radius: 4px;
+    color: white;
+  }
+  
+  .priority.high {
+    background-color: #e74c3c;
+  }
+  
+  .priority.medium {
+    background-color: #f39c12;
+  }
+  
+  .priority.low {
+    background-color: #2ecc71;
+  }
+  
+  .estimation {
+    color: #555;
+  }
+
+  .header-bar {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 10px;
+  }
+  
+  .form-dialog {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    min-width: 300px;
+  }
+  
+  mat-form-field {
+    width: 100%;
+  }
+  
+  .project-info {
+    font-size: 12px;
+    font-weight: 500;
+    color: #666;
+    margin-bottom: 5px;
+    border-left: 3px solid #2196f3;
+    padding-left: 6px;
+  }
+  
+  

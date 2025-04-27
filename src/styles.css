@@ -123,4 +123,86 @@
     color: white !important;
     font-weight: bold;
   }
+  /* You can add global styles to this file, and also import other style files */
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+.success-snackbar {
+    background-color: #4caf50;
+    color: white;
+    font-weight: 500;
+    z-index: 9999 !important;       /* Toujours au-dessus */
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.3);
+  }
+  /* You can add global styles to this file, and also import other style files */
+
+  @import '~@syncfusion/ej2-base/styles/material.css';
+  @import '~@syncfusion/ej2-buttons/styles/material.css';
+  @import '~@syncfusion/ej2-dropdowns/styles/material.css';
+  @import '~@syncfusion/ej2-inputs/styles/material.css';
+  @import '~@syncfusion/ej2-layouts/styles/material.css';
+  @import '~@syncfusion/ej2-navigations/styles/material.css';
+  @import '~@syncfusion/ej2-popups/styles/material.css';
+  @import '~@syncfusion/ej2-kanban/styles/material.css';
   
+  .e-card-wrapper .e-card-header {
+    font-size: 12px;
+    font-weight: 600;
+    display: inline-flex;
+  }
+  
+  .e-card-wrapper .e-priority {
+    font-size: 12px;
+    padding-left: 12px;
+    font-weight: 600;
+  }
+  
+  .e-swimlane-header img {
+    height: 24px;
+    width: 24px;
+    border-radius: 50%;
+  }
+  
+  .e-kanban .header-template-wrap {
+    display: inline-flex;
+    font-size: 15px;
+    font-weight: 400;
+  }
+  
+  .e-kanban .header-icon {
+    margin-right: 6px;
+  }
+  
+  .e-kanban .Open::before {
+    content: '\e700';
+    color: #0251cc;
+    font-size: 16px;
+  }
+  
+  .e-kanban .InProgress::before {
+    content: '\e703';
+    color: #ea9713;
+    font-size: 16px;
+  }
+  
+  .e-kanban .Review::before {
+    content: '\e701';
+    color: #8e4399;
+    font-size: 16px;
+  }
+  
+  .e-kanban .Close::before {
+    content: '\e702';
+    color: #63ba3c;
+    font-size: 16px;
+  }
+      
+        
+        
+        
+        
+        
+        
+        
+        
+        
