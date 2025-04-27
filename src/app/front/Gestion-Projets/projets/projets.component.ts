@@ -126,10 +126,12 @@ getFilteredData(): Projet[] {
   
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        this.router.navigate(['/collaborations']); // ou rechargement dynamique si besoin
+        // 👇 Recharge la liste après ajout
+        this.chargerProjets();
       }
     });
   }
+  
   
   // openAjouterProjet(): void {
   //   const dialogRef = this.dialog.open(AjouterProjetComponent, {

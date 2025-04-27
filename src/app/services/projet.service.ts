@@ -29,4 +29,7 @@ export class ProjetService {
   deleteProjet(id: number): Observable<void> {
     return this.http.delete<void>('http://localhost:8222/projet/remove-projet/' + id);
   }
+  getFullProjet(projetId: number) {
+    return this.http.get<Projet>(`http://localhost:8222/projet/with-collaborations/${projetId}`);
+  }
 }

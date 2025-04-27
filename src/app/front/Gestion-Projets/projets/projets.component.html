@@ -93,9 +93,19 @@ class="projet-wrapper mb-4"
             <button class="btn btn-sm btn-outline-custom-danger" (click)="supprimerProjet(projet.id)" title="Supprimer">
               🗑️
             </button>
-            <button class="btn btn-sm btn-outline-custom-success" (click)="onCollaborer(projet.id)" title="Collaborer">
-              🤝
+            <button 
+              class="btn btn-sm btn-outline-custom-success" 
+              (click)="onCollaborer(projet.id)" 
+              [disabled]="projet.collaborations?.length >= projet.nombreMaxCollaborateurs"
+              title="Collaborer">
+              🤝 Collaborer
             </button>
+
+          <span *ngIf="projet.collaborations?.length >= projet.nombreMaxCollaborateurs" 
+            class="badge bg-danger ms-2">
+            Complet
+          </span>
+
           </div>
           
         </div>

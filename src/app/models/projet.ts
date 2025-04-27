@@ -13,4 +13,10 @@ export class Projet {
   competencesRequises: string[] = [];
   collaborations?: Collaboration[];
   taches: Tache[] = []; // ✅ Ajout de cette ligne
+
+ // ➡️ Ajout :
+ get nombreActuelCollaborateurs(): number {
+  return this.collaborations?.length || 0;
+}
+
 }

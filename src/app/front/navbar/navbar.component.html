@@ -36,20 +36,32 @@
         <li class="dropdown notification-wrapper">
           <a href="#" data-toggle="dropdown" class="dropdown-toggle">
             <i class="icon-bell"></i>
-            <span class="notif-badge" *ngIf="notifications.length > 0">{{ notifications.length }}</span>
+            <span class="notif-badge" *ngIf="unreadCount > 0">{{ unreadCount }}</span>
           </a>
-
+        
           <ul class="dropdown-menu notifications-menu">
             <li class="header">Notifications ({{ notifications.length }})</li>
+        
             <li *ngIf="notifications.length === 0" class="text-center p-3">
               Aucune notification pour l'instant.
             </li>
-            <li *ngFor="let notif of notifications" class="notification-item">
+        
+            <li *ngFor="let notif of notifications" class="notification-item" (click)="onNotificationClick(notif)">
               <div class="notif-icon">📣</div>
-              <div class="notif-text">{{ notif.message }}</div>
+              <div class="notif-text">
+                {{ notif.message }}
+              </div>
+              <div class="notif-meta">
+                <span class="notif-date">
+                  {{ notif.timestamp | date:'dd/MM/yyyy HH:mm' }}
+                </span>
+              </div>
+                <span *ngIf="!notif.seen" class="unread-dot"></span>
+                
             </li>
           </ul>
         </li>
+        
 
       </ul>
     </div>

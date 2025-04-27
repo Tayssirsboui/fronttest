@@ -10,10 +10,11 @@ import { Router } from '@angular/router';
   styleUrls: ['./list-projets.component.css']
 })
 export class ListProjetsComponent {
- 
 
   projets: Projet[] = [];
   projetsFiltres: Projet[] = [];
+  selectedProjet!: Projet; // ✅ to hold selected project for modal
+
   searchTerm: string = '';
   selectedCategory: string = '';
   categories: string[] = [];
@@ -23,7 +24,11 @@ export class ListProjetsComponent {
 
   @ViewChild('detailsModal') detailsModal!: TemplateRef<any>;
 
-  constructor(private projetService: ProjetService, private dialog: MatDialog, private router: Router) {}
+  constructor(
+    private projetService: ProjetService,
+    private dialog: MatDialog,
+    private router: Router
+  ) {}
 
   ngOnInit(): void {
     this.chargerProjets();
@@ -41,7 +46,9 @@ export class ListProjetsComponent {
     let result = this.projets;
 
     if (this.searchTerm) {
-      result = result.filter(p => p.titre.toLowerCase().includes(this.searchTerm.toLowerCase()));
+      result = result.filter(p =>
+        p.titre.toLowerCase().includes(this.searchTerm.toLowerCase())
+      );
     }
     if (this.selectedCategory) {
       result = result.filter(p => p.categorie === this.selectedCategory);
@@ -73,8 +80,11 @@ export class ListProjetsComponent {
 
   getFilteredData(): Projet[] {
     let result = this.projets;
+
     if (this.searchTerm) {
-      result = result.filter(p => p.titre.toLowerCase().includes(this.searchTerm.toLowerCase()));
+      result = result.filter(p =>
+        p.titre.toLowerCase().includes(this.searchTerm.toLowerCase())
+      );
     }
     if (this.selectedCategory) {
       result = result.filter(p => p.categorie === this.selectedCategory);
@@ -101,8 +111,13 @@ export class ListProjetsComponent {
   }
 
   ouvrirDetails(projet: Projet) {
-    this.dialog.open(this.detailsModal, {
-      data: projet
+    // 👉 Important: reload full project with taches and collaborations
+    this.projetService.getFullProjet(projet.id).subscribe(fullProjet => {
+      this.selectedProjet = fullProjet;
+      this.dialog.open(this.detailsModal, {
+        width: '700px',
+        data: this.selectedProjet
+      });
     });
   }
 
