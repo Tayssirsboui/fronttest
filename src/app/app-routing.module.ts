@@ -37,6 +37,11 @@ import { ProjetsComponent } from './front/Gestion-Projets/projets/projets.compon
 import { CollaborationsComponent } from './front/Gestion-Projets/collaborations/collaborations.component';
 import { DashboardKanbanComponent } from './front/Gestion-Projets/dashboard-kanban/dashboard-kanban.component';
 import { ListProjetsComponent } from './back/Gestion-Projets/list-projets/list-projets.component';
+import { CommunityDetailComponent } from './front/forum/pages/community-detail/community-detail.component';
+import { CommunityListComponent } from './front/forum/pages/community-list/community-list.component';
+import { CreatePostComponent } from './front/forum/pages/create-post/create-post.component'
+import { CreateCommunityComponent } from './front/forum/pages/create-community/create-community.component';
+
 
 const routes: Routes = [
   {
@@ -78,7 +83,10 @@ const routes: Routes = [
       { path: 'contact', component: ContactComponent },
       { path: 'kanban/:id', component: DashboardKanbanComponent },
       { path: 'projets', component: ProjetsComponent },
-      
+      { path: 'communities', component: CommunityListComponent },
+      { path: 'community/:id', component: CommunityDetailComponent },
+      { path: 'create-community', component: CreateCommunityComponent },
+      { path: 'community/:id/create-post', component: CreatePostComponent }
 
       {
         path: 'profil', component: ProfilComponent,

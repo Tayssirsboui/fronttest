@@ -94,6 +94,12 @@ import { RoadmapModalComponent } from './front/Gestion-Projets/roadmap-modal/roa
 import { FilterPipe } from './front/Gestion-Projets/shared/filter.pipe';
 import { KanbanModule } from '@syncfusion/ej2-angular-kanban';
 
+import { CommunityDetailComponent } from './front/forum/pages/community-detail/community-detail.component';
+import { CommunityListComponent } from './front/forum/pages/community-list/community-list.component';
+import { CreatePostComponent } from './front/forum/pages/create-post/create-post.component'
+import { CreateCommunityComponent } from './front/forum/pages/create-community/create-community.component';
+import { SafeUrlPipe } from './pipes/safe-url.pipe';
+
 
 
 
@@ -110,6 +116,11 @@ import { KanbanModule } from '@syncfusion/ej2-angular-kanban';
     CoursesComponent,
     FooterBackComponent,
     SidebarBackComponent,
+    CommunityDetailComponent,
+    CreateCommunityComponent,
+    HomeComponent,
+    CommunityListComponent,
+    CreatePostComponent,
     BackLayoutComponent,
     FrontLayoutComponent,
     DashboardComponent,
@@ -154,7 +165,8 @@ import { KanbanModule } from '@syncfusion/ej2-angular-kanban';
     CollaborationsComponent,
     DashboardKanbanComponent,
     RoadmapModalComponent,
-    ListProjetsComponent
+    ListProjetsComponent,
+    SafeUrlPipe
   
   ],
  
@@ -201,7 +213,8 @@ import { KanbanModule } from '@syncfusion/ej2-angular-kanban';
   GoogleMapsModule,
   MatSnackBarModule,
   MatPaginatorModule,
-  KanbanModule
+  KanbanModule,
+   PickerModule
   ],
   
   providers: [{ provide: LocationStrategy, useClass: HashLocationStrategy },

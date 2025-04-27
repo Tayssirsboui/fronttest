@@ -1,0 +1,18 @@
+<div class="container">
+    <h2>Bienvenue !</h2>
+  
+    <form (ngSubmit)="login()">
+      <div>
+        <label>Nom :</label>
+        <input type="text" [(ngModel)]="name" name="name" required />
+      </div>
+  
+      <div>
+        <label>Image (URL) :</label>
+        <input type="text" [(ngModel)]="image" name="image" />
+      </div>
+  
+      <button type="submit">Se connecter</button>
+    </form>
+  </div>
+  

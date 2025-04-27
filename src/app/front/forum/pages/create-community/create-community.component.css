@@ -1,0 +1,72 @@
+/* Conteneur principal */
+.form-container {
+  max-width: 600px;
+  margin: 2rem auto;
+  background: #ffffff;
+  padding: 2rem;
+  border-radius: 1rem;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Titre */
+.form-container h2 {
+  font-size: 1.75rem;
+  font-weight: bold;
+  margin-bottom: 1.5rem;
+  color: #1f2937; /* gris foncé */
+}
+
+/* Groupe de formulaire */
+.form-group {
+  margin-bottom: 1.5rem;
+}
+
+/* Label */
+.form-group label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  color: #374151;
+}
+
+/* Champs input/textarea */
+.form-group input,
+.form-group textarea,
+.image-url {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: 1px solid #ccc;
+  border-radius: 0.75rem;
+  font-size: 1rem;
+  outline: none;
+  transition: box-shadow 0.2s ease;
+}
+
+.form-group input:focus,
+.form-group textarea:focus,
+.image-url:focus {
+  border-color: #3b82f6; /* blue-500 */
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+}
+
+/* Champ image url spécifique (si tu veux le styliser différemment) */
+.image-url {
+  margin-bottom: 1.5rem;
+}
+
+/* Bouton */
+button[type="submit"] {
+  background-color: #16a34a; /* green-600 */
+  color: white;
+  font-weight: bold;
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 0.75rem;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background-color 0.2s ease;
+}
+
+button[type="submit"]:hover {
+  background-color: #15803d; /* green-700 */
+}
