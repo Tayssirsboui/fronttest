@@ -100,7 +100,31 @@ import { CreatePostComponent } from './front/forum/pages/create-post/create-post
 import { CreateCommunityComponent } from './front/forum/pages/create-community/create-community.component';
 import { SafeUrlPipe } from './pipes/safe-url.pipe';
 
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { PdfViewerModule } from 'ng2-pdf-viewer';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatDialogModule } from '@angular/material/dialog';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { AffichageCategorieComponent } from './front/affichage-categorie/affichage-categorie.component';
 
+import { AddCategorieComponent } from './front/add-categorie/add-categorie.component';
+import { RessourcesComponent } from './front/ressources/ressources.component';
+import { AjoutRessourcesComponent } from './front/ajout-ressources/ajout-ressources.component';
+import { DetailRessourceComponent } from './front/detail-ressource/detail-ressource.component';
+import { ConfirmationDialogComponent } from './front/shared/confirmation-dialog/confirmation-dialog.component';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatButtonModule } from '@angular/material/button';
+import { MatSelectModule } from '@angular/material/select';
+import { MatRadioModule } from '@angular/material/radio';
+import { MatIconModule } from '@angular/material/icon';
+import { MatListModule } from '@angular/material/list';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';  // Importer ici
+import { HashLocationStrategy, LocationStrategy } from '@angular/common';
+import { HttpClientModule } from '@angular/common/http';
+import { MatGridListModule } from '@angular/material/grid-list';
+import { MatPaginatorModule } from '@angular/material/paginator';
 
 
 
@@ -167,7 +191,13 @@ import { SafeUrlPipe } from './pipes/safe-url.pipe';
     RoadmapModalComponent,
     ListProjetsComponent,
     SafeUrlPipe
-  
+    AffichageCategorieComponent,
+   
+    AddCategorieComponent,
+    RessourcesComponent,
+    AjoutRessourcesComponent,
+    DetailRessourceComponent,
+    ConfirmationDialogComponent,
   ],
  
   imports: [

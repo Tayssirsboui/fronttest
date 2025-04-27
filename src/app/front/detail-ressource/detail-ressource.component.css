@@ -1,0 +1,811 @@
+.details-container {
+    padding: 2rem;
+    background: #f9f9f9;
+    border-radius: 16px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    animation: fadeIn 0.6s ease;
+  }
+  
+  .btn-back {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: #eeeeee;
+    border: none;
+    padding: 0.6rem 1rem;
+    font-weight: 500;
+    border-radius: 10px;
+    cursor: pointer;
+    margin-bottom: 1rem;
+    transition: all 0.3s ease;
+  }
+  
+  .btn-back:hover {
+    background: #dcdcdc;
+    transform: translateX(-4px);
+  }
+  
+  .card-detail {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+  
+  .card-image img {
+    width: 100%;
+    max-height: 400px;
+    object-fit: cover;
+    border-radius: 12px;
+    box-shadow: 0 4px 14px rgba(0,0,0,0.15);
+  }
+  
+  .card-content {
+    padding: 1rem;
+  }
+  
+  .titre {
+    font-size: 1.8rem;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 1rem;
+  }
+  
+  .badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 1rem;
+  }
+  
+  .badge {
+    background-color: #e0f7fa;
+    color: #006064;
+    padding: 0.3rem 0.8rem;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  
+  /* Statut et Date Plus Grands */
+  .status-badge,
+  .date-badge {
+    font-size: 1.5rem;           /* Augmenter la taille de la police */
+    font-weight: 700;            /* Mettre en gras */
+    padding: 0.6rem 1.5rem;      /* Plus d'espace */
+    border-radius: 30px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  
+  .status-badge {
+    background-color: #ffe0b2;
+    color: #ef6c00;
+  }
+  
+  .date-badge {
+    background-color: #dcedc8;
+    color: #558b2f;
+  }
+  
+  .status-badge:hover,
+  .date-badge:hover {
+    transform: scale(1.1); /* Plus grand effet de survol */
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  }
+  
+  .description-block {
+    font-size: 1rem;
+    color: #555;
+    background: #ffffff;
+    padding: 1rem;
+    border-radius: 10px;
+    line-height: 2;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+    display: flex;
+    align-items: center;
+    gap: 8px;  /* Espace entre l'icône et le texte */
+  }
+  
+ 
+  .description-block p {
+    font-size: 16px;
+    margin: 0;  /* Supprime les marges par défaut */
+  }
+  .btn-access {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background-color: #0288d1;
+    color: #fff;
+    padding: 0.6rem 1.2rem;
+    text-decoration: none;
+    border-radius: 8px;
+    font-weight: 500;
+    transition: background 0.3s ease;
+    margin-top: 1rem;
+  }
+  
+  .btn-access:hover {
+    background-color: #0277bd;
+  }
+  
+  .pdf-container {
+    margin-top: 2rem;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    overflow: hidden;
+  }
+  
+  /* Styles pour les boutons d'action */
+  .action-buttons {
+    display: flex;
+    gap: 15px;
+    margin-top: 1.5rem;
+  }
+  
+  .btn-action {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 0.8rem 1.5rem;  /* Augmenter la taille des boutons */
+    font-weight: 600;         /* Augmenter le poids de la police */
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    font-size: 1.2rem;        /* Augmenter la taille de la police */
+    border: none;  /* Enlever la bordure par défaut */
+  }
+  
+  .btn-action:hover {
+    transform: scale(1.1); /* Augmenter l'effet de survol */
+  }
+  
+  /* Bouton Modifier - Changer couleur en bleu */
+  .btn-edit {
+    background-color: #0288d1; /* Bleu */
+    color: #fff;
+  }
+  
+  .btn-edit:hover {
+    background-color: #0277bd; /* Bleu foncé au survol */
+  }
+  
+  /* Bouton Supprimer */
+  .btn-delete {
+    background-color: #f44336;
+    color: #fff;
+  }
+  
+  .btn-delete:hover {
+    background-color: #e53935;
+  }
+  
+  /* Bouton Acheter */
+  .btn-buy {
+    background-color: #0288d1;
+    color: #fff;
+  }
+  
+  .btn-buy:hover {
+    background-color: #0277bd;
+  }
+  /* Styles pour les boutons d'action */
+.action-buttons {
+    display: flex;
+    gap: 15px;
+    margin-top: 1.5rem;
+    justify-content: center; /* Centrer les boutons */
+  }
+  /* Styles pour le prix */
+.price-container {
+    margin: 15px 0;
+    padding: 10px;
+    background: linear-gradient(135deg, #f5f7fa 0%, #e4e8eb 100%);
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  }
+  
+  .price-tag {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 1.4rem;
+    font-weight: bold;
+    color: #2c3e50;
+  }
+  
+  .price-amount {
+    color: #27ae60;
+    font-size: 1.6rem;
+  }
+  
+  .price-label {
+    font-size: 0.9rem;
+    color: #7f8c8d;
+    margin-left: 5px;
+  }
+  
+  .price-discount {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 5px;
+  }
+  
+  .original-price {
+    text-decoration: line-through;
+    color: #95a5a6;
+    font-size: 1rem;
+  }
+  
+  .discount-badge {
+    background-color: #e74c3c;
+    color: white;
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-size: 0.8rem;
+    font-weight: bold;
+  }
+  /* Style pour la section Article */
+.article-container {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    padding: 2rem;
+    margin: 2rem 0;
+    border-left: 4px solid #3f51b5;
+  }
+  
+  .article-header {
+    border-bottom: 1px solid #eee;
+    padding-bottom: 1rem;
+    margin-bottom: 1.5rem;
+  }
+  
+  .article-header h3 {
+    color: #3f51b5;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  .article-meta {
+    display: flex;
+    gap: 1.5rem;
+    font-size: 0.9rem;
+    color: #666;
+  }
+  
+  .article-meta fa-icon {
+    margin-right: 0.3rem;
+    color: #777;
+  }
+  
+  .article-content {
+    line-height: 1.8;
+    font-size: 1.1rem;
+    color: #333;
+  }
+  
+  .article-content p {
+    margin-bottom: 1.5rem;
+  }
+  
+  .article-content img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+    margin: 1rem 0;
+  }
+  
+  .article-footer {
+    border-top: 1px solid #eee;
+    padding-top: 1.5rem;
+    margin-top: 2rem;
+  }
+  
+  .tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    align-items: center;
+  }
+  
+  .tag {
+    background: #f0f4ff;
+    color: #3f51b5;
+    padding: 0.3rem 0.8rem;
+    border-radius: 20px;
+    font-size: 0.8rem;
+  }
+/* Style pour le contenu de l'article */
+.article-content {
+    font-size: 1.6rem;        /* Taille de police augmentée */
+    line-height: 1.6;         /* Interligne amélioré */
+    color: #333;              /* Couleur de texte plus foncée */
+    margin: 1rem 0;           /* Marge autour du contenu */
+  }
+  
+  /* Style pour les paragraphes à l'intérieur */
+  .article-content p {
+    margin-bottom: 1rem;
+  }
+  
+  /* Style pour les titres dans le contenu */
+  .article-content h1, 
+  .article-content h2, 
+  .article-content h3 {
+    margin: 1.5rem 0 1rem;
+    color: #222;
+  }
+  /* Styles pour les boutons et modaux de paiement */
+.btn-buy {
+  background-color: #4CAF50;
+  color: white;
+  &:hover {
+    background-color: #45a049;
+  }
+  &[disabled] {
+    background-color: #cccccc;
+    cursor: not-allowed;
+  }
+}
+
+.payment-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0,0,0,0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  
+  .modal-content {
+    background: white;
+    padding: 2rem;
+    border-radius: 8px;
+    width: 90%;
+    max-width: 500px;
+    
+    h3 {
+      margin-top: 0;
+      color: #333;
+    }
+    
+    .modal-actions {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 1.5rem;
+      
+      button {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.5rem 1rem;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        
+        mat-icon {
+          font-size: 1.2rem;
+        }
+      }
+      
+      .btn-confirm {
+        background-color: #4CAF50;
+        color: white;
+      }
+      
+      .btn-cancel {
+        background-color: #f44336;
+        color: white;
+      }
+    }
+  }
+}
+
+/* Badges de statut */
+.status-badge {
+  &.payant {
+    background-color: #ff9800;
+    color: white;
+  }
+  
+  &.gratuit {
+    background-color: #4CAF50;
+    color: white;
+  }
+}
+
+/* Adaptations responsive */
+@media (max-width: 768px) {
+  .action-buttons {
+    flex-direction: column;
+    gap: 0.5rem;
+    
+    button {
+      width: 100%;
+    }
+  }
+}  
+
+/* Dans votre fichier CSS */
+.btn-access mat-icon {
+  font-size: 1.5rem;
+  height: 1.5rem;
+  width: 1.5rem;
+}.image-container {
+  margin: 1rem 0;
+  border: 1px solid #eee;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.responsive-image {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+
+.pencil {
+  display: block;
+  width: 10em;
+  height: 10em;
+}
+
+.pencil__body1,
+.pencil__body2,
+.pencil__body3,
+.pencil__eraser,
+.pencil__eraser-skew,
+.pencil__point,
+.pencil__rotate,
+.pencil__stroke {
+  animation-duration: 3s;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+}
+
+.pencil__body1,
+.pencil__body2,
+.pencil__body3 {
+  transform: rotate(-90deg);
+}
+
+.pencil__body1 {
+  animation-name: pencilBody1;
+}
+
+.pencil__body2 {
+  animation-name: pencilBody2;
+}
+
+.pencil__body3 {
+  animation-name: pencilBody3;
+}
+
+.pencil__eraser {
+  animation-name: pencilEraser;
+  transform: rotate(-90deg) translate(49px,0);
+}
+
+.pencil__eraser-skew {
+  animation-name: pencilEraserSkew;
+  animation-timing-function: ease-in-out;
+}
+
+.pencil__point {
+  animation-name: pencilPoint;
+  transform: rotate(-90deg) translate(49px,-30px);
+}
+
+.pencil__rotate {
+  animation-name: pencilRotate;
+}
+
+.pencil__stroke {
+  animation-name: pencilStroke;
+  transform: translate(100px,100px) rotate(-113deg);
+}
+
+/* Animations */
+@keyframes pencilBody1 {
+  from,
+	to {
+    stroke-dashoffset: 351.86;
+    transform: rotate(-90deg);
+  }
+
+  50% {
+    stroke-dashoffset: 150.8;
+ /* 3/8 of diameter */
+    transform: rotate(-225deg);
+  }
+}
+
+@keyframes pencilBody2 {
+  from,
+	to {
+    stroke-dashoffset: 406.84;
+    transform: rotate(-90deg);
+  }
+
+  50% {
+    stroke-dashoffset: 174.36;
+    transform: rotate(-225deg);
+  }
+}
+
+@keyframes pencilBody3 {
+  from,
+	to {
+    stroke-dashoffset: 296.88;
+    transform: rotate(-90deg);
+  }
+
+  50% {
+    stroke-dashoffset: 127.23;
+    transform: rotate(-225deg);
+  }
+}
+
+@keyframes pencilEraser {
+  from,
+	to {
+    transform: rotate(-45deg) translate(49px,0);
+  }
+
+  50% {
+    transform: rotate(0deg) translate(49px,0);
+  }
+}
+
+@keyframes pencilEraserSkew {
+  from,
+	32.5%,
+	67.5%,
+	to {
+    transform: skewX(0);
+  }
+
+  35%,
+	65% {
+    transform: skewX(-4deg);
+  }
+
+  37.5%, 
+	62.5% {
+    transform: skewX(8deg);
+  }
+
+  40%,
+	45%,
+	50%,
+	55%,
+	60% {
+    transform: skewX(-15deg);
+  }
+
+  42.5%,
+	47.5%,
+	52.5%,
+	57.5% {
+    transform: skewX(15deg);
+  }
+}
+
+@keyframes pencilPoint {
+  from,
+	to {
+    transform: rotate(-90deg) translate(49px,-30px);
+  }
+
+  50% {
+    transform: rotate(-225deg) translate(49px,-30px);
+  }
+}
+
+@keyframes pencilRotate {
+  from {
+    transform: translate(100px,100px) rotate(0);
+  }
+
+  to {
+    transform: translate(100px,100px) rotate(720deg);
+  }
+}
+
+@keyframes pencilStroke {
+  from {
+    stroke-dashoffset: 439.82;
+    transform: translate(100px,100px) rotate(-113deg);
+  }
+
+  50% {
+    stroke-dashoffset: 164.93;
+    transform: translate(100px,100px) rotate(-113deg);
+  }
+
+  75%,
+	to {
+    stroke-dashoffset: 439.82;
+    transform: translate(100px,100px) rotate(112deg);
+  }
+}.loading-container {
+  position: fixed; /* Fixe la position par rapport à la fenêtre */
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  justify-content: center; /* Centre horizontalement */
+  align-items: center; /* Centre verticalement */
+  z-index: 9999; /* Pour s'assurer qu'il est au-dessus des autres éléments */
+  background-color: rgba(255, 255, 255, 0.7); /* Optionnel : ajoute un fond semi-transparent */
+}
+
+
+
+.button {
+  --width: 100px;
+  --height: 35px;
+  --tooltip-height: 35px;
+  --tooltip-width: 90px;
+  --gap-between-tooltip-to-button: 18px;
+  --button-color: #2ba64c;
+  --tooltip-color: #fff;
+  width: var(--width);
+  height: var(--height);
+  background: var(--button-color);
+  position: relative;
+  text-align: center;
+  border-radius: 0.45em;
+  font-family: "Arial";
+  transition: background 0.3s;
+}
+
+.button::before {
+  position: absolute;
+  content: attr(data-tooltip);
+  width: var(--tooltip-width);
+  height: var(--tooltip-height);
+  background-color: var(--tooltip-color);
+  font-size: 0.9rem;
+  color: #111;
+  border-radius: .25em;
+  line-height: var(--tooltip-height);
+  bottom: calc(var(--height) + var(--gap-between-tooltip-to-button) + 10px);
+  left: calc(50% - var(--tooltip-width) / 2);
+}
+
+.button::after {
+  position: absolute;
+  content: '';
+  width: 0;
+  height: 0;
+  border: 10px solid transparent;
+  border-top-color: var(--tooltip-color);
+  left: calc(50% - 10px);
+  bottom: calc(100% + var(--gap-between-tooltip-to-button) - 10px);
+}
+
+.button::after,.button::before {
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.5s;
+}
+
+.text {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.button-wrapper,.text,.icon {
+  overflow: hidden;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  left: 0;
+  color: #fff;
+}
+
+.text {
+  top: 0
+}
+
+.text,.icon {
+  transition: top 0.5s;
+}
+
+.icon {
+  color: #fff;
+  top: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.icon svg {
+  width: 24px;
+  height: 24px;
+}
+
+.button:hover {
+  background: #0c530c;
+}
+
+.button:hover .text {
+  top: -100%;
+}
+
+.button:hover .icon {
+  top: 0;
+}
+
+.button:hover:before,.button:hover:after {
+  opacity: 1;
+  visibility: visible;
+}
+
+.button:hover:after {
+  bottom: calc(var(--height) + var(--gap-between-tooltip-to-button) - 20px);
+}
+
+.button:hover:before {
+  bottom: calc(var(--height) + var(--gap-between-tooltip-to-button));
+}
+
+.button-containerr {
+  display: flex;
+  justify-content: space-between; /* Espacement entre les deux éléments */
+  align-items: center; /* Centrer verticalement les éléments */
+}
+
+button {
+  margin: 0; /* Retirer les marges par défaut */
+}
+
+.button-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+
+
+
+.mindmap-container {
+  margin-top: 1rem;
+  text-align: center;
+}
+
+.image-frame {
+  width: 1000px; /* fixe la taille du cadre */
+  height: 500px;
+  margin: 0 auto;
+  border: 2px solid #ccc;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  background-color: #f9f9f9;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.mindmap-image {
+  width: 1000px;
+  height: 400px;
+  object-fit: cover; /* ou 'cover' si tu veux garder les proportions */
+}

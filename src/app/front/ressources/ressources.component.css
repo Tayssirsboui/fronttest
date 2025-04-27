@@ -1,0 +1,187 @@
+ /* Effet hover sur les boutons */
+ .btn {
+    transition: background-color 0.3s ease, transform 0.3s ease;
+  }
+  
+  .btn:hover {
+    transform: scale(1.05);
+    background-color: #5a4fcf;
+  }
+  .single-topic {
+    margin-bottom: 30px; /* espace entre les cartes verticalement */
+  }
+  /* === TITRE SECTION "Explore top subjects" === */
+.section-tittle h2 {
+  font-size: 2.8rem;
+  font-weight: 700;
+  background: linear-gradient(135deg, #7b1fa2, #512da8);
+  color: transparent;
+  background-clip: text;
+  -webkit-background-clip: text;
+  margin-bottom: 1.5rem;
+  animation: fadeInUp 0.8s ease-out;
+  position: relative;
+}
+
+.section-tittle h2::after {
+  content: "";
+  display: block;
+  width: 80px;
+  height: 4px;
+  margin: 0.5rem auto 0 auto;
+  background: #7b1fa2;
+  border-radius: 4px;
+}
+
+/* === BOUTON AJOUTER CATEGORIE === */
+.btn {
+  display: block;
+  margin: 0 auto 2rem auto;
+  padding: 1rem 2.5rem;
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: white;
+  background: linear-gradient(135deg, #8e24aa, #5e35b1);
+  border: none;
+  border-radius: 50px;
+  box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.btn:hover {
+  background: linear-gradient(135deg, #5e35b1, #311b92);
+  transform: scale(1.05);
+}
+
+/* === ANIMATION D'APPARITION TITRE === */
+@keyframes fadeInUp {
+  0% {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.access-badge {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  padding: 4px 12px;
+  font-size: 0.8rem;
+  font-weight: bold;
+  color: #fff;
+  border-radius: 20px;
+  z-index: 3;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+  background: #999;
+  transition: 0.3s ease-in-out;
+}
+
+.access-badge.free {
+  background: linear-gradient(135deg, #43cea2, #185a9d); /* vert/bleu */
+}
+
+.access-badge.paid {
+  background: linear-gradient(135deg, #ff6a00, #ee0979); /* orange/rose */
+}
+/* Style pour le badge de statut */
+.status-badge {
+  position: absolute;
+  bottom: 10px;
+  left: 10px;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: bold;
+  color: white;
+}
+
+/* Style pour le statut Gratuit */
+.status-badge.free {
+  background-color: #4CAF50; /* Vert */
+}
+
+/* Style pour le statut Payant */
+.status-badge.paid {
+  background-color: #F44336; /* Rouge */
+}
+
+/* Position relative pour le conteneur parent */
+.topic-img {
+  position: relative;
+  display: inline-block;
+}
+
+/* Ajustement pour l'image */
+.topic-img img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* ressources.component.css */
+.pagination-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+  padding: 20px 0;
+}
+
+.custom-paginator {
+  background-color: #f5f5f5;
+  border-radius: 8px;
+  padding: 10px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+/* Ajoutez ces styles à votre fichier CSS existant */
+.pagination-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 30px;
+  padding: 20px 0;
+}
+
+.custom-pagination {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  background-color: #f8f9fa;
+  border-radius: 50px;
+  padding: 8px 20px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+
+.page-info {
+  font-weight: 600;
+  color: #4255a4;
+  min-width: 80px;
+  text-align: center;
+}
+
+/* Ajoutez Font Awesome pour les icônes */
+@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css'); .custom-pagination {
+  margin: 30px 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 15px;
+}
+
+.pagination-btn {
+  padding: 8px 16px;
+  border: 1px solid #4255a4;
+  border-radius: 4px;
+  background-color: white;
+  color: #4255a4;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-weight: 500;
+}

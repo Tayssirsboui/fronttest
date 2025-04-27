@@ -1,0 +1,217 @@
+<div class="details-container" *ngIf="ressource" [@fadeIn]>
+  <!-- Bouton Retour -->
+  <button class="btn-back" [routerLink]="['/ressource', ressource.idCategorie]">
+    <mat-icon>arrow_back</mat-icon>
+    <span>Retour</span>
+  </button>
+
+  <div class="card-detail">
+    <!-- Section Image -->
+    <div class="card-image" *ngIf="ressource.imageBase64">
+      <img [src]="'data:image/jpeg;base64,' + ressource.imageBase64"
+           alt="Image de {{ ressource.titre }}"
+           class="image-preview"/>
+    </div>
+
+    <!-- Section Contenu Principal -->
+    <div class="card-content">
+      <!-- Titre -->
+      <h2 class="titre">
+        <mat-icon>menu_book</mat-icon>
+        {{ ressource.titre }}
+      </h2>
+
+      <!-- Badges -->
+      <div class="badges">
+        <span class="badge" *ngIf="ressource.type">
+          <mat-icon>category</mat-icon>
+          {{ ressource.type }}
+        </span>
+
+        <span class="badge status-badge" [ngClass]="{
+          'payant': ressource.statut === 'Payant',
+          'gratuit': ressource.statut === 'Gratuit'
+        }">
+          <mat-icon>local_offer</mat-icon>
+          {{ ressource.statut }}
+        </span>
+
+        <span class="badge date-badge" *ngIf="ressource.dateAjout">
+          <mat-icon>calendar_today</mat-icon>
+          {{ ressource.dateAjout | date:'shortDate' }}
+        </span>
+      </div>
+      
+      <!-- Prix -->
+      <div class="price-container" *ngIf="ressource.prix">
+        <div class="price-tag">
+          <mat-icon>paid</mat-icon>
+          <span class="price-amount">{{ ressource.prix | currency:'TND':'symbol':'1.3-3' }}</span>
+          <span class="price-label" *ngIf="ressource.statut === 'Payant'">Prix TTC</span>
+        </div>
+      </div>
+
+      <!-- Description -->
+      <div class="description-block" *ngIf="ressource.description">
+        <mat-icon>info</mat-icon>
+        <p>{{ ressource.description }}</p>
+      </div>
+
+      <!-- Boutons d'action -->
+      <div class="action-buttons">
+        <!-- Boutons admin -->
+        <button class="btn-action btn-edit" (click)="openModal(ressource, ressource.idCategorie)">
+          <mat-icon>edit</mat-icon>
+          Modifier
+        </button>
+
+        <button class="btn-action btn-delete" (click)="confirmSuppression()" >
+          <mat-icon>delete</mat-icon>
+          Supprimer
+        </button>
+
+        <!-- Bouton Acheter -->
+        
+
+      </div>
+    </div>
+  </div>
+  <div *ngIf="!hasAccess() && ressource.statut === 'Payant'">
+    <p>Cette ressource est payante. Veuillez l’acheter pour y accéder.</p>
+  </div>
+  <!-- Section Article -->
+  <div *ngIf="ressource.type === 'ARTICLE' && ressource.text && (hasAccess() || ressource.status === 'Gratuit')"  class="article-container">
+    <div class="article-header">
+      <h3>
+        <mat-icon>article</mat-icon>
+        Contenu de l'article
+      </h3>
+      <div class="article-content" [innerHTML]="ressource.text"></div>
+      <div class="article-meta">
+        <span *ngIf="ressource.datePublication">
+          <mat-icon>calendar_today</mat-icon>
+          Publié le {{ ressource.datePublication | date:'longDate' }}
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Lien externe -->
+  <div
+  *ngIf="ressource.type === 'LIEN' && ressource.lien && (hasAccess() || ressource.status === 'Gratuit')">
+    <a [href]="ressource.lien"
+       target="_blank"
+       class="btn-access">
+      <mat-icon style="font-size: 1.5rem; height: 1.5rem; width: 1.5rem;">open_in_new</mat-icon>
+      <h4>Accéder à la ressource</h4>
+    </a>
+  </div>
+
+  <!-- Affichage des Fichiers (PDF/Images) -->
+  <div *ngIf="ressource.fichiers && ((ressource.fichiers.length > 0 && hasAccess()) || ressource.status === 'Gratuit')">
+
+    <div *ngIf="ressource.fichiers[0]?.filePath?.endsWith('.jpg') || ressource.fichiers[0]?.filePath?.endsWith('.png')">
+      <img [src]="getImageUrl(ressource.fichiers[0]?.filePath)"
+           [alt]="'Image: ' + ressource.titre"
+           style="max-width: 100%; height: auto; border: 1px solid #ddd; border-radius: 4px; padding: 3px;"
+
+           >
+          </div>
+    <div *ngIf="ressource.fichiers[0]?.filePath?.endsWith('.pdf')"  class="button-containerr">  
+       <!-- ... partie ia ... -->
+       <button (click)="generateMindmap()" mat-raised-button color="primary">
+        🧠 Générer la mindmap
+      </button>
+      
+
+      <!-- download-->
+      <div *ngIf="showbutton" class="button" [attr.data-tooltip]="'size ' + imageSize" (click)="downloadMindmap()">
+        <div class="button-wrapper">
+          <div class="text">Télécharger</div>
+            <span class="icon">
+              <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" width="2em" height="2em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15V3m0 12l-4-4m4 4l4-4M2 17l.621 2.485A2 2 0 0 0 4.561 21h14.878a2 2 0 0 0 1.94-1.515L22 17"></path></svg>
+            </span>
+          </div>
+        </div>
+     </div>
+<!-- Affichage de l'animation de chargement (SVG) pendant la génération -->
+<div *ngIf="mindmapUrl" class="mindmap-container">
+  <h3>🗺️ Mindmap générée</h3>
+  <div class="image-frame">
+    <img [src]="mindmapUrl" alt="Mindmap"  style="max-width: 100%;"  />
+  </div>
+</div>
+
+
+<!-- Affichage de l'animation de chargement (SVG) pendant la génération -->
+<div *ngIf="isGenerating" class="loading-container">
+<svg xmlns="http://www.w3.org/2000/svg" height="200px" width="200px" viewBox="0 0 200 200" class="pencil">
+	<defs>
+		<clipPath id="pencil-eraser">
+			<rect height="30" width="30" ry="5" rx="5"></rect>
+		</clipPath>
+	</defs>
+	<circle transform="rotate(-113,100,100)" stroke-linecap="round" stroke-dashoffset="439.82" stroke-dasharray="439.82 439.82" stroke-width="2" stroke="currentColor" fill="none" r="70" class="pencil__stroke"></circle>
+	<g transform="translate(100,100)" class="pencil__rotate">
+		<g fill="none">
+			<circle transform="rotate(-90)" stroke-dashoffset="402" stroke-dasharray="402.12 402.12" stroke-width="30" stroke="hsl(223,90%,50%)" r="64" class="pencil__body1"></circle>
+			<circle transform="rotate(-90)" stroke-dashoffset="465" stroke-dasharray="464.96 464.96" stroke-width="10" stroke="hsl(223,90%,60%)" r="74" class="pencil__body2"></circle>
+			<circle transform="rotate(-90)" stroke-dashoffset="339" stroke-dasharray="339.29 339.29" stroke-width="10" stroke="hsl(223,90%,40%)" r="54" class="pencil__body3"></circle>
+		</g>
+		<g transform="rotate(-90) translate(49,0)" class="pencil__eraser">
+			<g class="pencil__eraser-skew">
+				<rect height="30" width="30" ry="5" rx="5" fill="hsl(223,90%,70%)"></rect>
+				<rect clip-path="url(#pencil-eraser)" height="30" width="5" fill="hsl(223,90%,60%)"></rect>
+				<rect height="20" width="30" fill="hsl(223,10%,90%)"></rect>
+				<rect height="20" width="15" fill="hsl(223,10%,70%)"></rect>
+				<rect height="20" width="5" fill="hsl(223,10%,80%)"></rect>
+				<rect height="2" width="30" y="6" fill="hsla(223,10%,10%,0.2)"></rect>
+				<rect height="2" width="30" y="13" fill="hsla(223,10%,10%,0.2)"></rect>
+			</g>
+		</g>
+		<g transform="rotate(-90) translate(49,-30)" class="pencil__point">
+			<polygon points="15 0,30 30,0 30" fill="hsl(33,90%,70%)"></polygon>
+			<polygon points="15 0,6 30,0 30" fill="hsl(33,90%,50%)"></polygon>
+			<polygon points="15 0,20 10,10 10" fill="hsl(223,10%,10%)"></polygon>
+		</g>
+	</g>
+</svg>
+  
+</div>  
+    <!-- PDF Viewer -->
+    
+      <pdf-viewer 
+        [src]="getPdfUrl(ressource.fichiers[0].filePath)"
+        [render-text]="true"
+        [original-size]="false"
+        style="display: block; width: 100%; height: 700px;"
+        (error)="onPdfError($event)">
+      </pdf-viewer>
+    <!-- Image Viewer -->
+  
+
+    <!-- Navigation entre fichiers -->
+    <div class="pdf-navigation" *ngIf="ressource.fichiers.length > 1">
+      <button (click)="previousPdf()" [disabled]="currentPdfIndex === 0">
+        <mat-icon>chevron_left</mat-icon> Précédent
+      </button>
+      <span>Fichier {{ currentPdfIndex + 1 }} / {{ ressource.fichiers.length }}</span>
+      <button (click)="nextPdf()" [disabled]="currentPdfIndex === ressource.fichiers.length - 1">
+        Suivant <mat-icon>chevron_right</mat-icon>
+      </button>
+    </div>
+  </div>
+
+  <!-- Modal de paiement -->
+ <!-- Dans le template -->
+ <div *ngIf="ressource.statut === 'Payant' && !hasAccess()">
+  <button class="btn-action btn-buy"  (click)="pay(ressource.titre, ressource.prix)">
+
+    <mat-icon>shopping_cart</mat-icon>
+    {{ paiementEnCours ? 'Traitement...' : 'Acheter (' + (ressource.prix | currency:'TND':'symbol':'1.3-3') + ')' }}
+  </button>
+
+</div>
+
+
+</div>

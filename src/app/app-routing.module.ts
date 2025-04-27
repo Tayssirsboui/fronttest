@@ -41,6 +41,9 @@ import { CommunityDetailComponent } from './front/forum/pages/community-detail/c
 import { CommunityListComponent } from './front/forum/pages/community-list/community-list.component';
 import { CreatePostComponent } from './front/forum/pages/create-post/create-post.component'
 import { CreateCommunityComponent } from './front/forum/pages/create-community/create-community.component';
+import { AffichageCategorieComponent } from './front/affichage-categorie/affichage-categorie.component';
+import { RessourcesComponent } from './front/ressources/ressources.component';
+import { DetailRessourceComponent } from './front/detail-ressource/detail-ressource.component';
 
 
 const routes: Routes = [
@@ -70,6 +73,7 @@ const routes: Routes = [
       { path: 'about', component: AboutComponent },
       { path: 'quiz', component: QuizComponent },
       { path: 'quiz/:id', component: QuizComponent },
+      { path: 'categories', component: AffichageCategorieComponent },
       { path: 'course-single', component: CourseSingleComponent },
       { path: 'contact', component: ContactComponent },
       { path: 'blogs', component: BlogComponent },
@@ -87,6 +91,8 @@ const routes: Routes = [
       { path: 'community/:id', component: CommunityDetailComponent },
       { path: 'create-community', component: CreateCommunityComponent },
       { path: 'community/:id/create-post', component: CreatePostComponent },
+      { path: 'detail-ressource/:id', component: DetailRessourceComponent },
+      { path: 'ressource/:idCategorie', component: RessourcesComponent},
 
       {
         path: 'profil', component: ProfilComponent,
@@ -112,3 +118,5 @@ const routes: Routes = [
   exports: [RouterModule]
 })
 export class AppRoutingModule { }
+
+
