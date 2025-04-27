@@ -86,7 +86,7 @@ const routes: Routes = [
       { path: 'communities', component: CommunityListComponent },
       { path: 'community/:id', component: CommunityDetailComponent },
       { path: 'create-community', component: CreateCommunityComponent },
-      { path: 'community/:id/create-post', component: CreatePostComponent }
+      { path: 'community/:id/create-post', component: CreatePostComponent },
 
       {
         path: 'profil', component: ProfilComponent,
