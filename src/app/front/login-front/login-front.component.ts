@@ -95,8 +95,8 @@ export class LoginFrontComponent implements OnInit {
     this.authService.authenticate({ body: this.authRequest }).subscribe({
       next: (res: any) => {
         this.handleToken(res.token);
-        this.router.navigate(['cam']);
-
+       this.router.navigate(['cam']);
+        // this.router.navigate(['home']);
       },
       error: (err) => {
         console.error('Login error:', err);

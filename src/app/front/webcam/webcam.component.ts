@@ -130,8 +130,8 @@ export class WebcamComponent implements OnInit {
 
           // Check user status and roles based on the decoded token
           const userRole = decodedToken?.role?.[0]?.role;
-          if (userRole === 'ADMIN' || userRole === 'PATIENT') {
-            this.router.navigate(['/backoffice/dashboard']);
+          if (userRole === 'Admin' || userRole === 'Entrepreneur') {
+            this.router.navigate(['/back']);
           }
           else {
             this.router.navigate(['/home']);
