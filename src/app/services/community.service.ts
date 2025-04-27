@@ -8,7 +8,7 @@ import { PostDTO } from '../models/post-dto.model';
   providedIn: 'root'
 })
 export class CommunityService {
-  private apiUrl = 'http://localhost:5600/api/communities';
+  private apiUrl = 'http://localhost:8222/api/communities';
 
   constructor(private http: HttpClient) {}
 

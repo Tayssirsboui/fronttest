@@ -4,16 +4,14 @@ import { Injectable } from '@angular/core';
   providedIn: 'root'
 })
 export class UserService {
-  getCurrentUser(): any {
-    const user = localStorage.getItem('user');
-    return user ? JSON.parse(user) : null;
-  }
+  // Utilisateur statique pour les tests
+  currentUser = {
+    id: 1,
+    username: 'alice',
+    imageUrl: 'https://img.freepik.com/photos-gratuite/jeune-belle-fille-posant-dans-veste-cuir-noire-parc_1153-8104.jpg?semt=ais_hybrid&w=740'
+  };
 
-  setCurrentUser(user: any): void {
-    localStorage.setItem('user', JSON.stringify(user));
-  }
-
-  clearUser(): void {
-    localStorage.removeItem('user');
+  getCurrentUser() {
+    return this.currentUser;
   }
 }

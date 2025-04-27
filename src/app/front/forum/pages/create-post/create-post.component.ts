@@ -45,7 +45,7 @@ export class CreatePostComponent implements OnInit{
     };
 
     this.http
-      .post(`http://localhost:5600/api/communities/${this.communityId}/post`, postPayload)
+      .post(`http://localhost:8222/api/communities/${this.communityId}/post`, postPayload)
       .subscribe({
         next: () => this.router.navigate([`/community/${this.communityId}`]),
         error: (err) => alert('Erreur lors de la création du post')

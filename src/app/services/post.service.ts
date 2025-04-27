@@ -6,18 +6,19 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class PostService {
-  private apiUrl = 'http://localhost:5600/api/posts';
+  private apiUrl = 'http://localhost:8222/api/posts';
 
   constructor(private http: HttpClient) {}
 
   createPost(post: any): Observable<any> {
     return this.http.post<any>(this.apiUrl, post);
   }
-  deletePost(id: number): Observable<void> {
-    return this.http.delete<void>(`http://localhost:5600/api/communities/posts/${id}`);
+  deletePost(postId: number) {
+    return this.http.delete(`http://localhost:8222/api/communities/posts/${postId}`);
   }
+  
   generatePost(communityId: number) {
-    return this.http.post<any>(`http://localhost:5600/api/communities/generate/${communityId}`, {});
+    return this.http.post<any>(`http://localhost:8222/api/communities/generate/${communityId}`, {});
   }
   
   

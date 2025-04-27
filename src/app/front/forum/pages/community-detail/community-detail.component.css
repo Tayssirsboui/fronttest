@@ -178,5 +178,18 @@
   background: linear-gradient(135deg, #5eead4, #7e5bef);
   box-shadow: 0 0 18px rgba(94, 234, 212, 0.6);
 }
+.btn.btn-red {
+  background-color: #e74c3c;
+  color: white;
+  border: none;
+  padding: 6px 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+.btn.btn-red:hover {
+  background-color: #c0392b;
+}
+
 
 

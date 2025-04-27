@@ -3,6 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { CommunityService } from 'src/app/services/community.service';
 import { PostService } from 'src/app/services/post.service';
 import { CommunityWithPostsDTO } from 'src/app/models/community.model';
+import { UserService } from 'src/app/services/user.service';
 
 
 @Component({
@@ -11,6 +12,8 @@ import { CommunityWithPostsDTO } from 'src/app/models/community.model';
   styleUrls: ['./community-detail.component.css']
 })
 export class CommunityDetailComponent implements OnInit{
+  currentUser: any;
+
   communityId!: number;
   community: any;
   posts: any[] = [];
@@ -24,11 +27,14 @@ postsPerPage: number = 5;
     private route: ActivatedRoute,
     private communityService: CommunityService,
     private postService: PostService,
-    private router: Router  // Injecte le Router ici
+    private router: Router,
+    private userService: UserService
 
   ) {}
 
   ngOnInit(): void {
+    this.currentUser = this.userService.getCurrentUser();
+
     // Récupère l'ID de la communauté depuis les paramètres d'URL
     this.communityId = Number(this.route.snapshot.paramMap.get('id'));
 
@@ -51,20 +57,18 @@ postsPerPage: number = 5;
   }
 
   join() {
-    const user = JSON.parse(localStorage.getItem('user')!);
-    this.communityService.joinCommunity(this.communityId, user.id).subscribe(() => this.joined = true);
+    this.communityService.joinCommunity(this.communityId, this.currentUser.id).subscribe(() => this.joined = true);
     console.log('Rejoint la communauté avec ID :', this.communityId);
-
   }
-  
 
   createPost() {
     const user = JSON.parse(localStorage.getItem('user')!);
   const post = {
     content: this.newPostContent,
     communityId: this.communityId,
-    userName: user.name,
-    userImage: user.image
+    userId: this.currentUser.id,
+      userName: this.currentUser.name,
+      userImage: this.currentUser.image
   };
     this.postService.createPost(post).subscribe(() => {
       this.newPostContent = '';
@@ -91,18 +95,7 @@ postsPerPage: number = 5;
   goToPage(page: number) {
     this.currentPage = page;
   }
-  deletePost(postId: number) {
-    this.postService.deletePost(postId).subscribe({
-      next: () => {
-        if (this.communityDetails) {
-          this.communityDetails.posts = this.communityDetails.posts.filter(p => p.id !== postId);
-        }
-      },
-      error: err => {
-        console.error('Erreur lors de la suppression du post', err);
-      }
-    });
-  }
+  
   generatePost(communityId: number) {
     this.postService.generatePost(communityId).subscribe({
       next: () => {
@@ -111,6 +104,22 @@ postsPerPage: number = 5;
       error: (err) => console.error('Erreur lors de la génération du post', err)
     });
   }
+  deletePost(postId: number) {
+    if (confirm('Voulez-vous vraiment supprimer ce post ?')) {
+      this.postService.deletePost(postId).subscribe({
+        next: () => {
+          this.loadData(); // Recharge les données après suppression
+        },
+        error: err => {
+          console.error('Erreur lors de la suppression du post', err);
+        }
+      });
+    }
+  }
+  canDelete(post: any): boolean {
+    return post.userId === this.currentUser.id;
+  }
+  
   
   
   

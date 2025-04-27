@@ -30,8 +30,7 @@
 
 
         </div>
-       <!-- <button (click)="deletePost(post.id)">🗑️ Supprimer</button>-->
-      </div>
+        <button *ngIf="canDelete(post)" (click)="deletePost(post.id)" class="btn btn-red">🗑️ Supprimer</button>      </div>
     </div>
 
     <div *ngIf="communityDetails.posts.length === 0" class="no-posts">
