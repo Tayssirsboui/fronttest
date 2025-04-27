@@ -22,6 +22,8 @@ export class CommunityDetailComponent implements OnInit{
   communityDetails: CommunityWithPostsDTO | null = null;
   currentPage: number = 1;
 postsPerPage: number = 5;
+sortOrder: 'asc' | 'desc' = 'desc'; // Pour le tri des posts
+
 
   constructor(
     private route: ActivatedRoute,
@@ -119,7 +121,23 @@ postsPerPage: number = 5;
   canDelete(post: any): boolean {
     return post.userId === this.currentUser.id;
   }
+  toggleSortOrder(event: Event) {
+    const selectElement = event.target as HTMLSelectElement;
+    this.sortOrder = selectElement.value === 'asc' ? 'asc' : 'desc';
+  }
   
+  
+    
+  get sortedPosts() {
+    if (!this.communityDetails) return [];
+  
+    const postsCopy = [...this.communityDetails.posts]; // Copie pour ne pas modifier directement
+    return postsCopy.sort((a, b) => {
+      const dateA = new Date(a.createdAt).getTime();
+      const dateB = new Date(b.createdAt).getTime();
+      return this.sortOrder === 'asc' ? dateA - dateB : dateB - dateA;
+    });
+  }
   
   
   
