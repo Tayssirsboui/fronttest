@@ -77,7 +77,6 @@ import { MatCardModule } from '@angular/material/card';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatIconModule } from '@angular/material/icon';
 import { GoogleMapsModule } from '@angular/google-maps';
-import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { AdminGestionEvenementsComponent } from './back/admin-gestion-evenements/admin-gestion-evenements.component';
@@ -100,31 +99,22 @@ import { CreatePostComponent } from './front/forum/pages/create-post/create-post
 import { CreateCommunityComponent } from './front/forum/pages/create-community/create-community.component';
 import { SafeUrlPipe } from './pipes/safe-url.pipe';
 
-import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { PdfViewerModule } from 'ng2-pdf-viewer';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
-import { MatDialogModule } from '@angular/material/dialog';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { AffichageCategorieComponent } from './front/affichage-categorie/affichage-categorie.component';
+
 
 import { AddCategorieComponent } from './front/add-categorie/add-categorie.component';
 import { RessourcesComponent } from './front/ressources/ressources.component';
 import { AjoutRessourcesComponent } from './front/ajout-ressources/ajout-ressources.component';
 import { DetailRessourceComponent } from './front/detail-ressource/detail-ressource.component';
 import { ConfirmationDialogComponent } from './front/shared/confirmation-dialog/confirmation-dialog.component';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
-import { MatButtonModule } from '@angular/material/button';
-import { MatSelectModule } from '@angular/material/select';
+
 import { MatRadioModule } from '@angular/material/radio';
-import { MatIconModule } from '@angular/material/icon';
+
 import { MatListModule } from '@angular/material/list';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';  // Importer ici
-import { HashLocationStrategy, LocationStrategy } from '@angular/common';
-import { HttpClientModule } from '@angular/common/http';
+
 import { MatGridListModule } from '@angular/material/grid-list';
-import { MatPaginatorModule } from '@angular/material/paginator';
+import { PdfViewerModule } from 'ng2-pdf-viewer';
+import { AffichageCategorieComponent } from './front/affichage-categorie/affichage-categorie.component';
 
 
 
@@ -190,7 +180,7 @@ import { MatPaginatorModule } from '@angular/material/paginator';
     DashboardKanbanComponent,
     RoadmapModalComponent,
     ListProjetsComponent,
-    SafeUrlPipe
+    SafeUrlPipe,
     AffichageCategorieComponent,
    
     AddCategorieComponent,
@@ -240,11 +230,23 @@ import { MatPaginatorModule } from '@angular/material/paginator';
   MatCardModule,
   MatIconModule,
   MatProgressSpinnerModule,
+  MatRadioModule,
   GoogleMapsModule,
   MatSnackBarModule,
   MatPaginatorModule,
   KanbanModule,
-   PickerModule
+   PickerModule,
+   BrowserModule,
+   AppRoutingModule,
+   BrowserAnimationsModule,
+   HttpClientModule,
+   FormsModule, 
+   ReactiveFormsModule,
+   MatListModule,
+   MatGridListModule,
+   PdfViewerModule
+      
+   
   ],
   
   providers: [{ provide: LocationStrategy, useClass: HashLocationStrategy },
