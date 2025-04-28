@@ -16,7 +16,7 @@ export class NavbarComponent implements OnInit {
   notifications: Notification[] = [];
   unreadCount: number = 0;
   showDropdown: boolean = false;
-  currentUserId: number = 1; // 🔥 TEMPORARY STATIC ID! (later replace with logged-in user ID)
+  currentUserId!: number ; // 🔥 TEMPORARY STATIC ID! (later replace with logged-in user ID)
 
   constructor(private notificationService: NotificationService,private router: Router) {}
 

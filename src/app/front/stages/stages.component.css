@@ -29,7 +29,7 @@
     }
   
     .card-content {
-        background-image: url('D:\Pi-dev\FRONT V2\fronttest\src\assets\img\IMG_6806.jpg');
+     background-image: url('../../../assets/img/about3.png');
         background-size: cover;
         background-position: center;
         border-radius: 12px;

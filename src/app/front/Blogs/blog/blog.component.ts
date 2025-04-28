@@ -9,6 +9,8 @@ import { Post } from 'src/app/models/post';
 import { ToastrService } from 'ngx-toastr';
 import * as bootstrap from 'bootstrap';
 import Swal from 'sweetalert2';
+import { UserService } from 'src/app/services/user.service';
+import { UserControllerService } from 'src/app/services/services';
 
 @Component({
   selector: 'app-blog',
@@ -35,14 +37,18 @@ export class BlogComponent implements OnInit {
   recommendedPosts: any[] = [];
   selectedFile: File | null = null;
 style: any;
+user: any;
+
 showSortOptions = false;
+  userData: any;
 
   constructor(
     private fb: FormBuilder,
     private router: Router,
     private location: Location,
     private bs: BlogService,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    private userService: UserControllerService,
   ) {
     this.postForm = this.fb.group({
       title: ['', [Validators.required, Validators.minLength(3)]],
@@ -56,8 +62,36 @@ showSortOptions = false;
   ngOnInit() {
     this.toastr.info("Chargement des posts", "Info");
     this.loadPosts();
+    this.loadUserData(); 
+   
+    
   }
 
+  loadUserData() {
+    const token = localStorage.getItem('token');
+    if (token) {
+      const payload = this.decodeTokenPayload(token);
+      if (payload) {
+        this.userData = payload;
+        this.userId = payload.id || payload.userId || payload._id; // selon ton token
+        console.log("Utilisateur connecté :", this.userData);
+      }
+    } else {
+      console.error('Token non trouvé dans localStorage');
+      this.toastr.error('Utilisateur non connecté', 'Erreur');
+    }
+  }
+  
+  private decodeTokenPayload(token: string): any {
+    try {
+      const payload = token.split('.')[1]; // prendre la partie payload du JWT
+      const decodedPayload = atob(payload); // décoder base64
+      return JSON.parse(decodedPayload); // convertir en objet JSON
+    } catch (error) {
+      console.error('Failed to decode token payload', error);
+      return null;
+    }
+  }
   loadPosts() {
     this.bs.getPosts().subscribe(data => {
       this.listPosts = data;
@@ -160,8 +194,15 @@ showSortOptions = false;
       });
     });
   }
+
   addPosts() {
     const formData = new FormData();
+   
+      if (!this.userId) {
+        this.toastr.error("Utilisateur non connecté.", "Erreur");
+        return;
+      }
+
     formData.append('title', this.postForm.value.title);
     formData.append('description', this.postForm.value.content);
     //formData.append('createdBy', this.postForm.value.createdBy);
@@ -178,16 +219,19 @@ showSortOptions = false;
         Swal.fire({
           icon: 'success',
           title: 'Succès',
-          text: 'Le post a été ajouté avec succès !',
+          text: 'The post has been successfully added! 📢',
           confirmButtonText: 'OK',
           timer: 2000,
           timerProgressBar: true,
+          allowOutsideClick: false, // (optionnel) empêcher de cliquer dehors pour fermer
+           allowEscapeKey: false,    
         }).then(() => {
           this.loadPosts();
           this.postForm.reset();
           this.selectedFile = null;
-          this.toastr.success('Le post a été ajouté avec succès', 'Succès');
-        this.router.navigate(['/blogs']);
+          this.closeModal(); 
+          this.toastr.success('The post has been successfully added!', 'Succès');
+        this.router.navigate(['blogs']);
         });
       },
       error: (err) => {
@@ -198,6 +242,7 @@ showSortOptions = false;
   }
   
   
+
 
 
 

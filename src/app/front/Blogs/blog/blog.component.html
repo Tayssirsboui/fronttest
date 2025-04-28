@@ -32,15 +32,24 @@
             </button>
             
            
-                 
-                 <button routerLink="/mesPosts" 
-                 class="btn btn-primary my-posts-button d-flex align-items-center gap-2"
-                 style="background-color: #4e54c8; border: none; border-radius: 25px; padding: 10px 20px; box-shadow: 0 4px 10px rgba(0,0,0,0.15); transition: background-color 0.3s ease;"
-                 (mouseover)="this.style.backgroundColor='#5f67e0'"
-                 (mouseout)="this.style.backgroundColor='#4e54c8'">
-           <i class="fas fa-user"></i>
-           Mes posts
-         </button>
+            <hr>
+            <ul class="event_filter">
+             <li>
+               <a class="is_active" href="#!" data-filter="*">Show All</a>
+             </li>
+             <li>
+               
+               <a  routerLink="/mesPosts"  data-filter=".design"  (mouseout)="this.style.backgroundColor='#4e54c8'">My Posts</a>
+             </li>
+             <li>
+               <a href="#!" data-filter=".development">Favoris</a>
+             </li>
+             <li>
+               <a href="#!" data-filter=".wordpress">Wordpress</a>
+             </li>
+           </ul>
+             
+             
           
           
           <!-- Menu de tri (prend 4 colonnes) -->
@@ -84,7 +93,7 @@
                 <li class="main-info">
                   <div class="d-flex align-items-center mb-2">
                     <img [src]="'assets/img/avatar-profile.png'" class="avatar-profile me-3" />
-                    <span class="category">{{ p.createdBy }}</span>
+                    <span class="category">{{ user?.sub }}</span>
                   </div>
                   <h4 class="post-title">{{ p.title }}</h4>
                 </li>

@@ -2,98 +2,84 @@
 
 <div class="d-flex justify-content-between align-items-center mb-3">
 
-<div class="input-group mb-3 w-50">
-  <span class="input-group-text bg-light"><i class="bi bi-search text-muted"></i></span>
-  <input type="text" class="form-control"placeholder="🔍 Rechercher un post..." 
-         [(ngModel)]="searchTerm">
-         
-        
-</div>
-
-<button class="btn btn-outline-primary mb-3" (click)="toggleSortOrder()">
-  📅 Trier par date 
-  {{ sortAsc ? '⬆️ Ancien → Récent' : '⬇️ Récent → Ancien' }}
-</button>
-
-</div>
-
-<!-- Modal Backdrop -->
-<div *ngIf="showStatsModal" class="custom-modal-backdrop" (click)="closeStatsModal()">
-  <div class="custom-modal-xl" (click)="$event.stopPropagation()">
-    <div class="custom-modal-header">
-      <h5>Dashboard Statistics</h5>
-      <button class="close-btn" (click)="closeStatsModal()">&times;</button>
-    </div>
-    
-    <div class="custom-modal-body">
-      <app-stat-posts></app-stat-posts>
+  <div class="input-group mb-3 w-50">
+    <span class="input-group-text bg-light"><i class="bi bi-search text-muted"></i></span>
+    <input type="text" class="form-control"placeholder="🔍 Rechercher un post..." 
+           [(ngModel)]="searchTerm">
+           
+          
+  </div>
+  
+  <button class="btn btn-outline-primary mb-3" (click)="toggleSortOrder()">
+    📅 Trier par date 
+    {{ sortAsc ? '⬆️ Ancien → Récent' : '⬇️ Récent → Ancien' }}
+  </button>
+  
+  </div>
+  
+  <!-- Modal Backdrop -->
+  <div *ngIf="showStatsModal" class="custom-modal-backdrop" (click)="closeStatsModal()">
+    <div class="custom-modal-xl" (click)="$event.stopPropagation()">
+      <div class="custom-modal-header">
+        <h5>Dashboard Statistics</h5>
+        <button class="close-btn" (click)="closeStatsModal()">&times;</button>
+      </div>
+      
+      <div class="custom-modal-body">
+        <app-stat-posts></app-stat-posts>
+      </div>
     </div>
   </div>
-</div>
-
-<div class="col-lg-12 d-flex align-items-stretch">
-  <div class="card w-100 shadow-sm border-0">
-    <div class="card-body p-4">
-      <div class="d-flex justify-content-between align-items-center mb-3">
-        <h5 class="card-title fw-bold text-primary mb-0">Blog Management</h5>
-        <div class="download-buttons">
-          <button class="btn btn-outline-primary" (click)="downloadPageAsPNG($event)">Download as PNG</button>
-          <button class="btn btn-outline-secondary" (click)="downloadPageAsJPEG($event)">Download as JPEG</button>
-          <button class="btn btn-outline-success" (click)="downloadPageAsPDF($event)">Download as PDF</button>
-          <button class="btn btn-outline-danger" (click)="downloadPageAsCSV($event)">Download as CSV</button>
+  
+  <div class="col-lg-12 d-flex align-items-stretch" id="admin-page">
+    <div class="card w-100 shadow-sm border-0">
+      <div class="card-body p-4">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <h5 class="card-title fw-bold text-primary mb-0">Blog Management</h5>
+          <div class="download-buttons">
+            <button class="btn btn-outline-primary" (click)="downloadPageAsPNG($event)">Download as PNG</button>
+            <button class="btn btn-outline-secondary" (click)="downloadPageAsJPEG($event)">Download as JPEG</button>
+            <button class="btn btn-outline-success" (click)="downloadPageAsPDF($event)">Download as PDF</button>
+            <button class="btn btn-outline-danger" (click)="downloadPageAsCSV($event)">Download as CSV</button>
+          </div>
+          <div *ngIf="isLoading" class="spinner-border text-primary" role="status">
+            <span class="visually-hidden">Loading...</span>
+          </div>
         </div>
-        <div *ngIf="isLoading" class="spinner-border text-primary" role="status">
-          <span class="visually-hidden">Loading...</span>
-        </div>
-      </div>
-
-      <div class="table-responsive" id="admin-page">
-        <table class="table table-hover align-middle">
-          <thead class="table-light">
-            <tr>
-              <th>Id</th>
-              <th>Author 🧑‍💻</th>
-              <th>Title</th>
-              <th>Content</th>
-              <th>Created At</th>
-              <th>Likes</th>
-              <th>Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let p of paginatedPosts" class="row-hover-blue">
-              <td>{{ p.id }}</td>
-              <td>
-                <div class="fw-semibold">{{ p.createdBy }}</div>
-                <small class="text-muted">Web Designer</small>
-              </td>
-              <td>{{ p.title }}</td>
-              <td>
-                <span class="d-inline-block text-truncate" style="max-width: 200px;">
-                  {{ p.content }}
-                </span>
-              </td>
-              <td>{{ p.createdAt | date: 'medium' }} 📅</td>
-              <td>
+  
+        <div class="row" >
+          <div class="col-md-6 col-lg-4 mb-4" *ngFor="let p of paginatedPosts">
+            <div class="card h-100 shadow-sm card-hover-effect">
+              <img 
+                [src]="'http://localhost:5100/posts/images/' + p.imageUrl" 
+                class="card-img-top" 
+                alt="Post Image" 
+                style="object-fit: cover; height: 200px;"
+              >
+                 <!-- Button Delete en haut à droite -->
+      <button class="btn btn-outline-danger btn-sm position-absolute top-0 end-0 m-2" 
+      (click)="openConfirmModal('post', p.id)">
+  🗑️
+  </button>
+              <div class="card-body d-flex flex-column">
+                <h5 class="card-title text-primary fw-bold">{{ p.title }}</h5>
+                <h6 class="card-subtitle mb-2 text-muted">By {{ p.createdBy }} 🧑‍💻</h6>
+                <p class="card-text text-truncate" style="max-height: 80px;">{{ p.content }}</p>
+                <small class="text-muted mt-auto">📅 {{ p.createdAt | date: 'medium' }}</small>
+              </div>
+              <div class="card-footer bg-transparent d-flex justify-content-between align-items-center">
                 <span class="badge bg-success">{{ p.likes }} ❤️</span>
-              </td>
-              <td>
-                <div class="d-flex gap-2 action-buttons">
-                
-                  <button class="btn btn-outline-danger btn-md" (click)="openConfirmModal('post', p.id)">
-                    <i class="bi bi-trash me-1"></i>  🗑️ Delete
+                <div class="card-footer bg-transparent border-0 d-flex justify-content-between">
+              
+                  <button class="btn btn-outline-secondary" (click)="openCommentsModal(p.id)">
+                    💬
                   </button>
-
-                  <button
-                    class="btn btn-outline-secondary btn-md d-flex align-items-center px-3"
-                    (click)="openCommentsModal(p.id)">
-                    <i class="bi bi-chat-dots me-1"></i> Comments
-                  </button>
+              
                 </div>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+              </div>
+            </div>
+          </div>
+        </div>
         <nav *ngIf="totalPages > 1" class="mt-3">
           <ul class="pagination justify-content-center">
             <li class="page-item" [class.disabled]="currentPage === 1">
@@ -113,110 +99,95 @@
             </li>
           </ul>
         </nav>
-        <div class="mb-3">
-          <label for="itemsPerPageSelect" class="form-label">Posts per page:</label>
-          <select id="itemsPerPageSelect" class="form-select w-auto d-inline-block ms-2"
-                  [(ngModel)]="itemsPerPage" (change)="currentPage = 1">
-            <option [value]="5">5</option>
-            <option [value]="10">10</option>
-            <option [value]="20">20</option>
-            <option [value]="20">40</option>
-          </select>
-        </div>
-                
-
-        <div *ngIf="posts.length === 0 && !isLoading" class="text-center text-muted py-4">
-          No posts found.
-        </div>
       </div>
     </div>
   </div>
-</div>
-
-<!-- Custom Modal for Comments -->
-<div *ngIf="showModal" class="custom-modal-backdrop" (click)="closeModal()">
-  <div class="custom-modal" (click)="$event.stopPropagation()"> <!-- Prevent backdrop click from closing -->
-    <div class="custom-modal-header">
-      <h5>Comments</h5>
-      <button (click)="closeModal()" class="close-btn">&times;</button>
-    </div>
-    <div class="custom-modal-body">
-      <div *ngIf="loadingComments" class="text-center my-3">
-        <div class="spinner-border text-primary" role="status"></div>
+  
+  <!-- Custom Modal for Comments -->
+  <div *ngIf="showModal" class="custom-modal-backdrop" (click)="closeModal()">
+    <div class="custom-modal" (click)="$event.stopPropagation()"> <!-- Prevent backdrop click from closing -->
+      <div class="custom-modal-header">
+        <h5>Comments</h5>
+        <button (click)="closeModal()" class="close-btn">&times;</button>
       </div>
-
-      <div *ngIf="!loadingComments && comments.length > 0">
-        <div *ngFor="let comment of comments" class="card mb-3 shadow-sm">
-          <div class="card-body">
-            <h6 class="mb-1">{{ comment.createdBy }}</h6>
-            <p class="mb-1">{{ comment.description }}</p>
-            <small class="text-muted">{{ comment.createdAt | date: 'medium' }}</small>
-            <div class="mt-2">
-              <i class="bi bi-hand-thumbs-up me-1 text-primary"></i>{{ comment.likes }} likes
+      <div class="custom-modal-body">
+        <div *ngIf="loadingComments" class="text-center my-3">
+          <div class="spinner-border text-primary" role="status"></div>
+        </div>
+  
+        <div *ngIf="!loadingComments && comments.length > 0">
+          <div *ngFor="let comment of comments" class="card mb-3 shadow-sm">
+            <div class="card-body">
+              <h6 class="mb-1">{{ comment.createdBy }}</h6>
+              <p class="mb-1">{{ comment.description }}</p>
+              <small class="text-muted">{{ comment.createdAt | date: 'medium' }}</small>
+              <div class="mt-2">
+                <i class="bi bi-hand-thumbs-up me-1 text-primary"></i>{{ comment.likes }} likes
+              </div>
+              <button class="btn btn-outline-danger btn-sm mt-2" (click)="openConfirmModal('comment', comment.idComment)">
+                <i class="bi bi-trash me-1"></i> Delete
+              </button>
+              
+              
             </div>
-            <button class="btn btn-outline-danger btn-sm mt-2" (click)="openConfirmModal('comment', comment.idComment)">
-              <i class="bi bi-trash me-1"></i> Delete
-            </button>
-            
-            
           </div>
         </div>
-      </div>
-
-      <div *ngIf="!loadingComments && comments.length === 0" class="text-muted text-center">
-        No comments for this post.
-      </div>
-    </div>
-  </div>
-</div>
-<!-- Confirmation Modal -->
-<div *ngIf="showConfirmModal" class="modal-backdrop-custom" (click)="closeConfirmModal()">
-  <div class="modal-box-custom animate-scale-in" (click)="$event.stopPropagation()">
-    <div class="modal-header-custom d-flex justify-content-between align-items-center">
-      <h5 class="text-primary fw-bold mb-0">
-        <i class="bi bi-exclamation-triangle me-2 text-warning"></i> Confirm Deletion
-      </h5>
-      <button class="btn-close-custom" (click)="closeConfirmModal()">&times;</button>
-    </div>
-
-    <div class="modal-body-custom text-center mt-3">
-      <p class="fs-6 mb-3">Are you sure you want to delete this <strong>{{ confirmType }}</strong>?</p>
-
-      <div class="d-flex justify-content-center gap-3">
-        <button class="btn btn-danger px-4" (click)="confirmDeletion()">
-          <i class="bi bi-trash me-1"></i> Yes, Delete ✅
-        </button>
-        <button class="btn btn-outline-secondary px-4" (click)="closeConfirmModal()">
-          <i class="bi bi-x-circle me-1"></i> Cancel
-        </button>
-      </div>
-    </div>
-  </div>
-</div>
-<!-- No Comments Popup -->
-<div *ngIf="noCommentsPopup" class="custom-modal-backdrop" (click)="noCommentsPopup = false">
-  <div class="custom-modal" (click)="$event.stopPropagation()"> <!-- Prevent backdrop click from closing -->
-    <div class="custom-modal-header">
-      <h5>No Comments Available</h5>
-      <button (click)="noCommentsPopup = false" class="close-btn">&times;</button>
-    </div>
-    <div class="custom-modal-body">
-      <p class="text-center">This post does not have any comments yet.</p>
-      <div class="text-center">
-        <button class="btn btn-outline-secondary" (click)="noCommentsPopup = false">Close</button>
-      </div>
-    </div>
-  </div>
-</div>
-
-
-<div class="text-center my-5">
-  <button class="btn btn-xl rounded-pill px-5 py-3 fw-bold stats-button-gradient" 
-          (click)="openStatsModal()">
-          <i class="bi bi-speedometer2 me-2"></i> 
-    <span class="fs-4"> 📊 Show Analytics Dashboard</span>
-  </button>
   
-</div>
-
-
+        <div *ngIf="!loadingComments && comments.length === 0" class="text-muted text-center">
+          No comments for this post.
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Confirmation Modal -->
+  <div *ngIf="showConfirmModal" class="modal-backdrop-custom" (click)="closeConfirmModal()">
+    <div class="modal-box-custom animate-scale-in" (click)="$event.stopPropagation()">
+      <div class="modal-header-custom d-flex justify-content-between align-items-center">
+        <h5 class="text-primary fw-bold mb-0">
+          <i class="bi bi-exclamation-triangle me-2 text-warning"></i> Confirm Deletion
+        </h5>
+        <button class="btn-close-custom" (click)="closeConfirmModal()">&times;</button>
+      </div>
+  
+      <div class="modal-body-custom text-center mt-3">
+        <p class="fs-6 mb-3">Are you sure you want to delete this <strong>{{ confirmType }}</strong>?</p>
+  
+        <div class="d-flex justify-content-center gap-3">
+          <button class="btn btn-danger px-4" (click)="confirmDeletion()">
+            <i class="bi bi-trash me-1"></i> Yes, Delete ✅
+          </button>
+          <button class="btn btn-outline-secondary px-4" (click)="closeConfirmModal()">
+            <i class="bi bi-x-circle me-1"></i> Cancel
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- No Comments Popup -->
+  <div *ngIf="noCommentsPopup" class="custom-modal-backdrop" (click)="noCommentsPopup = false">
+    <div class="custom-modal" (click)="$event.stopPropagation()"> <!-- Prevent backdrop click from closing -->
+      <div class="custom-modal-header">
+        <h5>No Comments Available</h5>
+        <button (click)="noCommentsPopup = false" class="close-btn">&times;</button>
+      </div>
+      <div class="custom-modal-body">
+        <p class="text-center">This post does not have any comments yet.</p>
+        <div class="text-center">
+          <button class="btn btn-outline-secondary" (click)="noCommentsPopup = false">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  
+  <div class="text-center my-5">
+    <button class="btn btn-xl rounded-pill px-5 py-3 fw-bold stats-button-gradient" 
+            (click)="openStatsModal()">
+            <i class="bi bi-speedometer2 me-2"></i> 
+      <span class="fs-4"> 📊 Show Analytics Dashboard</span>
+    </button>
+    
+  </div>
+  
+  
+  

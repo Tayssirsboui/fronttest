@@ -272,15 +272,25 @@ closeStatsModal(): void {
   }
   downloadPageAsPNG(event: Event): void {
     event.preventDefault();
-    const pageElement = document.getElementById('admin-page'); // Replace with the actual container ID or class
+    const pageElement = document.getElementById('admin-page'); // ID de l'élément à capturer
     if (pageElement) {
-      html2canvas(pageElement).then(canvas => {
+      html2canvas(pageElement, {
+        useCORS: true, // Permet d'inclure les images distantes si elles sont accessibles
+        logging: true,  // Active les logs pour le débogage
+       // proxy: 'https://your-proxy-server.com/', // Optionnel, si nécessaire pour contourner les restrictions CORS
+        scale: 4     // Améliore la qualité de l'image (facultatif, selon vos besoins)
+      }).then(canvas => {
         const link = document.createElement('a');
         link.download = 'admin-page.png';
         link.href = canvas.toDataURL('image/png');
         link.click();
+      }).catch(error => {
+        console.error("Error capturing page as PNG: ", error);
       });
+    } else {
+      console.error("Element with id 'admin-page' not found.");
     }
+  
   }
 
   downloadPageAsJPEG(event: Event): void {
@@ -298,19 +308,30 @@ closeStatsModal(): void {
 
   downloadPageAsPDF(event: Event): void {
     event.preventDefault();
-    const pageElement = document.getElementById('admin-page');
+    const pageElement = document.getElementById('admin-page'); // ID de l'élément à capturer
     if (pageElement) {
-      html2canvas(pageElement).then(canvas => {
+      html2canvas(pageElement, {
+        useCORS: true, // Permet d'inclure les images distantes
+        logging: true,  // Active les logs pour le débogage
+       // proxy: 'https://your-proxy-server.com/', // Optionnel, si nécessaire pour contourner les restrictions CORS
+        scale: 4      // Améliore la qualité de l'image (facultatif)
+      }).then(canvas => {
         const imgData = canvas.toDataURL('image/png');
-        const pdf = new jsPDF('landscape');
+        const pdf = new jsPDF('landscape');  // Utilisation du format paysage
         const imgProps = pdf.getImageProperties(imgData);
         const pdfWidth = pdf.internal.pageSize.getWidth();
         const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+
         pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
         pdf.save('admin-page.pdf');
+      }).catch(error => {
+        console.error("Error capturing page as PDF: ", error);
       });
+    } else {
+      console.error("Element with id 'admin-page' not found.");
     }
   }
+
 
   downloadPageAsCSV(event: Event): void {
     event.preventDefault();

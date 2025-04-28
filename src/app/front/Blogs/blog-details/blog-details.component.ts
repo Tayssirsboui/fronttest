@@ -23,6 +23,7 @@ export class BlogDetailsComponent {
   id!: number;
   post!: Post;
   loadingEnhancement: boolean = false;
+  userData: any;
 
   constructor(
     private bs: BlogService,
@@ -45,11 +46,39 @@ export class BlogDetailsComponent {
     this.bs.getPostsById(this.id).subscribe(data => {
       this.post = data;
     });
+    this.loadUserData(); 
+
 
     // Get the comments for the post on page load
     this.refreshComments();
   }
 
+  
+  loadUserData() {
+    const token = localStorage.getItem('token');
+    if (token) {
+      const payload = this.decodeTokenPayload(token);
+      if (payload) {
+        this.userData = payload;
+        this.userId = payload.id || payload.userId || payload._id; // selon ton token
+        console.log("Utilisateur connecté :", this.userData);
+      }
+    } else {
+      console.error('Token non trouvé dans localStorage');
+      this.toastr.error('Utilisateur non connecté', 'Erreur');
+    }
+  }
+  
+  private decodeTokenPayload(token: string): any {
+    try {
+      const payload = token.split('.')[1]; // prendre la partie payload du JWT
+      const decodedPayload = atob(payload); // décoder base64
+      return JSON.parse(decodedPayload); // convertir en objet JSON
+    } catch (error) {
+      console.error('Failed to decode token payload', error);
+      return null;
+    }
+  }
   toggleEmojiPicker() {
     this.showEmojiPicker = !this.showEmojiPicker;
   }

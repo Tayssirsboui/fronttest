@@ -1,4 +1,46 @@
 /* Floating Gemini Chat Button */
+.event_filter  {
+  padding: 15px 20px;
+}
+.event_filter li {
+  display: inline-block;
+  margin: 0px 10px;
+}
+.event_filter ul li {
+  display: block;
+  margin: 12px 5px;
+}
+.event_filter li {
+  display: inline-block;
+  margin: 0px 20px;
+}
+
+.event_filter li a {
+  font-size: 14px;
+  font-weight: 500;
+  color: #1e1e1e;
+  transition: all .3s;
+}
+
+.event_filter li
+
+.event_filter li a.is_active,
+.event_filter li a:hover {
+  color: #ffffff;
+}
+
+.event_filter {
+  text-align: center;
+}
+
+.event_filter {
+  background-color: hsla(237, 87%, 69%, 0.795);
+  border-radius: 50px;
+  padding: 15px 40px;
+  list-style: none;
+  margin: 0 auto 70px;
+  max-width: max-content;
+}
 @import "ngx-toastr/toastr";
 .modal-overlay {
   display: flex;
