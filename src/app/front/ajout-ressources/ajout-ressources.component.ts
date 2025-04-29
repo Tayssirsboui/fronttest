@@ -4,6 +4,7 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Inject } from '@angular/core';
 import { RessourceService } from 'src/app/front/services/ressource.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { TokenService } from 'src/app/services/token/token.service';
 
 @Component({
   selector: 'app-ajout-ressources',
@@ -29,13 +30,15 @@ export class AjoutRessourcesComponent implements OnInit {
       ressource?: any, 
       idCategorie: number
     },
+    private tk:TokenService,
     private dialogRef: MatDialogRef<AjoutRessourcesComponent>,
     private fb: FormBuilder,
     private snackBar: MatSnackBar,
     private ressourceService: RessourceService
   ) {}
-
+  token= localStorage.getItem('token') as string;
   ngOnInit(): void {
+    this.idUser=this.decodeTokenPayload(this.token).id;
     console.log('Data reçu:', this.data);
     console.log('Ressource:', this.data?.ressource);
     console.log('ID Ressource:', this.data?.ressource?.id);
@@ -309,6 +312,20 @@ removeImage() {
   // Réinitialiser l'input file
   const fileInput = document.getElementById('fileInput') as HTMLInputElement;
   if (fileInput) fileInput.value = '';
+}
+
+//user 
+
+
+private decodeTokenPayload(token: string): any {
+  try {
+    const payload = token.split('.')[1]; // prendre la partie payload du JWT
+    const decodedPayload = atob(payload); // décoder base64
+    return JSON.parse(decodedPayload); // convertir en objet JSON
+  } catch (error) {
+    console.error('Failed to decode token payload', error);
+    return null;
+  }
 }
 
 

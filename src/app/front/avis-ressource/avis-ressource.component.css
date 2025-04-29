@@ -1,0 +1,464 @@
+
+/* Style général adorable */
+.cutie-rating-box {
+    max-width: 500px;
+    margin: 2rem auto;
+    padding: 2rem;
+    background: #fff9fb;
+    border-radius: 20px;
+    box-shadow: 0 4px 15px rgba(255, 182, 193, 0.3);
+    border: 1px solid #ffebee;
+    text-align: center;
+    font-family: 'Comic Sans MS', cursive, sans-serif;
+  }
+  
+  .cutie-title {
+    color: #ff6b88;
+    margin-bottom: 1.5rem;
+    font-size: 1.5rem;
+    text-shadow: 1px 1px 2px pink;
+  }
+  
+  /* Étoiles interactives */
+  .cutie-stars {
+    margin: 1.5rem 0;
+    font-size: 2.5rem;
+    display: inline-block;
+  }
+  
+  .cutie-star {
+    cursor: pointer;
+    color: #ffd6de;
+    margin: 0 5px;
+    transition: all 0.3s ease;
+    display: inline-block;
+    transform: scale(1);
+    filter: drop-shadow(0 2px 3px rgba(255, 105, 140, 0.3));
+  }
+  
+  .cutie-star:hover {
+    transform: scale(1.2) rotate(10deg);
+    color: #ffb6c1;
+  }
+  
+  .cutie-star-active {
+    color: #ff6b88 !important;
+    animation: bounce 0.5s;
+  }
+  
+  @keyframes bounce {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.3); }
+  }
+  
+  /* Affichage de la note */
+  .cutie-rating-display {
+    margin: 1rem 0;
+    color: #ff6b88;
+    font-size: 1.2rem;
+  }
+  
+  .cutie-heart {
+    animation: heartbeat 1.5s infinite;
+    display: inline-block;
+  }
+  
+  @keyframes heartbeat {
+    0% { transform: scale(1); }
+    25% { transform: scale(1.1); }
+    50% { transform: scale(1); }
+    75% { transform: scale(1.1); }
+    100% { transform: scale(1); }
+  }
+  
+  /* Zone de texte */
+  .cutie-textarea {
+    width: 100%;
+    padding: 15px;
+    border: 2px dashed #ffb6c1;
+    border-radius: 15px;
+    background: #fffdfe;
+    resize: none;
+    font-family: inherit;
+    color: #ff6b88;
+    transition: all 0.3s;
+  }
+  
+  .cutie-textarea:focus {
+    outline: none;
+    border: 2px solid #ff6b88;
+    box-shadow: 0 0 0 4px rgba(255, 107, 136, 0.2);
+  }
+  
+  /* Bouton submit */
+  .cutie-submit-btn {
+    background: linear-gradient(135deg, #ff6b88, #ff8e9e);
+    color: white;
+    border: none;
+    padding: 12px 25px;
+    border-radius: 50px;
+    font-size: 1.1rem;
+    cursor: pointer;
+    margin-top: 1.5rem;
+    transition: all 0.3s;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 4px 10px rgba(255, 107, 136, 0.4);
+  }
+  
+  .cutie-submit-btn:hover:not(:disabled) {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 15px rgba(255, 107, 136, 0.5);
+  }
+  
+  .cutie-submit-btn:disabled {
+    background: #cccccc;
+    cursor: not-allowed;
+  }
+  
+  .cutie-btn-heart {
+    margin-left: 8px;
+    display: inline-block;
+    animation: float 3s ease-in-out infinite;
+  }
+  
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-5px); }
+  }
+  
+  /* Liste des commentaires */
+  .cutie-comments {
+    max-width: 600px;
+    margin: 3rem auto;
+  }
+  
+  .cutie-comments-title {
+    color: #ff6b88;
+    text-align: center;
+    margin-bottom: 1.5rem;
+    font-size: 1.5rem;
+  }
+  
+  .cutie-comment {
+    background: white;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    border-radius: 15px;
+    box-shadow: 0 3px 10px rgba(255, 182, 193, 0.2);
+    border-left: 5px solid #ffb6c1;
+    position: relative;
+  }
+  
+  .cutie-comment:before {
+    content: "";
+    position: absolute;
+    top: -10px;
+    left: 20px;
+    border-width: 0 10px 10px;
+    border-style: solid;
+    border-color: #ffb6c1 transparent;
+  }
+  
+  .cutie-comment-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1rem;
+  }
+  
+  .cutie-comment-avatar {
+    font-size: 1.5rem;
+    margin-right: 10px;
+  }
+  
+  .cutie-comment-author {
+    font-weight: bold;
+    color: #ff6b88;
+    margin-right: auto;
+  }
+  
+  .cutie-mini-star {
+    color: #ffd6de;
+    font-size: 1rem;
+    margin: 0 2px;
+  }
+  
+  .cutie-mini-star-active {
+    color: #ff6b88 !important;
+  }
+  
+  .cutie-comment-text {
+    color: #666;
+    line-height: 1.5;
+    margin-bottom: 0.5rem;
+  }
+  
+  .cutie-comment-date {
+    color: #aaa;
+    font-size: 0.9rem;
+    text-align: right;
+  }
+  
+  /* Alerte mignonne */
+  .cutie-alert {
+    max-width: 500px;
+    margin: 2rem auto;
+    padding: 1rem 1.5rem;
+    border-radius: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: fadeIn 0.5s;
+  }
+  
+  .cutie-alert-success {
+    background: #ffebf1;
+    color: #ff6b88;
+    border: 2px solid #ffb6c1;
+  }
+  
+  .cutie-alert-error {
+    background: #fff0f0;
+    color: #ff6b6b;
+    border: 2px solid #ffb6b6;
+  }
+  
+  .cutie-alert-emoji {
+    margin-right: 10px;
+    font-size: 1.5rem;
+  }
+  
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  /* Style général adorable */
+  .cutie-rating-box {
+    max-width: 500px;
+    margin: 2rem auto;
+    padding: 2rem;
+    background: #fff9fb;
+    border-radius: 20px;
+    box-shadow: 0 4px 15px rgba(255, 182, 193, 0.3);
+    border: 1px solid #ffebee;
+    text-align: center;
+    font-family: 'Comic Sans MS', cursive, sans-serif;
+  }
+  
+  .cutie-title {
+    color: #ff6b88;
+    margin-bottom: 1.5rem;
+    font-size: 1.5rem;
+    text-shadow: 1px 1px 2px pink;
+  }
+  
+  /* Étoiles interactives */
+  .cutie-stars {
+    margin: 1.5rem 0;
+    font-size: 2.5rem;
+    display: inline-block;
+  }
+  
+  .cutie-star {
+    cursor: pointer;
+    color: #ffd6de;
+    margin: 0 5px;
+    transition: all 0.3s ease;
+    display: inline-block;
+    transform: scale(1);
+    filter: drop-shadow(0 2px 3px rgba(255, 105, 140, 0.3));
+  }
+  
+  .cutie-star:hover {
+    transform: scale(1.2) rotate(10deg);
+    color: #ffb6c1;
+  }
+  
+  .cutie-star-active {
+    color: #ff6b88 !important;
+    animation: bounce 0.5s;
+  }
+  
+  @keyframes bounce {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.3); }
+  }
+  
+  /* Affichage de la note */
+  .cutie-rating-display {
+    margin: 1rem 0;
+    color: #ff6b88;
+    font-size: 1.2rem;
+  }
+  
+  .cutie-heart {
+    animation: heartbeat 1.5s infinite;
+    display: inline-block;
+  }
+  
+  @keyframes heartbeat {
+    0% { transform: scale(1); }
+    25% { transform: scale(1.1); }
+    50% { transform: scale(1); }
+    75% { transform: scale(1.1); }
+    100% { transform: scale(1); }
+  }
+  
+  /* Zone de texte */
+  .cutie-textarea {
+    width: 100%;
+    padding: 15px;
+    border: 2px dashed #ffb6c1;
+    border-radius: 15px;
+    background: #fffdfe;
+    resize: none;
+    font-family: inherit;
+    color: #ff6b88;
+    transition: all 0.3s;
+  }
+  
+  .cutie-textarea:focus {
+    outline: none;
+    border: 2px solid #ff6b88;
+    box-shadow: 0 0 0 4px rgba(255, 107, 136, 0.2);
+  }
+  
+  /* Bouton submit */
+  .cutie-submit-btn {
+    background: linear-gradient(135deg, #ff6b88, #ff8e9e);
+    color: white;
+    border: none;
+    padding: 12px 25px;
+    border-radius: 50px;
+    font-size: 1.1rem;
+    cursor: pointer;
+    margin-top: 1.5rem;
+    transition: all 0.3s;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 4px 10px rgba(255, 107, 136, 0.4);
+  }
+  
+  .cutie-submit-btn:hover:not(:disabled) {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 15px rgba(255, 107, 136, 0.5);
+  }
+  
+  .cutie-submit-btn:disabled {
+    background: #cccccc;
+    cursor: not-allowed;
+  }
+  
+  .cutie-btn-heart {
+    margin-left: 8px;
+    display: inline-block;
+    animation: float 3s ease-in-out infinite;
+  }
+  
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-5px); }
+  }
+  
+  /* Liste des commentaires */
+  .cutie-comments {
+    max-width: 600px;
+    margin: 3rem auto;
+  }
+  
+  .cutie-comments-title {
+    color: #ff6b88;
+    text-align: center;
+    margin-bottom: 1.5rem;
+    font-size: 1.5rem;
+  }
+  
+  .cutie-comment {
+    background: white;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    border-radius: 15px;
+    box-shadow: 0 3px 10px rgba(255, 182, 193, 0.2);
+    border-left: 5px solid #ffb6c1;
+    position: relative;
+  }
+  
+  .cutie-comment:before {
+    content: "";
+    position: absolute;
+    top: -10px;
+    left: 20px;
+    border-width: 0 10px 10px;
+    border-style: solid;
+    border-color: #ffb6c1 transparent;
+  }
+  
+  .cutie-comment-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1rem;
+  }
+  
+  .cutie-comment-avatar {
+    font-size: 1.5rem;
+    margin-right: 10px;
+  }
+  
+  .cutie-comment-author {
+    font-weight: bold;
+    color: #ff6b88;
+    margin-right: auto;
+  }
+  
+  .cutie-mini-star {
+    color: #ffd6de;
+    font-size: 1rem;
+    margin: 0 2px;
+  }
+  
+  .cutie-mini-star-active {
+    color: #ff6b88 !important;
+  }
+  
+  .cutie-comment-text {
+    color: #666;
+    line-height: 1.5;
+    margin-bottom: 0.5rem;
+  }
+  
+  .cutie-comment-date {
+    color: #aaa;
+    font-size: 0.9rem;
+    text-align: right;
+  }
+  
+  /* Alerte mignonne */
+  .cutie-alert {
+    max-width: 500px;
+    margin: 2rem auto;
+    padding: 1rem 1.5rem;
+    border-radius: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: fadeIn 0.5s;
+  }
+  
+  .cutie-alert-success {
+    background: #ffebf1;
+    color: #ff6b88;
+    border: 2px solid #ffb6c1;
+  }
+  
+  .cutie-alert-error {
+    background: #fff0f0;
+    color: #ff6b6b;
+    border: 2px solid #ffb6b6;
+  }
+  
+  .cutie-alert-emoji {
+    margin-right: 10px;
+    font-size: 1.5rem;
+  }
+  
+  

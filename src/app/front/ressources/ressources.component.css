@@ -185,3 +185,27 @@
   transition: all 0.3s ease;
   font-weight: 500;
 }
+
+.rating-badge {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background-color: rgba(255, 255, 255, 0.8);
+  padding: 5px 8px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  font-size: 18px;
+}
+
+.star {
+  color: gold;
+  font-size: 20px;
+  margin-right: 2px;
+}
+
+.half-star {
+  color: gold;
+  font-size: 20px;
+  margin-right: 2px;
+}

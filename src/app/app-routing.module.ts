@@ -45,6 +45,8 @@ import { AffichageCategorieComponent } from './front/affichage-categorie/afficha
 import { RessourcesComponent } from './front/ressources/ressources.component';
 import { DetailRessourceComponent } from './front/detail-ressource/detail-ressource.component';
 
+import { StatRessourceComponent } from './back/stat-ressource/stat-ressource.component';
+import { AvisRessourceComponent } from './front/avis-ressource/avis-ressource.component';
 
 const routes: Routes = [
   {
@@ -59,6 +61,7 @@ const routes: Routes = [
       {path:'evenement', component: AdminGestionEvenementsComponent},
       {path:'participation', component: ListeParticipationsComponent},
       { path: 'projets', component: ListProjetsComponent },
+      {path: 'statRessource', component: StatRessourceComponent}
     ]
   },
   {
@@ -93,7 +96,7 @@ const routes: Routes = [
       { path: 'community/:id/create-post', component: CreatePostComponent },
       { path: 'detail-ressource/:id', component: DetailRessourceComponent },
       { path: 'ressource/:idCategorie', component: RessourcesComponent},
-
+      { path: 'avisResource/:id', component: AvisRessourceComponent},
       {
         path: 'profil', component: ProfilComponent,
         canActivate: [AuthGuard]

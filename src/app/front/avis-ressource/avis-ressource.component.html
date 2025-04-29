@@ -1,0 +1,69 @@
+<div class="cutie-rating-box">
+    <h3 class="cutie-title">Donnez votre avis 💖</h3>
+  
+    <div class="cutie-stars">
+      <span *ngFor="let star of stars; let i = index"
+            (click)="rate(i + 1)"
+            [class.cutie-star-active]="i < rating"
+            class="cutie-star">
+        ⭐
+      </span>
+    </div>
+  
+    <div class="cutie-rating-display" *ngIf="rating > 0">
+      Vous avez donné {{ rating }} <span class="cutie-heart">❤️</span>
+    </div>
+  
+    <div class="cutie-comment-box">
+      <textarea [(ngModel)]="comment"
+                class="cutie-textarea"
+                placeholder="Dites-nous ce que vous avez pensé... 🥰"
+                rows="3"></textarea>
+    </div>
+  
+    <button (click)="submitRating()"
+            [disabled]="isSubmitting || rating === 0 || !comment.trim()"
+            class="cutie-submit-btn">
+      Envoyer avec amour 💌
+      <span class="cutie-btn-heart">💝</span>
+    </button>
+  </div>
+  
+  <!-- Nouveau commentaire -->
+  <div *ngIf="newComment" class="cutie-comment new-comment">
+    <div class="cutie-comment-header">
+      <span class="cutie-comment-avatar">👤</span>
+      <span class="cutie-comment-author">{{ newComment.username }}</span>
+      <span class="cutie-comment-rating">
+        <span *ngFor="let star of stars; let i = index"
+              [class.cutie-mini-star-active]="i < newComment.rating"
+              class="cutie-mini-star">
+          ★
+        </span>
+      </span>
+    </div>
+    <p class="cutie-comment-text">{{ newComment.comment }}</p>
+    <div class="cutie-comment-date">📅 Maintenant</div>
+  </div>
+  
+  <!-- Tous les commentaires -->
+  <div class="cutie-comments" *ngIf="comments.length > 0">
+    <h3 class="cutie-comments-title">Ce que les autres pensent 🌈</h3>
+  
+    <div class="cutie-comment" *ngFor="let comment of comments">
+      <div class="cutie-comment-header">
+        <span class="cutie-comment-avatar">👤</span>
+        <span class="cutie-comment-author">{{ comment.username }}</span>
+        <span class="cutie-comment-rating">
+          <span *ngFor="let star of stars; let i = index"
+                [class.cutie-mini-star-active]="i < comment.rating"
+                class="cutie-mini-star">
+            ★
+          </span>
+        </span>
+      </div>
+      <p class="cutie-comment-text">{{ comment.comment }}</p>
+      <div class="cutie-comment-date">📅 {{ comment.date | date:'short' }}</div>
+    </div>
+  </div>
+  
