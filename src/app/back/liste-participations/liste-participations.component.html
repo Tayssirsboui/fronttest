@@ -1,62 +1,61 @@
 <div class="container mt-4">
-    <h2 class="fw-bold mb-4">📋 Liste des Participations par Événement</h2>
-  
-    <div *ngFor="let evenement of evenements" class="mb-4">
-      <div class="card p-4 shadow-sm border-0 rounded-4">
-        <div class="d-flex justify-content-between align-items-center flex-wrap">
-          <div>
-            <h5 class="fw-bold mb-1">{{ evenement.titre }}</h5>
-            <p class="mb-1 small text-muted"><strong>📍 Lieu :</strong> {{ evenement.lieu }}</p>
-            <p class="mb-1 small text-muted"><strong>📅 Date :</strong> {{ evenement.dateDebut | date:'short' }}</p>
-            <p class="small text-muted"><strong>📝 Description :</strong> {{ evenement.description }}</p>
-          </div>
-          <div>
-            <button class="btn btn-outline-primary btn-sm mt-3 mt-md-0"
-                    (click)="toggleExpand(evenement.id)">
-              {{ isExpanded(evenement.id) ? 'Cacher Participations' : 'Voir Participations' }}
-            </button>
-          </div>
-        </div>
-  
-        <div [ngClass]="{'smooth-collapse': true, 'show': isExpanded(evenement.id)}" class="mt-4">
-          <div *ngIf="participationsParEvenement[evenement.id]?.length > 0; else noParticipation">
-            <div class="table-responsive">
-              <table class="table table-hover align-middle rounded shadow-sm overflow-hidden">
-                <thead class="table-light">
-                  <tr>
-                    <th>Nom</th>
-                    <th>Email</th>
-                    <th>Statut</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr *ngFor="let p of participationsParEvenement[evenement.id]">
-                    <td class="fw-semibold">{{ p.nomUtilisateur }}</td>
-                    <td>{{ p.emailUtilisateur }}</td>
-                    <td>
-                      <span [ngClass]="{
-                        'badge bg-success': p.statut === 'ACCEPTE',
-                        'badge bg-warning text-dark': p.statut === 'EN_ATTENTE',
-                        'badge bg-danger': p.statut === 'REJETE'
-                      }">
-                        {{ p.statut }}
-                      </span>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-          <div class="text-end mt-2 small text-muted">
-            Total :👥 {{ participationsParEvenement[evenement.id]?.length || 0 }} participants
-          </div>
+  <h2 class="fw-bold mb-4">📋 Liste des Participations par Événement</h2>
 
-        
-          <ng-template #noParticipation>
-            <p class="text-muted small">Aucune participation pour cet événement.</p>
-          </ng-template>
+  <div *ngFor="let evenement of evenements" class="mb-4">
+    <div class="card p-4 shadow-sm border-0 rounded-4">
+      <div class="d-flex justify-content-between align-items-center flex-wrap">
+        <div>
+          <h5 class="fw-bold mb-1">{{ evenement.titre }}</h5>
+          <p class="mb-1 small text-muted"><strong>📍 Lieu :</strong> {{ evenement.lieu }}</p>
+          <p class="mb-1 small text-muted"><strong>📅 Date :</strong> {{ evenement.dateDebut | date:'short' }}</p>
+          <p class="small text-muted"><strong>📝 Description :</strong> {{ evenement.description }}</p>
         </div>
+        <div>
+          <button class="btn btn-outline-primary btn-sm mt-3 mt-md-0"
+                  (click)="toggleExpand(evenement.id)">
+            {{ isExpanded(evenement.id) ? 'Cacher Participations' : 'Voir Participations' }}
+          </button>
+        </div>
+      </div>
+
+      <div [ngClass]="{'smooth-collapse': true, 'show': isExpanded(evenement.id)}" class="mt-4">
+        <div *ngIf="participationsParEvenement[evenement.id]?.length > 0; else noParticipation">
+          <div class="table-responsive">
+            <table class="table table-hover align-middle rounded shadow-sm overflow-hidden">
+              <thead class="table-light">
+                <tr>
+                  <th>Nom complet</th> <!-- maintenant juste Nom complet -->
+                  <th>Email</th>
+                  <th>Statut</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let p of participationsParEvenement[evenement.id]">
+                  <td class="fw-semibold">{{ p.nomUtilisateur }}</td> <!-- nom complet -->
+                  <td>{{ p.emailUtilisateur }}</td> <!-- email -->
+                  <td>
+                    <span [ngClass]="{
+                      'badge bg-success': p.statut === 'ACCEPTE',
+                      'badge bg-warning text-dark': p.statut === 'EN_ATTENTE',
+                      'badge bg-danger': p.statut === 'REJETE'
+                    }">
+                      {{ p.statut }}
+                    </span>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="text-end mt-2 small text-muted">
+          Total : 👥 {{ participationsParEvenement[evenement.id]?.length || 0 }} participants
+        </div>
+
+        <ng-template #noParticipation>
+          <p class="text-muted small">Aucune participation pour cet événement.</p>
+        </ng-template>
       </div>
     </div>
   </div>
-  
+</div>

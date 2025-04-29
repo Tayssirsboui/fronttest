@@ -67,7 +67,7 @@
   padding: 6px 20px;
   border-radius: 20px;
   font-size: 0.9rem;
-  color: #5fcf80;
+  color: #49D292;
   border-color: #5fcf80;
   transition: 0.3s;
 }
@@ -83,7 +83,7 @@
 }
 
 .events .card:hover .card-body {
-  border-color: #5fcf80;
+  border-color: #51d497;
 }
 
 .badge-gold {
@@ -122,7 +122,7 @@
 }
 
 .pagination .page-item.active .page-link {
-  background-color: #4ed672;
+  background-color: #51d497;
   color: white;
   box-shadow: 0 0 10px rgba(60, 202, 96, 0.5);
 }
