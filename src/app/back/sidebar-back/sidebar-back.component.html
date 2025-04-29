@@ -17,6 +17,11 @@
           <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
           <span class="hide-menu">Home</span>
         </li>
+        <li *ngIf="isLoggedIn()" class="profile-icon">
+          <a (click)="goToProfile()" title="Profile">
+            <i class="fa fa-user-circle fa-lg"></i>
+          </a>
+        </li>
         <li class="sidebar-item">
           <a class="sidebar-link" [routerLink]="['/back/listuser']" routerLinkActive="active" aria-expanded="false">
             <span>
@@ -30,6 +35,15 @@
           <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
           <span class="hide-menu">Evenements</span>
         </li>
+        <li class="sidebar-item">
+          <a class="sidebar-link" routerLink="bstage" aria-expanded="false">
+          <span>
+            <i class="ti ti-article"></i>
+          </span>
+          <span class="hide-menu" >Stages</span>
+        </a>
+      </li>
+      <li class="sidebar-item">
       
         <li class="sidebar-item">
             <a class="sidebar-link" routerLink="quizzes" aria-expanded="false">

@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { StageService } from '../../../services/stage.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import Swal from 'sweetalert2'; // ✅ Import SweetAlert2
 
 @Component({
   selector: 'app-bstages',
@@ -47,6 +48,7 @@ export class BstagesComponent {
       error: (err) => {
         console.error('Erreur lors du chargement des stages :', err);
         this.isLoading = false;
+        Swal.fire('Erreur', 'Erreur lors du chargement des stages.', 'error');
       }
     });
   }
@@ -79,9 +81,11 @@ export class BstagesComponent {
           next: () => {
             this.fetchStages();
             this.closeModal();
+            Swal.fire('Succès', 'Stage modifié avec succès.', 'success');
           },
           error: (err) => {
             console.error('Erreur update :', err.error);
+            Swal.fire('Erreur', 'Erreur lors de la modification du stage.', 'error');
           }
         });
       } else {
@@ -90,31 +94,44 @@ export class BstagesComponent {
           next: () => {
             this.fetchStages();
             this.closeModal();
+            Swal.fire('Succès', 'Stage ajouté avec succès.', 'success');
           },
           error: (err) => {
             console.error('Erreur create :', err.error);
             console.log("FormData envoyé :", formData);
-
+            Swal.fire('Erreur', 'Erreur lors de l\'ajout du stage.', 'error');
           }
         });
       }
     } else {
       console.warn("Formulaire invalide :", this.stageForm.errors);
+      Swal.fire('Attention', 'Veuillez remplir correctement le formulaire.', 'warning');
     }
   }
-  
-  
 
   deleteStage(stageId: number): void {
-    if (confirm("Êtes-vous sûr de vouloir supprimer ce stage ?")) {
-      this.stageService.deleteStage(stageId).subscribe({
-        next: () => {
-          this.fetchStages();
-        },
-        error: (err) => {
-          console.error('Erreur lors de la suppression du stage :', err);
-        }
-      });
-    }
+    Swal.fire({
+      title: 'Êtes-vous sûr ?',
+      text: 'Cette action est irréversible !',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Oui, supprimer !',
+      cancelButtonText: 'Annuler'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.stageService.deleteStage(stageId).subscribe({
+          next: () => {
+            this.fetchStages();
+            Swal.fire('Supprimé !', 'Le stage a été supprimé.', 'success');
+          },
+          error: (err) => {
+            console.error('Erreur lors de la suppression du stage :', err);
+            Swal.fire('Erreur', 'Erreur lors de la suppression du stage.', 'error');
+          }
+        });
+      }
+    });
   }
 }

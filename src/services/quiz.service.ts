@@ -26,8 +26,8 @@ export class QuizService {
   }
 
   // Fetch all test results
-  getTestResults(): Observable<any> {
-    return this.http.get<any>(`${this.apiUrl}/test-result`);
+  getTestResults(fullName: string): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/test-result?fullName=${encodeURIComponent(fullName)}`);
   }
   // create test new 
   createTest(testData: any): Observable<any> {
@@ -50,6 +50,11 @@ export class QuizService {
   generateQuestions(description: string): Observable<any> {
     return this.http.post<any>(`${this.apiUrl}/generate-questions`, { description });
   }
+
+  getStatistics(): Observable<any> {
+  return this.http.get<any>(`${this.apiUrl}/admin/statistics`);
+}
+
   
   
   

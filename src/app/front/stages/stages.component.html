@@ -1,54 +1,4 @@
-<div class="probootstrap-search" id="probootstrap-search">
-  <button type="button" class="probootstrap-close js-probootstrap-close">
-    <i class="icon-cross"></i>
-  </button>
-  <form>
-    <input type="search" name="s" id="search" placeholder="Search a keyword and hit enter...">
-  </form>
-</div>
-
-<div class="probootstrap-page-wrapper">
-  <section class="probootstrap-section probootstrap-section-colored">
-    <div class="container">
-      <div class="row">
-        <div class="col-md-12 text-left section-heading probootstrap-animate">
-          <h1>Stages</h1>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section class="probootstrap-section">
-    <div class="container">
-      <div class="row">
-        <div class="col-md-12">
-          <div class="probootstrap-flex-block">
-            <div class="probootstrap-text probootstrap-animate">
-              <div class="text-uppercase probootstrap-uppercase">Featured Events</div>
-              <h3>Students Math Competition for The Year 2017</h3>
-              <p>Quis explicabo veniam labore ratione illo vero voluptate a deserunt incidunt odio aliquam commodi</p>
-              <p>
-                <span class="probootstrap-date"><i class="icon-calendar"></i>July 9, 2017</span>
-                <span class="probootstrap-location"><i class="icon-location2"></i>White Palace, Brooklyn, NYC</span>
-              </p>
-              <p>
-                <button type="button" class="btn btn-primary">
-                  Learn More
-                </button>
-              </p>
-            </div>
-            <div class="probootstrap-image probootstrap-animate" style="background-image: url(../../../assets/img/slider_4.jpg)">
-              <a [href]="'https://vimeo.com/45830194'" target="_blank" class="btn-video popup-vimeo" rel="noopener noreferrer">
-                <i class="icon-play3"></i>
-              </a>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- 🔍 Search Bar Container -->
+<!-- 🔍 Search Bar Container -->
 <div class="search-bar-wrapper">
   <input
     type="text"
@@ -62,34 +12,58 @@
 <!-- Cartes -->
 <div class="container">
   <div *ngIf="isLoading" class="loader">Chargement...</div>
-<div class="stage-cards-container" style="font-size: 1.4rem;">
-  <div *ngFor="let stage of filteredStages" class="stage-card">
-    <div class="card-content">
-      <div class="header" style="display: flex; justify-content: space-between; align-items: center;">
-        <h3 style="font-size: 1.6rem;">{{ stage.type }}</h3>
-        <span class="badge"
-              [ngClass]="{ paid: stage.payant, unpaid: !stage.payant }"
-              style="font-size: 1.2rem; padding: 0.4rem 0.9rem;">
-          {{ stage.payant ? 'Rémunéré' : 'Non rémunéré' }}
-        </span> 
-      </div>
+  <div class="stage-cards-container" style="font-size: 1.4rem;">
+    <div *ngFor="let stage of filteredStages" class="stage-card">
+      <div class="card-content">
+        <div class="header" style="display: flex; justify-content: space-between; align-items: center;">
+          <h3 style="font-size: 1.6rem;">{{ stage.type }}</h3>
+          <span class="badge" [ngClass]="{ paid: stage.payant, unpaid: !stage.payant }" style="font-size: 1.2rem; padding: 0.4rem 0.9rem;">
+            {{ stage.payant ? 'Rémunéré' : 'Non rémunéré' }}
+          </span> 
+        </div>
 
-      <div class="details" style="font-size: 1rem;">
-        <p style="font-size: 1.4rem;"><strong>Domaine :</strong> {{ stage.domaine }}</p>
-        <p style="font-size: 1.4rem;"><strong>Entreprise :</strong> {{ stage.entreprise }}</p>
-        <p style="font-size: 1.4rem;"><strong>Début :</strong> {{ stage.dateDebut }}</p>
-        <p style="font-size: 1.4rem;"><strong>Fin :</strong> {{ stage.dateFin }}</p>
-      </div>
+        <div class="details" style="font-size: 1rem;">
+          <p style="font-size: 1.4rem;"><strong>Domaine :</strong> {{ stage.domaine }}</p>
+          <p style="font-size: 1.4rem;"><strong>Entreprise :</strong> {{ stage.entreprise }}</p>
+          <p style="font-size: 1.4rem;"><strong>Début :</strong> {{ stage.dateDebut }}</p>
+          <p style="font-size: 1.4rem;"><strong>Fin :</strong> {{ stage.dateFin }}</p>
+        </div>
 
-      <button (click)="toggleDetails(stage.id!)" class="details-button">
-        Voir plus de détails
-      </button>
+        <div class="action-buttons">
+          <!-- Icône pour afficher les détails -->
+          <button (click)="toggleDetails(stage.id!)" class="icon-button" title="Voir plus de détails">
+            ➕
+          </button>
+        
+          <!-- Icône pour afficher la localisation -->
+          <button (click)="afficherMap(stage.entreprise)" class="icon-button" title="Voir la localisation de l'entreprise">
+            📍
+          </button>
+        </div>
+        
 
-      <div *ngIf="expandedId === stage.id" class="extra-details">
-        <p style="font-size: 1.4rem;"><strong>Email:</strong> {{ stage.email }}</p>
-        <p style="font-size: 1.4rem;"><strong>Téléphone:</strong> {{ stage.phoneNumber }}</p>
-        <p style="font-size: 1.4rem;"><strong>Description:</strong> {{ stage.description }}</p>
+        <div *ngIf="expandedId === stage.id" class="extra-details">
+          <p style="font-size: 1.4rem;"><strong>Email:</strong> {{ stage.email }}</p>
+          <p style="font-size: 1.4rem;"><strong>Téléphone:</strong> {{ stage.phoneNumber }}</p>
+          <p style="font-size: 1.4rem;"><strong>Description:</strong> {{ stage.description }}</p>
+        </div>
       </div>
     </div>
+  </div>
+</div>
+
+<!-- 🗺️ Modal pour afficher la carte -->
+<div *ngIf="showMapModal" class="modal-overlay">
+  <div class="modal-content">
+    <button class="close-button" (click)="closeMapModal()">X</button>
+    <h2>Localisation de l'entreprise</h2>
+
+    <iframe
+      width="100%"
+      height="400"
+      frameborder="0"
+      [src]="mapUrl"
+      allowfullscreen>
+    </iframe>
   </div>
 </div>

@@ -127,14 +127,15 @@ export class WebcamComponent implements OnInit {
           this.authService.saveToken(response.token);
           // Decode the token using JWT decode method
           const decodedToken = this.authService.decodeToken(response.token);
-
+          console.log('Decoded token:', decodedToken);
+          
           // Check user status and roles based on the decoded token
-          const userRole = decodedToken?.role?.[0]?.role;
-          if (userRole === 'Admin' || userRole === 'Entrepreneur') {
-            this.router.navigate(['/back']);
+          const userRole = decodedToken?.role;
+          if (userRole === 'Student' || userRole === 'Entrepreneur') {
+            this.router.navigate(['']);
           }
-          else {
-            this.router.navigate(['/home']);
+          else if (userRole === 'Admin') {
+            this.router.navigate(['/back']);
           }
 
         }

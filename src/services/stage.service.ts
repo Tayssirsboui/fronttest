@@ -21,7 +21,7 @@ export interface Stage {
   providedIn: 'root'
 })
 export class StageService {
-  private apiUrl = 'http://localhost:6002/stages/api/stages'; // via gateway (StripPrefix=1)
+  private apiUrl = 'http://localhost:8222/stages/api/stages'; // via gateway (StripPrefix=1)
 
   constructor(private http: HttpClient) {}
 

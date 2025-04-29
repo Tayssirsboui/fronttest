@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { StageService, Stage } from '../../../services/stage.service';
-
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser'; // ✅
 
 @Component({
   selector: 'app-stages',
@@ -12,10 +12,15 @@ export class StagesComponent {
   isLoading = true;
   expandedId: number | null = null;
   searchQuery: string = '';
-filteredStages: Stage[] = [];
+  filteredStages: Stage[] = [];
 
+  showMapModal = false; 
+  mapUrl!: SafeResourceUrl; // ✅ au lieu de googleMapsUrl
 
-  constructor(private stageService: StageService) {}
+  constructor(
+    private stageService: StageService,
+    private sanitizer: DomSanitizer
+  ) {}
 
   ngOnInit(): void {
     this.stageService.getAllStages().subscribe({
@@ -30,9 +35,11 @@ filteredStages: Stage[] = [];
       }
     });
   }
+
   toggleDetails(id: number): void {
     this.expandedId = this.expandedId === id ? null : id;
   }
+
   filterStages(): void {
     const query = this.searchQuery.toLowerCase();
     this.filteredStages = this.stages.filter(stage =>
@@ -40,5 +47,16 @@ filteredStages: Stage[] = [];
       stage.domaine.toLowerCase().includes(query) ||
       stage.entreprise.toLowerCase().includes(query)
     );
+  }
+
+  afficherMap(entreprise: string): void { // ✅ version moderne
+    const encoded = encodeURIComponent(entreprise);
+    const url = `https://www.google.com/maps?q=${encoded}&output=embed`;
+    this.mapUrl = this.sanitizer.bypassSecurityTrustResourceUrl(url);
+    this.showMapModal = true;
+  }
+
+  closeMapModal(): void {
+    this.showMapModal = false;
   }
 }

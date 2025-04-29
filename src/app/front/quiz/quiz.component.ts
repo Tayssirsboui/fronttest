@@ -1,6 +1,8 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { QuizService } from '../../../services/quiz.service';
 import { Router, ActivatedRoute } from '@angular/router';
+import Swal from 'sweetalert2';
+
 
 
 @Component({
@@ -50,14 +52,48 @@ export class QuizComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    // Get all quizzes
-    this.quizService.getAllTests().subscribe(data => {
-      this.tests = data;
-      this.filteredTests = [...this.tests]; // Initialize filteredTests with all quizzes
-    });
+    // ➡️ Toast de chargement discret en haut à droite
+  // ➡️ Toast de chargement discret (spinner ON au début)
+  Swal.fire({
+    toast: true,
+    position: 'top-end',
+    icon: 'info',
+    title: 'Chargement des quizz...',
+    showConfirmButton: false,
+    timerProgressBar: true,
+    didOpen: () => {
+      Swal.showLoading();
+    }
+  });
 
-    
+  this.quizService.getAllTests().subscribe({
+    next: (data) => {
+      this.tests = data;
+      this.filteredTests = [...this.tests];
+
+      // ⏳ Arrêter l'animation de chargement et afficher juste l'icône d'information
+      Swal.hideLoading();
+
+      // ✅ Laisser le toast visible encore 3 secondes après le chargement
+      setTimeout(() => {
+        Swal.close();
+      }, 3000);
+    },
+    error: (error) => {
+      console.error('Erreur lors du chargement des quizzes', error);
+      Swal.fire({
+        toast: true,
+        position: 'top-end',
+        icon: 'error',
+        title: 'Erreur de chargement',
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true,
+      });
+    }
+  });
   }
+  
 
   ngOnDestroy(): void {
     // Cleanup event listener when the component is destroyed
@@ -80,7 +116,6 @@ export class QuizComponent implements OnInit, OnDestroy {
 
     this.quizService.getQuestionsByTest(testId).subscribe(data => {
       this.currentTest = data;
-      this.router.navigate([`/quiz`,testId]);
 
       this.timerDuration = (this.currentTest.testDTO.time || 1) * 60;
       this.timeLeft = this.timerDuration;
@@ -130,31 +165,62 @@ export class QuizComponent implements OnInit, OnDestroy {
       console.error('Missing test ID');
       return;
     }
-
+  
+    const userString = localStorage.getItem('user');
+    if (!userString) {
+      console.error('User not found in localStorage.');
+      return;
+    }
+  
+    let fullName: string | null = null;
+    let email: string | null = null;
+  
+    try {
+      const parsedUser = JSON.parse(userString);
+      fullName = parsedUser.fullName || null;
+      email = parsedUser.sub || null; // ⚡ Récupérer l'email depuis `sub`
+    } catch (error) {
+      console.error('Failed to parse user from localStorage', error);
+      return;
+    }
+  
+    if (!fullName || !email) {
+      console.error('Full Name or Email not found in user object.');
+      return;
+    }
+  
     const submitData = {
       testId: this.currentTest.testDTO.id,
+      fullName: fullName,
+      email: email, // ✅ email correctement lu de `sub`
       responses: Object.keys(this.selectedAnswer).map(questionId => ({
         questionId: +questionId,
         selectedOption: this.selectedAnswer[+questionId]
       }))
     };
-
+  
     const allAnswered = Object.keys(this.selectedAnswer).length === this.currentTest.questions.length;
-
+  
     if (allAnswered || autoSubmit) {
       clearInterval(this.timerInterval);
-      this.quizService.submitTest(submitData).subscribe(response => {
-        this.submissionResult = response;
-        this.showSubmissionPopup = true;
-        this.isQuizAnswered = true;
-        this.quizStarted = false;
-      }, error => {
-        console.error('Submission error:', error);
+  
+      this.quizService.submitTest(submitData).subscribe({
+        next: (response) => {
+          this.submissionResult = response;
+          this.showSubmissionPopup = true;
+          this.isQuizAnswered = true;
+          this.quizStarted = false;
+        },
+        error: (error) => {
+          console.error('Submission error:', error);
+        }
       });
     } else if (!autoSubmit) {
       alert('Please answer all questions before submitting.');
     }
   }
+  
+  
 
   closePopup(): void {
     this.showSubmissionPopup = false;
@@ -211,11 +277,31 @@ export class QuizComponent implements OnInit, OnDestroy {
 
   // View all results in a modal
   viewAllResults(): void {
-    this.quizService.getTestResults().subscribe(results => {
-      this.testResults = results;
-      this.showResultsModal = true;
-    });
+    const userString = localStorage.getItem('user');
+    if (!userString) {
+      console.error('No user info found in localStorage.');
+      return;
+    }
+  
+    try {
+      const parsedUser = JSON.parse(userString);
+      const fullName = parsedUser.fullName;
+  
+      this.quizService.getTestResults(fullName).subscribe({
+        next: (results) => {
+          this.testResults = results;
+          this.showResultsModal = true;
+        },
+        error: (error) => {
+          console.error('Error loading user test results', error);
+        }
+      });
+  
+    } catch (error) {
+      console.error('Error parsing user from localStorage', error);
+    }
   }
+  
 
   closeResultsModal(): void {
     this.showResultsModal = false;

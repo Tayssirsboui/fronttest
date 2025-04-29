@@ -5,18 +5,42 @@
       align-items: center;
       justify-content: center;
       min-height: 100vh;
-      background: linear-gradient(135deg, #fdfcfb, #e2d1c3);
+      background: url('assets/img/slider_2.jpg') no-repeat center center/cover;
       font-family: 'Segoe UI', sans-serif;
       padding: 1rem;
+      position: relative;
     }
 
     .login-card {
-      background-color: #ffffff;
+      background-color: rgba(255, 255, 255, 0.85); /* translucent white */
       padding: 2rem;
       border-radius: 12px;
       box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
       width: 100%;
       max-width: 400px;
+      
+    }
+    .divider {
+      display: flex;
+      align-items: center;
+      margin: 1.5rem 0;
+      color: #777;
+      font-size: 0.9rem;
+    }
+
+    .divider::before,
+    .divider::after {
+      content: "";
+      flex: 1;
+      border-bottom: 1px solid #ddd;
+    }
+
+    .divider::before {
+      margin-right: 1rem;
+    }
+
+    .divider::after {
+      margin-left: 1rem;
     }
 
     .login-card h2 {
@@ -54,11 +78,18 @@
 
     .toggle-password {
       position: absolute;
+      right: 10px;
       top: 50%;
-      right: 12px;
       transform: translateY(-50%);
       cursor: pointer;
+      font-size: 1.2rem;
       color: #888;
+      transition: color 0.3s ease, transform 0.2s ease;
+    }
+
+    .toggle-password:hover {
+      color: #aa8bd1;
+      transform: translateY(-50%) scale(1.2);
     }
 
     .btn-submit {
@@ -71,11 +102,11 @@
       border-radius: 8px;
       cursor: pointer;
       transition: background 0.3s ease;
-      margin: 10px;
+      margin: 10px 0;
     }
 
     .btn-submit:hover {
-      background: #6610f2;
+      background: #530dc0;
     }
 
     .login-links {
@@ -115,34 +146,7 @@
     .password-wrapper input {
       width: 100%;
       padding-right: 2.5rem;
-      /* espace pour l'icône */
       box-sizing: border-box;
-    }
-
-    .toggle-password {
-      position: absolute;
-      right: 10px;
-      top: 50%;
-      transform: translateY(-50%);
-      cursor: pointer;
-      font-size: 1rem;
-      color: #888;
-    }
-
-    .toggle-password {
-      position: absolute;
-      right: 10px;
-      top: 50%;
-      transform: translateY(-50%);
-      cursor: pointer;
-      font-size: 1.2rem;
-      color: #888;
-      transition: color 0.3s ease, transform 0.2s ease;
-    }
-
-    .toggle-password:hover {
-      color: #aa8bd1;
-      transform: translateY(-50%) scale(1.2);
     }
   </style>
 
@@ -167,7 +171,6 @@
       </div>
 
       <!-- Password -->
-      <!-- Password -->
       <div class="form-input password-field">
         <label for="password">Password</label>
         <div class="password-wrapper">
@@ -179,24 +182,24 @@
         </div>
       </div>
 
-
       <!-- Submit -->
       <button (click)="login()" type="button" class="btn-submit">
         <i class="fas fa-sign-in-alt"></i> Login
       </button>
-      <button type="button" class=" btn-submit" (click)="loginWithGoogle()">
-        <img src="https://www.svgrepo.com/show/303108/google-icon-logo.svg" alt="Google logo">
-        Continue with Google
-      </button>
+      <div class="divider">OR</div>
 
-      <button type="button" class=" btn-submit" (click)="loginWithGithub()">
-        <img src="https://www.svgrepo.com/show/217753/github.svg" alt="GitHub logo">
+
+      
+      <button type="button" class="btn-submit" (click)="loginWithGithub()">
+        <img src="https://www.svgrepo.com/show/217753/github.svg" alt="GitHub logo" width="20" />
         Continue with GitHub
       </button>
+
       <button type="button" class="btn-submit" (click)="loginWithFacebook()">
-        <img src="https://www.svgrepo.com/show/475700/facebook-color.svg" alt="Facebook logo">
+        <img src="https://www.svgrepo.com/show/448224/facebook.svg" alt="Facebook logo" width="20" />
         Continue with Facebook
       </button>
+
       <!-- Links -->
       <div class="login-links">
         <a routerLink="/forgot-password">Forgot Password?</a>

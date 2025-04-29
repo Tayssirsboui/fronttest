@@ -19,6 +19,10 @@
     <button class="btn btn-success create-btn" (click)="openCreateTestModal()" style="font-size: 1.4rem;">
       Créer un nouveau quiz
     </button>
+    <button class="btn btn-info" (click)="openStatisticsModal()" style="margin-bottom: 20px;">
+      📊 Voir les Statistiques
+    </button>
+    
 
   </div>
 </section>
@@ -72,7 +76,7 @@
 
         <div class="form-group">
           <label for="testTime">Durée (minutes)</label>
-          <input type="number" id="testTime" class="form-control" [(ngModel)]="newTest.time" name="time" required min="1" style="font-size: 1.4rem;" />
+          <input type="number" id="testTime" class="form-control" [(ngModel)]="newTest.time" name="time" [readonly]="true" style="font-size: 1.4rem;" />
         </div>
 
         <button type="submit" class="btn btn-primary" [disabled]="isSubmitting" style="font-size: 1.4rem;">
@@ -175,6 +179,29 @@
           ➕ Ajouter au quiz
         </button>
       </div>
+    </div>
+  </div>
+</div>
+<div *ngIf="showStatisticsModal" class="modal-overlay">
+  <div class="modal-popup" style="width: 600px; max-width: 95%;">
+    <div class="modal-header-custom">
+      <h4 class="modal-title-custom">📈 Statistiques Globales</h4>
+      <button class="close-btn" (click)="closeStatisticsModal()">×</button>
+    </div>
+
+    <div *ngIf="statisticsData">
+      <p><strong>✅ Total Réponses Correctes :</strong> {{ statisticsData.correctAnswers }}</p>
+      <p><strong>❌ Total Réponses Fausses :</strong> {{ statisticsData.wrongAnswers }}</p>
+      
+    
+      <!-- 🎨 PieChart -->
+      <div style="margin-top: 30px;">
+        <canvas id="pieChart" width="300" height="300"></canvas>
+      </div>
+    </div>
+
+    <div class="modal-footer-custom">
+      <button class="btn btn-secondary" (click)="closeStatisticsModal()">Fermer</button>
     </div>
   </div>
 </div>

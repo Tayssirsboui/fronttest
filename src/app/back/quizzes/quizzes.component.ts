@@ -2,6 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { QuizService } from '../../../services/quiz.service';
 import { Router } from '@angular/router';
 import { ChangeDetectorRef } from '@angular/core';
+import Swal from 'sweetalert2';
+import { Chart, registerables } from 'chart.js';
+Chart.register(...registerables);
+
 
 @Component({
   selector: 'app-quizzes',
@@ -41,6 +45,8 @@ export class QuizzesComponent implements OnInit {
   deleteMessage = '';
   searchQuery = '';
   showGeneratedSuccessPopup = false;
+  showStatisticsModal = false;
+  statisticsData: any = null;
 
   constructor(private quizService: QuizService, private router: Router, private cdr: ChangeDetectorRef) {}
 
@@ -73,13 +79,62 @@ export class QuizzesComponent implements OnInit {
           this.generatedQuestionQuizId = quizId;
           this.showGeneratedQuestionsModal = true;
           this.showGeneratedSuccessPopup = true;
+          Swal.fire({
+            icon: 'success',
+            title: 'Questions générées avec succès !',
+            toast: true,
+            position: 'top-end',
+            timer: 3000,
+            timerProgressBar: true,
+            showConfirmButton: false,
+          });
         } else {
           console.warn('⚠️ Unexpected AI response:', res);
         }
       },
-      error: (err) => console.error('❌ AI API error:', err)
+      error: (err) => {
+        console.error('❌ AI API error:', err);
+        Swal.fire({
+          icon: 'error',
+          title: 'Erreur génération questions',
+          toast: true,
+          position: 'top-end',
+          timer: 3000,
+          timerProgressBar: true,
+          showConfirmButton: false,
+        });
+      }
     });
   }
+  renderPieChart(): void {
+    const ctx = document.getElementById('pieChart') as HTMLCanvasElement;
+  
+    if (!ctx) {
+      console.error('Canvas for PieChart not found!');
+      return;
+    }
+  
+    new Chart(ctx, {
+      type: 'pie',
+      data: {
+        labels: ['Réponses Correctes', 'Réponses Fausses'],
+        datasets: [{
+          data: [this.statisticsData.correctAnswers, this.statisticsData.wrongAnswers],
+          backgroundColor: ['#4CAF50', '#F44336'],
+          borderWidth: 1
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: {
+            position: 'bottom'
+          }
+        }
+      }
+    });
+  }
+  
 
   closeGeneratedQuestionsModal(): void {
     this.showGeneratedQuestionsModal = false;
@@ -96,7 +151,16 @@ export class QuizzesComponent implements OnInit {
 
   createTest(): void {
     if (!this.isValidForm()) {
-      alert('Please fill in all fields correctly');
+      Swal.fire({
+        icon: 'warning',
+        title: 'Champs invalides',
+        text: 'Veuillez remplir tous les champs correctement.',
+        toast: true,
+        position: 'top-end',
+        timer: 3000,
+        timerProgressBar: true,
+        showConfirmButton: false,
+      });
       return;
     }
 
@@ -106,38 +170,68 @@ export class QuizzesComponent implements OnInit {
         this.fetchQuizzes();
         this.closeModal();
         this.isSubmitting = false;
-        this.successMessage = 'Test created successfully!';
-        this.showSuccessPopup = true;
-        this.showTickAnimation = true;
-        setTimeout(() => {
-          this.showSuccessPopup = false;
-          this.showTickAnimation = false;
-        }, 3000);
+        Swal.fire({
+          icon: 'success',
+          title: 'Test créé avec succès !',
+          toast: true,
+          position: 'top-end',
+          timer: 3000,
+          timerProgressBar: true,
+          showConfirmButton: false,
+        });
       },
       error: (error) => {
         console.error('Error creating test:', error);
-        alert('An error occurred while creating the test.');
         this.isSubmitting = false;
+        Swal.fire({
+          icon: 'error',
+          title: 'Erreur création test',
+          toast: true,
+          position: 'top-end',
+          timer: 3000,
+          timerProgressBar: true,
+          showConfirmButton: false,
+        });
       }
     });
   }
 
   deleteQuiz(testId: number): void {
-    if (!confirm("Are you sure you want to delete this quiz?")) return;
-    this.quizService.deleteTest(testId).subscribe({
-      next: () => {
-        this.fetchQuizzes();
-        this.deleteMessage = "Quiz deleted successfully!";
-        this.showDeletePopup = true;
-        this.showTickAnimation = true;
-        setTimeout(() => {
-          this.showDeletePopup = false;
-          this.showTickAnimation = false;
-        }, 3000);
-      },
-      error: (error) => {
-        console.error('Error deleting quiz:', error);
-        alert('Error deleting quiz');
+    Swal.fire({
+      title: 'Êtes-vous sûr ?',
+      text: 'Cette action est irréversible !',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Oui, supprimer',
+      cancelButtonText: 'Annuler'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.quizService.deleteTest(testId).subscribe({
+          next: () => {
+            this.fetchQuizzes();
+            Swal.fire({
+              icon: 'success',
+              title: 'Quiz supprimé avec succès !',
+              toast: true,
+              position: 'top-end',
+              timer: 3000,
+              timerProgressBar: true,
+              showConfirmButton: false,
+            });
+          },
+          error: (error) => {
+            console.error('Error deleting quiz:', error);
+            Swal.fire({
+              icon: 'error',
+              title: 'Erreur suppression quiz',
+              toast: true,
+              position: 'top-end',
+              timer: 3000,
+              timerProgressBar: true,
+              showConfirmButton: false,
+            });
+          }
+        });
       }
     });
   }
@@ -154,7 +248,16 @@ export class QuizzesComponent implements OnInit {
 
   addQuestion(): void {
     if (!this.isValidQuestion()) {
-      alert('Please fill in all fields correctly');
+      Swal.fire({
+        icon: 'warning',
+        title: 'Champs invalides',
+        text: 'Veuillez remplir toutes les options.',
+        toast: true,
+        position: 'top-end',
+        timer: 3000,
+        timerProgressBar: true,
+        showConfirmButton: false,
+      });
       return;
     }
 
@@ -167,10 +270,27 @@ export class QuizzesComponent implements OnInit {
       next: () => {
         this.fetchQuizzes();
         this.closeAddQuestionModal();
+        Swal.fire({
+          icon: 'success',
+          title: 'Question ajoutée avec succès !',
+          toast: true,
+          position: 'top-end',
+          timer: 3000,
+          timerProgressBar: true,
+          showConfirmButton: false,
+        });
       },
       error: (error) => {
         console.error('Error adding question:', error);
-        alert('Error adding question');
+        Swal.fire({
+          icon: 'error',
+          title: 'Erreur ajout question',
+          toast: true,
+          position: 'top-end',
+          timer: 3000,
+          timerProgressBar: true,
+          showConfirmButton: false,
+        });
       }
     });
   }
@@ -190,7 +310,7 @@ export class QuizzesComponent implements OnInit {
   }
 
   isValidForm(): boolean {
-    return !!(this.newTest.title.trim() && this.newTest.description.trim() && this.newTest.time > 0);
+    return !!(this.newTest.title.trim() && this.newTest.description.trim());
   }
 
   isValidQuestion(): boolean {
@@ -210,5 +330,26 @@ export class QuizzesComponent implements OnInit {
 
   closeQuestionsModal(): void {
     this.showQuestionsModal = false;
+  }
+  openStatisticsModal(): void {
+    this.quizService.getStatistics().subscribe({
+      next: (data) => {
+        this.statisticsData = data;
+        this.showStatisticsModal = true;
+  
+        // ⚡ Important : petit timeout pour laisser Angular afficher le canvas
+        setTimeout(() => {
+          this.renderPieChart();
+        }, 0);
+      },
+      error: (err) => {
+        console.error('Erreur chargement stats:', err);
+      }
+    });
+  }
+  
+
+  closeStatisticsModal(): void {
+    this.showStatisticsModal = false;
   }
 }

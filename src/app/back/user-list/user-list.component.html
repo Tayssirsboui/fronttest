@@ -1,32 +1,46 @@
 <div class="container mt-4">
-    <h2>Liste des utilisateurs</h2>
-    <table class="table table-striped mt-3" *ngIf="users.length > 0">
-      <thead>
-        <tr>
-          <th>ID</th>
-          <th>Nom</th>
-          <th>Prénom</th>
-          <th>Email</th>
-          <th>Téléphone</th>
-          <th>Rôle</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let user of users">
-            <td>{{ user.idUser }}</td>
-            <td>{{ user.nom }}</td>
-            <td>{{ user.prenom }}</td>
-            <td>{{ user.email }}</td>
-            <td>{{ user.phoneNumber }}</td>
-            <td>{{ user.roles }}</td>
-            
-            
+  <h2>Liste des utilisateurs</h2>
 
-           
-          </tr>
-          
-      </tbody>
-    </table>
+  <table class="table table-striped mt-3" *ngIf="users.length > 0">
+    <thead>
+      <tr>
+        <th>id</th>
+
+        <th>Nom</th>
+        <th>Prénom</th>
+        <th>Email</th>
+        <th>Téléphone</th>
+        <th>Rôle</th>
+        <th>Actions</th> <!-- Nouvelle colonne -->
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let user of users">
+        <td>{{ user.idUser}}</td>
+
+        <td>{{ user.nom }}</td>
+        <td>{{ user.prenom }}</td>
+        <td>{{ user.email }}</td>
+        <td>{{ user.phoneNumber }}</td>
+        <td>{{ user.roles }}</td>
+        <td>
+          <button 
+          class="btn btn-sm" 
+          [ngClass]="user.accountLocked ? 'btn-success' : 'btn-danger'" 
+          (click)="toggleBan(user)">
+          {{ user.accountLocked ? 'Unban' : 'Ban' }}
+        </button>
   
-    <p *ngIf="users.length === 0">Aucun utilisateur trouvé.</p>
-  </div>
+          <select class="form-select form-select-sm mt-2" (change)="changeRole(user.idUser , $event.target.value)">
+            <option disabled selected>Changer Rôle</option>
+            <option value="Student">Student</option>
+            <option value="Entrepreneur">Entrepreneur</option>
+            <option value="Admin">Admin</option>
+          </select>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p *ngIf="users.length === 0">Aucun utilisateur trouvé.</p>
+</div>

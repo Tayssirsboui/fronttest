@@ -1,4 +1,3 @@
-
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -15,9 +14,7 @@ import { FacialRecognitionControllerService } from 'src/app/services/services/fa
   styleUrls: ['./register-front.component.css']
 })
 export class RegisterFrontComponent implements OnInit {
-  loginWithGithub() {
-    window.location.href = 'http://localhost:5300/oauth2/authorize/github';
-  }
+
   registerRequest: RegistrationRequest = {
     email: '',
     nom: '',
@@ -32,6 +29,7 @@ export class RegisterFrontComponent implements OnInit {
   errorMsg: string[] = [];
   passwordVisible = false;
   isLoading = false;
+  selectedFile: File | null = null;
 
   constructor(
     private router: Router,
@@ -39,25 +37,15 @@ export class RegisterFrontComponent implements OnInit {
     private authService: AuthentificationService,
     private tokenService: TokenService,
     private http: HttpClient,
-    private faceRecognitionService: FacialRecognitionControllerService // 👈 Ajout
+    private faceRecognitionService: FacialRecognitionControllerService
+  ) {}
 
-  ) { } ngOnInit(): void {
-    const rootParams = new URLSearchParams(window.location.search);
-    const rootToken = rootParams.get('token');
-    if (rootToken) {
-      this.handleToken(rootToken);
-      window.history.replaceState({}, '', window.location.pathname);
-    }
+  ngOnInit(): void {
+    const url = window.location.href;
+    const token = new URL(url).searchParams.get('token');
 
-    const hashParams = new URLSearchParams(window.location.hash.split('?')[1]);
-    const hashToken = hashParams.get('token');
-    if (hashToken) {
-      this.handleToken(hashToken);
-      // Clean hash fragment
-      this.router.navigate(['home'], {
-        queryParams: { token: null },
-        replaceUrl: true
-      });
+    if (token) {
+      this.handleToken(token);
     }
   }
 
@@ -92,47 +80,50 @@ export class RegisterFrontComponent implements OnInit {
       }
     });
   }
-  
-  
-  
+
   loginWithGoogle() {
     window.location.href = 'http://localhost:5300/oauth2/authorize/google';
   }
+
+  loginWithGithub() {
+    window.location.href = 'http://localhost:5300/oauth2/authorize/github';
+  }
+
   loginWithFacebook() {
     window.location.href = 'http://localhost:5300/oauth2/authorize/facebook';
   }
+
   togglePasswordVisibility() {
     this.passwordVisible = !this.passwordVisible;
   }
 
-  selectedFile: File | null = null; // 👈 ajouter une propriété
-
   onFileSelected(event: any) {
     const file = event.target.files[0];
     if (file) {
-      this.selectedFile = file; // 👈 stocker l'objet File pour l'upload
+      this.selectedFile = file;
       const reader = new FileReader();
       reader.onload = () => {
-        this.registerRequest.image = reader.result as string; // base64 pour la BDD
+        this.registerRequest.image = reader.result as string;
       };
       reader.readAsDataURL(file);
     }
   }
-  
+
   navigateToLogin() {
     this.router.navigate(['/login']);
   }
+
   private decodeTokenPayload(token: string): any {
     try {
-      const payload = token.split('.')[1]; // prendre la partie payload du JWT
-      const decodedPayload = atob(payload); // décoder base64
-      return JSON.parse(decodedPayload); // convertir en objet JSON
+      const payload = token.split('.')[1];
+      const decodedPayload = atob(payload);
+      return JSON.parse(decodedPayload);
     } catch (error) {
       console.error('Failed to decode token payload', error);
       return null;
     }
   }
-  
+
   private handleToken(token: string) {
     try {
       if (typeof localStorage === 'undefined') {
@@ -148,7 +139,9 @@ export class RegisterFrontComponent implements OnInit {
       }
 
       localStorage.setItem('user', JSON.stringify(payload));
-      this.router.navigateByUrl('http://localhost:4200');
+
+      // ✅ Redirection propre vers ton dashboard
+      this.router.navigate(['/front/home']);
 
     } catch (e) {
       console.error('Token handling error:', e);

@@ -1,4 +1,3 @@
-<!-- register.component.html -->
 <section class="form-section">
   <style>
     .form-section {
@@ -6,18 +5,36 @@
       align-items: center;
       justify-content: center;
       min-height: 100vh;
-      background: linear-gradient(135deg, #fdfcfb, #e2d1c3);
+      background: url('assets/img/slider_2.jpg') no-repeat center center/cover;
       font-family: 'Segoe UI', sans-serif;
       padding: 1rem;
+      position: relative;
     }
 
     .register-card {
-      background-color: #ffffff;
+      background-color: rgba(255, 255, 255, 0.85);
       padding: 2rem;
       border-radius: 12px;
       box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
       width: 100%;
       max-width: 420px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .form-input select {
+      width: 100%;
+      padding: 0.7rem;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 1rem;
+      transition: border-color 0.3s ease;
+      background-color: white;
+    }
+
+    .form-input select:focus {
+      border-color: #6610f2;
+      outline: none;
     }
 
     .register-card h2 {
@@ -144,6 +161,7 @@
       margin-left: 1rem;
     }
   </style>
+
   <div class="register-card">
     <h2>Create Account</h2>
 
@@ -186,23 +204,28 @@
         <input type="file" id="image" (change)="onFileSelected($event)" accept="image/*">
       </div>
 
+      <div class="form-input">
+        <label for="role">Select Role</label>
+        <select id="role" name="role" [(ngModel)]="registerRequest.roles" required>
+          <option value="" disabled selected>Select your role</option>
+          <option value="Student">Student</option>
+          <option value="Entrepreneur">Entrepreneur</option>
+        </select>
+      </div>
+
       <button type="submit" class="btn-submit" [disabled]="isLoading">
         {{ isLoading ? 'Registering...' : 'Register' }}
       </button>
 
       <div class="divider">OR</div>
 
-      <button type="button" class=" btn-submit" (click)="loginWithGoogle()">
-        <img src="https://www.svgrepo.com/show/303108/google-icon-logo.svg" alt="Google logo">
-        Continue with Google
-      </button>
-
-      <button type="button" class=" btn-submit" (click)="loginWithGithub()">
-        <img src="https://www.svgrepo.com/show/217753/github.svg" alt="GitHub logo">
+      <button type="button" class="btn-submit" (click)="loginWithGithub()">
+        <img src="https://www.svgrepo.com/show/217753/github.svg" alt="GitHub logo" width="20" />
         Continue with GitHub
       </button>
+
       <button type="button" class="btn-submit" (click)="loginWithFacebook()">
-        <img src="https://www.svgrepo.com/show/475700/facebook-color.svg" alt="Facebook logo">
+        <img src="https://www.svgrepo.com/show/448224/facebook.svg" alt="Facebook logo" width="20" />
         Continue with Facebook
       </button>
     </form>

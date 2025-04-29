@@ -94,4 +94,17 @@
     background: #fff;
     border: none;
   }
+  .genius-link {
+    font-family: 'Poppins', sans-serif;
+    font-size: 24px;
+    font-weight: bold;
+    color: #4F46E5; /* Exemple violet foncé */
+    text-decoration: none;
+    transition: color 0.3s ease;
+  
+    /* Hover effect */
+    &:hover {
+      color: #4338CA; /* Slightly darker on hover */
+    }
+  }
   

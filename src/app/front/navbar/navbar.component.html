@@ -1,84 +1,151 @@
-<nav class="navbar navbar-default probootstrap-navbar">
-  <div class="container" >
-    <div class="navbar-header">
-      <div class="btn-more js-btn-more visible-xs">
-        <a ><i class="icon-dots-three-vertical "></i></a>
-        <button type="button" class="btn-more-toggle">
-          <i class="icon-dots-three-vertical"></i>
+<style>
+  /* Style pour le lien "GENIUS" */
+  .brand-title {
+    font-family: 'Poppins', sans-serif;
+    font-size: 28px;
+    font-weight: 700;
+    color: #4F46E5;
+    text-decoration: none;
+    letter-spacing: 1px;
+    transition: all 0.3s ease;
+  }
+  
+  .brand-title:hover {
+    color: #4338CA;
+    text-decoration: underline;
+  }
+  
+  /* Style pour aligner correctement "GENIUS" */
+  .nav-logo {
+    display: flex;
+    align-items: center;
+    margin-right: auto;
+  }
+  
+  /* Style général navbar (tu peux améliorer si besoin) */
+  .navbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  
+  .navbar-nav {
+    display: flex;
+    align-items: center;
+    list-style: none;
+    padding-left: 0;
+    margin-bottom: 0;
+  }
+  
+  .navbar-nav li {
+    margin-left: 20px;
+  }
+  
+  .navbar-nav a {
+    font-family: 'Poppins', sans-serif;
+    font-size: 16px;
+    font-weight: 500;
+    text-decoration: none;
+    color: #333;
+    transition: color 0.3s;
+  }
+  
+  .navbar-nav a:hover {
+    color: #4F46E5;
+  }
+  
+  /* Notification badge */
+  .notif-badge {
+    background: red;
+    color: white;
+    font-size: 12px;
+    border-radius: 50%;
+    padding: 2px 6px;
+    margin-left: 4px;
+  }
+  </style>
+  
+  <nav class="navbar navbar-default probootstrap-navbar">
+    <div class="container">
+  
+      <div class="navbar-header">
+        <div class="btn-more js-btn-more visible-xs">
+          <a><i class="icon-dots-three-vertical"></i></a>
+          <button type="button" class="btn-more-toggle">
+            <i class="icon-dots-three-vertical"></i>
+          </button>
+        </div>
+  
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse" aria-expanded="false" aria-controls="navbar">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
         </button>
       </div>
-      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse" aria-expanded="false" aria-controls="navbar">
-        <span class="sr-only">Toggle navigation</span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </button>
-      <a class="navbar-brand" routerLink="/">GENIUS</a>
+  
+      <div id="navbar-collapse" class="navbar-collapse collapse">
+        <ul class="nav navbar-nav navbar-right">
+  
+          <!-- GENIUS Logo intégré ici -->
+          <li class="nav-logo">
+            <a routerLink="/" class="brand-title">GENIUS</a>
+          </li>
+  
+          <!-- Navigation Links -->
+          <li><a routerLink="/">Home</a></li>
+          <li><a routerLink="/evenement">Events</a></li>
+          <li><a routerLink="/blogs" class="active">Blogs</a></li>
+          <li><a routerLink="/quiz">Quizzes</a></li>
+          <li><a routerLink="/stages">Stages</a></li>
+          <li><a routerLink="/projets">Projets</a></li>
+          <li><a routerLink="/collaborations">Collaborations</a></li>
+          <li><a routerLink="/categories">Ressources</a></li>
+          <li><a routerLink="/communities">Communities</a></li>
+  
+          <!-- Notification Bell -->
+          <li class="dropdown notification-wrapper">
+            <a href="#" data-toggle="dropdown" class="dropdown-toggle">
+              <i class="icon-bell"></i>
+              <span class="notif-badge" *ngIf="unreadCount > 0">{{ unreadCount }}</span>
+            </a>
+            <ul class="dropdown-menu notifications-menu">
+              <li class="header">Notifications ({{ notifications.length }})</li>
+              <li *ngIf="notifications.length === 0" class="text-center p-3">
+                Aucune notification pour l'instant.
+              </li>
+              <li *ngFor="let notif of notifications" class="notification-item" (click)="onNotificationClick(notif)">
+                <div class="notif-icon">📣</div>
+                <div class="notif-text">
+                  {{ notif.message }}
+                </div>
+                <div class="notif-meta">
+                  <span class="notif-date">
+                    {{ notif.timestamp | date:'dd/MM/yyyy HH:mm' }}
+                  </span>
+                </div>
+                <span *ngIf="!notif.seen" class="unread-dot"></span>
+              </li>
+            </ul>
+          </li>
+  
+          <!-- Profile Icon -->
+          <li *ngIf="isLoggedIn()" class="profile-icon">
+            <a (click)="goToProfile()" title="Profile">
+              <i class="fa fa-user-circle fa-lg"></i>
+            </a>
+          </li>
+  
+          <!-- Join / Login Buttons -->
+          <li *ngIf="!isLoggedIn()" class="button-header margin-left">
+            <a routerLink="/register" class="btn">Join</a>
+          </li>
+          <li *ngIf="!isLoggedIn()" class="button-header">
+            <a routerLink="/login" class="btn btn3">Log in</a>
+          </li>
+  
+        </ul>
+      </div>
     </div>
-
-    <div id="navbar-collapse" class="navbar-collapse collapse" >
-      <ul class="nav navbar-nav navbar-right">
-        <li><a routerLink="/">Home</a></li>
-        <li><a routerLink="/evenement">Events</a></li>
-        <li><a class="active" routerLink="blogs">Blogs</a></li>
-        <li routerLinkActive="active">
-          <a routerLink="quiz">Quizzes</a>
-        </li>
-        <li routerLinkActive="active">
-          <a routerLink="stages">Stages</a>
-        </li> 
-        <li><a routerLink="/projets">Projets</a></li>
-        <li><a routerLink="/collaborations">Collaborations</a></li>
-        <li><a routerLink="/categories">Ressources</a></li>
-
-        
-        <li><a routerLink="communities">Communities</a></li>
-       
-
-             <!-- 🔔 Notification Bell Beautiful -->
-             <li class="dropdown notification-wrapper">
-              <a href="#" data-toggle="dropdown" class="dropdown-toggle">
-                <i class="icon-bell"></i>
-                <span class="notif-badge" *ngIf="unreadCount > 0">{{ unreadCount }}</span>
-              </a>
-            
-              <ul class="dropdown-menu notifications-menu">
-                <li class="header">Notifications ({{ notifications.length }})</li>
-            
-                <li *ngIf="notifications.length === 0" class="text-center p-3">
-                  Aucune notification pour l'instant.
-                </li>
-            
-                <li *ngFor="let notif of notifications" class="notification-item" (click)="onNotificationClick(notif)">
-                  <div class="notif-icon">📣</div>
-                  <div class="notif-text">
-                    {{ notif.message }}
-                  </div>
-                  <div class="notif-meta">
-                    <span class="notif-date">
-                      {{ notif.timestamp | date:'dd/MM/yyyy HH:mm' }}
-                    </span>
-                  </div>
-                    <span *ngIf="!notif.seen" class="unread-dot"></span>
-                    
-                </li>
-              </ul>
-            </li>
-            <!-- Profile icon (visible only if logged in) -->
-            <li *ngIf="isLoggedIn()" class="profile-icon">
-              <a (click)="goToProfile()" title="Profile">
-                <i class="fa fa-user-circle fa-lg"></i>
-              </a>
-            </li>
-    
-            <!-- Join/Login buttons (visible only if not logged in) -->
-            <li *ngIf="!isLoggedIn()" class="button-header margin-left">
-              <a routerLink="/register" class="btn">Join</a>
-            </li>
-            <li *ngIf="!isLoggedIn()" class="button-header">
-              <a routerLink="/login" class="btn btn3">Log in</a>
-            </li>
-      </ul>
-    </div>
-  </div>
-</nav>
+  </nav>
+  
