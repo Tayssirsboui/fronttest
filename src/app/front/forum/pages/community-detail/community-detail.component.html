@@ -5,10 +5,23 @@
       <img *ngIf="communityDetails.imageUrl" [src]="communityDetails.imageUrl" alt="Image de la communauté" />
       <h2>c/{{ communityDetails.name }}</h2>
     </div>
-
+    <div style="text-align: right; margin-bottom: 10px;">
+      <select (change)="toggleSortOrder($event.target.value)" style="padding: 4px 8px; font-size: 14px;">
+        <option value="desc" [selected]="sortOrder === 'desc'">Plus récent</option>
+        <option value="asc" [selected]="sortOrder === 'asc'">Plus ancien</option>
+      </select>
+    </div>
+    
+    
     <!-- Liste des posts -->
     <div class="post-list">
-      <div *ngFor="let post of communityDetails.posts" class="post-card">
+      <div *ngFor="let post of sortedPosts" class="post-card">
+        <div class="post-header">
+          <h3>{{ post.title }}</h3>
+          <button class="report-button" (click)="reportPost(post.id)">
+            <i class="fa fa-ellipsis-h"></i> <!-- Trois points -->
+          </button>
+        </div>
         <div class="post-author">
           <img src="https://img.freepik.com/photos-gratuite/jeune-belle-fille-posant-dans-veste-cuir-noire-parc_1153-8104.jpg?semt=ais_hybrid&w=740" alt="Alice" />
           <div>

@@ -1,0 +1,69 @@
+
+
+<div class="probootstrap-page-wrapper">
+  <section >
+    <div class="container">
+      <div class="row">
+        <div >
+          <h1>Gestion des Communautés</h1>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Barre sticky -->
+  <div class="header">
+    <div class="header-content">
+      <!-- Champ recherche centré -->
+      <input
+        type="text"
+        [(ngModel)]="searchTerm"
+        (input)="onSearchChange()"
+        placeholder="Rechercher une communauté"
+        class="search-input"
+      />
+      <button (click)="goToReportedPosts()" class="btn btn-warning reported-posts-btn">
+        Voir les posts signalés
+      </button>
+      <button class="btn btn-outline-success" (click)="downloadPageAsPDF($event)">Download as PDF</button>
+
+      <!-- Bouton "Créer une communauté" -->
+    </div>
+  </div>
+
+  <!-- Grille des communautés -->
+  <div class="container" id="admin-page">
+    <div class="grid">
+      <div *ngFor="let c of filteredCommunities" class="community-item">
+        <div class="community-card">
+          <figure class="community-img">
+            <img *ngIf="c.imageUrl" [src]="c.imageUrl" alt="Image de la communauté" class="img-responsive" />
+            <div *ngIf="!c.imageUrl" class="community-img-placeholder">
+              Pas d’image
+            </div>
+          </figure>
+          <div class="community-text">
+            <h3>{{ c.name }}</h3>
+            <p>{{ c.description.length > 15 ? (c.description.substring(0, 29) + '...') : c.description }}</p>
+          </div>
+          <!-- Actions admin -->
+          <div class="community-actions">
+            <button (click)="editCommunity(c.id)" class="btn btn-primary">Modifier</button>
+            <button (click)="deleteCommunity(c.id)" class="btn btn-danger">Supprimer</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Pagination -->
+    <div class="pagination">
+      <button (click)="prevPage()" [disabled]="currentPage === 1" class="page-btn prev-btn">
+        &lt; Précédent
+      </button>
+      <span>{{ currentPage }} / {{ totalPages() }}</span>
+      <button (click)="nextPage()" [disabled]="currentPage === totalPages()" class="page-btn next-btn">
+        Suivant &gt;
+      </button>
+    </div>
+  </div>
+</div>

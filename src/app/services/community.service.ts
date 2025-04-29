@@ -20,8 +20,8 @@ export class CommunityService {
     return this.http.get<any>(`${this.apiUrl}/${id}`);
   }
 
-  createCommunity(community: any): Observable<any> {
-    return this.http.post<any>(this.apiUrl, community);
+  createCommunity(community: any,userId:number): Observable<any> {
+    return this.http.post<any>(`${this.apiUrl}/user/${userId}`, community);
   }
 
   joinCommunity(communityId: number, userId: number): Observable<any> {
@@ -38,4 +38,8 @@ export class CommunityService {
   createPost(communityId: number, postDTO: PostDTO): Observable<any> {
     return this.http.post<any>(`${this.apiUrl}/${communityId}/post`, postDTO);
   }
+  deleteCommunity(id: number): Observable<any> {
+    return this.http.delete(`${this.apiUrl}/${id}`);
+  }
+  
 }

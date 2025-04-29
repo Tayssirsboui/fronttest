@@ -10,8 +10,8 @@ export class PostService {
 
   constructor(private http: HttpClient) {}
 
-  createPost(post: any): Observable<any> {
-    return this.http.post<any>(this.apiUrl, post);
+  createPost(id:number,post: any,userId:number): Observable<any> {
+    return this.http.post<any>(`this.apiUrl/${id}/post/${userId}`, post);
   }
   deletePost(id: number): Observable<void> {
     return this.http.delete<void>(`http://localhost:5600/api/communities/posts/${id}`);
@@ -19,6 +19,14 @@ export class PostService {
   generatePost(communityId: number) {
     return this.http.post<any>(`http://localhost:5600/api/communities/generate/${communityId}`, {});
   }
+  reportPost(id: number): Observable<any> {
+    return this.http.post(`http://localhost:5600/api/communities/posts/${id}/report`, {});
+  }
+  getReportedPosts() {
+    return this.http.get<any[]>('http://localhost:5600/api/communities/posts/reported');
+  }
+  
+  
   
   
   

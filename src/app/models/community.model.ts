@@ -1,3 +1,5 @@
+import { User } from "../services/models";
+
 export interface Post {
   id: number;
   userId: number;
@@ -9,8 +11,9 @@ export interface Post {
     upvotes: number;   // Nouveau champ pour les upvotes
     downvotes: number; // Nouveau champ pour les downvotes
     userVote?: 'upvote' | 'downvote' | null;
-    userName: string;
-    userImage: string; 
+    //userName: string;
+    //userImage: string; 
+    user:User;
 
 
 

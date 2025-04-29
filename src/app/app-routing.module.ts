@@ -44,6 +44,9 @@ import { CreateCommunityComponent } from './front/forum/pages/create-community/c
 import { AffichageCategorieComponent } from './front/affichage-categorie/affichage-categorie.component';
 import { RessourcesComponent } from './front/ressources/ressources.component';
 import { DetailRessourceComponent } from './front/detail-ressource/detail-ressource.component';
+import { CommunityBackListComponent } from './back/forum/community-back-list/community-back-list.component';
+import { ReportedPostsBackListComponent } from './back/forum/reported-posts-back-list/reported-posts-back-list.component';
+
 
 
 const routes: Routes = [
@@ -59,6 +62,12 @@ const routes: Routes = [
       {path:'evenement', component: AdminGestionEvenementsComponent},
       {path:'participation', component: ListeParticipationsComponent},
       { path: 'projets', component: ListProjetsComponent },
+      { path: 'community', component: CommunityBackListComponent },
+      { path: 'admin/reported-posts', component: ReportedPostsBackListComponent },
+      { path: 'admin/edit-community/:id', component: CreateCommunityComponent },  // <= ajoute cette ligne
+
+
+
     ]
   },
   {

@@ -19,6 +19,10 @@ export class CommunityDetailComponent implements OnInit{
   communityDetails: CommunityWithPostsDTO | null = null;
   currentPage: number = 1;
 postsPerPage: number = 5;
+sortOrder: 'asc' | 'desc' = 'desc'; // Ajouté : ordre de tri par défaut (plus récents d'abord)
+  userData: any;
+  userId: any;
+
 
   constructor(
     private route: ActivatedRoute,
@@ -31,7 +35,7 @@ postsPerPage: number = 5;
   ngOnInit(): void {
     // Récupère l'ID de la communauté depuis les paramètres d'URL
     this.communityId = Number(this.route.snapshot.paramMap.get('id'));
-
+    this.loadUserData();    
     // Appel au service pour récupérer les détails de la communauté
     this.communityService.getCommunityWithPosts(this.communityId).subscribe(
       data => {
@@ -57,7 +61,30 @@ postsPerPage: number = 5;
 
   }
   
-
+  private decodeTokenPayload(token: string): any {
+    try {
+      const payload = token.split('.')[1]; // prendre la partie payload du JWT
+      const decodedPayload = atob(payload); // décoder base64
+      return JSON.parse(decodedPayload); // convertir en objet JSON
+    } catch (error) {
+      console.error('Failed to decode token payload', error);
+      return null;
+    }
+  }
+  loadUserData() {
+    const token = localStorage.getItem('token');
+    if (token) {
+      const payload = this.decodeTokenPayload(token);
+      if (payload) {
+        this.userData = payload;
+        this.userId = payload.id || payload.userId || payload._id; // selon ton token
+        console.log("Utilisateur connecté :", this.userData);
+      }
+    } else {
+      console.error('Token non trouvé dans localStorage');
+      //this.toastr.error('Utilisateur non connecté', 'Erreur');
+    }
+  }
   createPost() {
     const user = JSON.parse(localStorage.getItem('user')!);
   const post = {
@@ -65,8 +92,9 @@ postsPerPage: number = 5;
     communityId: this.communityId,
     userName: user.name,
     userImage: user.image
+    
   };
-    this.postService.createPost(post).subscribe(() => {
+    this.postService.createPost(this.communityId,post,this.userId).subscribe(() => {
       this.newPostContent = '';
       this.loadData();
     });
@@ -111,7 +139,30 @@ postsPerPage: number = 5;
       error: (err) => console.error('Erreur lors de la génération du post', err)
     });
   }
+  reportPost(postId: number): void {
+    this.postService.reportPost(postId).subscribe({
+      next: () => {
+        alert('Post signalé avec succès');
+      },
+      error: (err) => {
+        console.error('Erreur lors du signalement du post', err);
+      }
+    });
+  }
+  toggleSortOrder(value: string) {
+    this.sortOrder = value === 'asc' ? 'asc' : 'desc';
+  }
+    
+  get sortedPosts() {
+    if (!this.communityDetails) return [];
   
+    const postsCopy = [...this.communityDetails.posts]; // Copie pour ne pas modifier directement
+    return postsCopy.sort((a, b) => {
+      const dateA = new Date(a.createdAt).getTime();
+      const dateB = new Date(b.createdAt).getTime();
+      return this.sortOrder === 'asc' ? dateA - dateB : dateB - dateA;
+    });
+  }
   
   
 }

@@ -115,6 +115,8 @@ import { MatListModule } from '@angular/material/list';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { PdfViewerModule } from 'ng2-pdf-viewer';
 import { AffichageCategorieComponent } from './front/affichage-categorie/affichage-categorie.component';
+import { CommunityBackListComponent } from './back/forum/community-back-list/community-back-list.component';
+import { ReportedPostsBackListComponent } from './back/forum/reported-posts-back-list/reported-posts-back-list.component';
 
 
 
@@ -188,6 +190,8 @@ import { AffichageCategorieComponent } from './front/affichage-categorie/afficha
     AjoutRessourcesComponent,
     DetailRessourceComponent,
     ConfirmationDialogComponent,
+    CommunityBackListComponent,
+    ReportedPostsBackListComponent,
   ],
  
   imports: [

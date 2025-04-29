@@ -1,0 +1,114 @@
+/* Style général */
+.post-container {
+    margin-top: 30px;
+  }
+  
+  /* Grid pour afficher les posts */
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 20px;
+  }
+  
+  /* Carte du post */
+  .post-card {
+    background: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+    padding: 20px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  
+  .post-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.15);
+  }
+  
+  /* Texte du post */
+  .post-header {
+    margin-bottom: 15px;
+  }
+  
+  .post-content {
+    font-size: 16px;
+    color: #333333;
+    line-height: 1.4;
+  }
+  
+  /* Image du post */
+  .post-image-wrapper {
+    margin-top: 10px;
+    text-align: center;
+  }
+  
+  .post-image {
+    max-width: 100%;
+    max-height: 200px;
+    border-radius: 8px;
+    object-fit: cover;
+  }
+  
+  /* Bouton Supprimer */
+  .post-actions {
+    margin-top: 15px;
+    text-align: right;
+  }
+  
+  .post-actions .btn-danger {
+    background-color: #dc3545;
+    border: none;
+    padding: 8px 16px;
+    font-size: 14px;
+    border-radius: 6px;
+    transition: background-color 0.2s ease;
+  }
+  
+  .post-actions .btn-danger:hover {
+    background-color: #c82333;
+  }
+  
+  /* Pagination */
+  .pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 30px;
+    gap: 10px;
+  }
+  
+  .page-btn {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    font-size: 14px;
+    border-radius: 6px;
+    transition: background-color 0.2s ease;
+  }
+  
+  .page-btn:hover {
+    background-color: #0056b3;
+  }
+  
+  .page-btn:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+  }
+  
+  .page-number {
+    font-size: 16px;
+    font-weight: bold;
+  }
+  
+  /* Barre de recherche */
+  .search-input {
+    width: 100%;
+    max-width: 400px;
+    padding: 10px 15px;
+    border: 1px solid #cccccc;
+    border-radius: 8px;
+    font-size: 16px;
+    margin: 20px auto;
+    display: block;
+  }
+  
