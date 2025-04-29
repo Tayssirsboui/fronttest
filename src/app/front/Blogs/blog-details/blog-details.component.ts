@@ -7,6 +7,10 @@ import { BlogService } from 'src/app/services/blog.service';
 import { Comment } from 'src/app/models/comment';
 import { ToastrService } from 'ngx-toastr';
 import { postRecommendationService } from 'src/app/services/post-recommendation.service';
+import { UserControllerService } from 'src/app/services/services';
+import { HttpClient } from '@angular/common/http';
+import * as RecordRTC from 'recordrtc';
+
 
 @Component({
   selector: 'app-blog-details',
@@ -24,14 +28,18 @@ export class BlogDetailsComponent {
   post!: Post;
   loadingEnhancement: boolean = false;
   userData: any;
+  postUser: any;
+  recorder: any;
+  isRecording: boolean = false;
+  audioStream: any;
 
   constructor(
     private bs: BlogService,
-    private toastr: ToastrService,
+    private toastr: ToastrService,private http: HttpClient,
     private Ac: ActivatedRoute,
     private enhancementService: postRecommendationService,
     private route: Router,
-    private fb: FormBuilder
+    private fb: FormBuilder, private userService: UserControllerService
   ) {
     this.commentForm = this.fb.group({
       description: ['', [Validators.required]],
@@ -41,18 +49,64 @@ export class BlogDetailsComponent {
 
   
   ngOnInit() {
-    // Initialize the postId (id) once here
     this.id = +this.Ac.snapshot.paramMap.get('id')!;
+    
+    // Récupérer le post
     this.bs.getPostsById(this.id).subscribe(data => {
       this.post = data;
+  
+      // ✅ Récupérer aussi l'utilisateur qui a créé ce post
+      if (this.post.userId) {
+        this.userService.getUserById({ id: this.post.userId }).subscribe(user => {
+          this.postUser = user;
+        }, error => {
+          console.error("Erreur récupération user du post:", error);
+        });
+      }
     });
+  
     this.loadUserData(); 
-
-
-    // Get the comments for the post on page load
     this.refreshComments();
   }
+  startRecording() {
+    navigator.mediaDevices.getUserMedia({ audio: true })
+      .then(stream => {
+        this.recorder = new RecordRTC(stream, {
+          type: 'audio',
+          mimeType: 'audio/webm'
+        });
+  
+        this.recorder.startRecording();
+        this.audioStream = stream;
+      });
+  }
+  
+  stopRecording() {
+    this.recorder.stopRecording(() => {
+      const blob = this.recorder.getBlob();
+      const audioURL = URL.createObjectURL(blob);
+      console.log('Audio URL:', audioURL);
+      // Tu peux maintenant envoyer le blob à Hugging Face
+    });
+  
+    this.audioStream.getTracks().forEach((track: { stop: () => any; }) => track.stop());
+  }
+  uploadAudio(audioBlob: Blob) {
+    const formData = new FormData();
+    formData.append('audio', audioBlob, 'recording.wav');
 
+    this.http.post('http://localhost:5000/transcribe', formData).subscribe(
+      (response: any) => {
+        console.log('Transcription:', response.transcription);
+        // Afficher la transcription dans ton commentaire
+        this.toastr.success('Commentaire transcrit avec succès');
+      },
+      (error) => {
+        console.error('Erreur lors de la transcription:', error);
+        this.toastr.error('Erreur lors de la transcription');
+      }
+    );
+  }
   
   loadUserData() {
     const token = localStorage.getItem('token');
@@ -116,6 +170,8 @@ export class BlogDetailsComponent {
       next: (res) => {
         // Mettre à jour la valeur du commentaire dans le formulaire avec le texte amélioré
         this.commentForm.patchValue({ description: res.enhanced_comment });
+this.commentForm.get('description')?.markAsDirty(); // <-- Add this
+
         // Afficher un message de succès
         this.toastr.success("Commentaire enrichi automatiquement !");
         
@@ -133,16 +189,19 @@ export class BlogDetailsComponent {
 
   addComment(): void {
     const trimmedDescription = this.commentForm.value.description?.trim();
-
+    console.log('Submitting comment:', trimmedDescription);
     if (!trimmedDescription) {
       alert("Le champ commentaire est vide !");
       return;
     }
-
+    if (!trimmedDescription) {
+      alert("Le champ commentaire est vide !");
+      return;
+    }   
     // ✅ Patch createdBy if it's required
     this.commentForm.patchValue({
       description: trimmedDescription,
-      createdBy: 'CurrentUserName' // <-- Replace with real username if available
+      //createdBy: 'CurrentUserName' // <-- Replace with real username if available
     });
 
     const commentData = {
@@ -150,6 +209,7 @@ export class BlogDetailsComponent {
       postId: this.id,  // Use the postId (this.id)
       userId: this.userId
     };
+    
 
     if (this.editMode && this.selectedCommentId) {
       this.bs.updateComment(this.selectedCommentId!, this.userId, commentData).subscribe(() => {
@@ -187,8 +247,15 @@ export class BlogDetailsComponent {
       console.log('Loaded comments for post', this.id, ':', data);
       this.comments = data as Comment[];
       this.post.commentsCount = this.comments.length;
+     // Pour chaque commentaire, récupérer l'utilisateur
+     this.comments.forEach(comment => {
+      if (comment.userId) {
+        this.userService.getUserById({ id: comment.userId }).subscribe(user => {
+          comment.user = user; // Ajouter l'utilisateur directement dans le commentaire
+        });
+      }
     });
-  }
+  });}
 
   likeComment(commentId: number): void {
     this.bs.likeComment(commentId, this.userId).subscribe({

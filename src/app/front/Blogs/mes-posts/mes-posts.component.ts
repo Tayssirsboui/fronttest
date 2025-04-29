@@ -3,7 +3,8 @@ import { BlogService } from 'src/app/services/blog.service';
 import { Post } from 'src/app/models/post';
 import { Location } from '@angular/common';
 import { ToastrService } from 'ngx-toastr';
-
+import { UserControllerService } from 'src/app/services/services';
+import Swal from 'sweetalert2';
 @Component({
   selector: 'app-mes-posts',
   templateUrl: './mes-posts.component.html',
@@ -22,7 +23,8 @@ export class MesPostsComponent implements OnInit {
   constructor(
     private bs: BlogService,
     private location: Location,
-    private toastr: ToastrService
+    private toastr: ToastrService,    private userService: UserControllerService
+    
   ) {}
 
   ngOnInit(): void {
@@ -61,19 +63,38 @@ export class MesPostsComponent implements OnInit {
       console.error('No user ID found to load posts');
       return;
     }
+  
     this.isLoading = true;
+  
     this.bs.getPostsByUserId(this.userId).subscribe({
       next: (posts) => {
         this.userPosts = posts;
         this.isLoading = false;
+  
+        if (this.userPosts && this.userPosts.length > 0) {
+          this.userPosts.forEach((post) => {
+            this.userService.getUserById({ id: post.userId }).subscribe({
+              next: (user) => {
+                console.log('Utilisateur récupéré pour le post ID', post.id, ':', user);
+                post.user = user; // Ajouter l'objet user directement au post
+              },
+              error: (err) => {
+                console.error('Erreur lors de la récupération de l’utilisateur pour le post', post.id, err);
+              }
+            });
+          });
+        }
       },
       error: (error) => {
-        console.error('Error loading user posts:', error);
+        console.error('Erreur lors du chargement des posts utilisateur :', error);
         this.isLoading = false;
       }
     });
   }
+  
 
+  
+ 
   onEdit(post: Post) {
     this.selectedPostToEdit = { ...post };
     this.showEditModal = true;
@@ -114,21 +135,41 @@ export class MesPostsComponent implements OnInit {
       });
     }
   }
-
   onDelete(postId: number): void {
-    if (confirm('Are you sure you want to delete this post?')) {
-      this.bs.DeletePost(postId).subscribe({
-        next: () => {
-          console.log('Post deleted successfully');
-          this.toastr.success('Post deleted successfully', 'Success');
-          this.fetchUserPosts();
-        },
-        error: (error) => {
-          console.error('Error deleting post:', error);
-          this.toastr.error('Failed to delete post', 'Error');
-        }
-      });
-    }
+    Swal.fire({
+      title: 'Êtes-vous sûr ?',
+      text: 'Cette action supprimera le post et tous ses commentaires.',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Oui, supprimer',
+      cancelButtonText: 'Annuler'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        // Étape 1 : Supprimer les commentaires
+        this.bs.deleteCommentsByPostId(postId).subscribe({
+          next: () => {
+            // Étape 2 : Supprimer le post une fois les commentaires supprimés
+            this.bs.DeletePost(postId).subscribe({
+              next: () => {
+                this.toastr.success('Post supprimé avec succès', 'Succès');
+                Swal.fire('Supprimé !', 'Le post et ses commentaires ont été supprimés.', 'success');
+                this.fetchUserPosts(); // rechargement de la liste
+              },
+              error: (err) => {
+                console.error('Erreur suppression du post:', err);
+                Swal.fire('Erreur', 'Impossible de supprimer le post.', 'error');
+              }
+            });
+          },
+          error: (err) => {
+            console.error('Erreur suppression des commentaires:', err);
+            Swal.fire('Erreur', 'Impossible de supprimer les commentaires.', 'error');
+          }
+        });
+      }
+    });
   }
 
   toggleMenu(postId: number) {

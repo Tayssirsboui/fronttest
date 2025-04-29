@@ -16,7 +16,7 @@
    
   
     <!--? Blog Area Start -->
-    <section id="blog-details" class="blog-details section">
+    <section id="blog-details" class="blog-details section "  >
         <div class="container">
             <article class="article">
                 <!-- Image de l'article -->
@@ -34,16 +34,17 @@
                 <!-- Contenu de l'article -->
                 <div class="article-content" delay="100">
                     <div class="content-header">
-                        <h1 class="title">{{ post?.title }}</h1>
+                        <h1 class="title">Title: {{ post?.title }}</h1>
   
                         <!-- Infos de l'auteur -->
                         <div class="author-info">
                             <div class="author-details">
                                 <img src="assets/img/blog/person-f-8.webp" alt="Author" class="author-img">
                                 <div class="info">
-                                    <h4>{{post.createdBy}}</h4>
-                                    <span class="role">Senior Web Developer</span>
-                                </div>
+                                    <h4>{{ postUser.nom }} {{ postUser.prenom }}</h4>
+                                    <p class="role" *ngIf="postUser.role">{{ postUser.role }}</p>
+                                    <p class="email">{{ postUser.email }}</p>
+                                  </div>
                             </div>
                             <div class="post-meta">
                                 <span class="date"><i class="bi bi-calendar3"></i>{{ post.createdAt | date:'d MMM yyyy' }}</span>
@@ -66,18 +67,22 @@
                             <h3>Nombre de commentaires: <span class="comment-count">({{ post?.commentsCount || 0 }})</span></h3>
                         </div>
   
-                        <div class="comments-wrapper">
+                        <div class="comments-wrapper" >
                             <!-- Commentaire 1 -->
                             <article class="comment-card" *ngFor="let comment of comments">
                                 <div class="comment-header">
                                     <div class="user-info">
                                         <img src="assets/img/blog/person-f-9.webp" alt="User avatar" loading="lazy">
                                         <div class="meta">
-                                            <h4 class="name">{{comment.createdBy}}</h4>
+                                            
+                                           
+                                                <h4 class="name">{{ comment.user?.nom }} {{ comment.user?.prenom }}</h4>
+                                                <small class="text-muted">{{ comment.user?.email }}</small>
+                                        
                                             <span class="date"><i class="bi bi-calendar3"></i> {{ comment.createdAt | date:'d MMM yyyy' }}</span>
                                         </div>
                                     </div>
-                                    <h2 class="name">{{comment.description}}</h2>
+                                    <h2 class="comment-description">{{comment.description}}</h2>
 
                                 </div>
 
@@ -112,7 +117,8 @@
                                                     id="comment" name="comment" rows="6" 
                                                     placeholder="Write your thoughts here..." 
                                                     formControlName="description"></textarea>
-                                            
+                                                    <button (click)="startRecording()" [disabled]="isRecording">Start Recording</button>
+                                                    <button (click)="stopRecording()" [disabled]="!isRecording">Stop Recording</button>
                                             <!-- Bouton emoji -->
                                             <button  class=" btn-emoji" 
                                                     (click)="toggleEmojiPicker()">

@@ -281,7 +281,9 @@ button[type="button"] {
 --------------------------------------------------------------*/
 .blog-details {
   max-width: 1000px;
-  margin: 0 auto;
+  justify-content:center ;
+  margin-left:193px ;
+ 
 }
 
 .blog-details .hero-img {
@@ -818,7 +820,7 @@ button[type="button"] {
 
 @media (min-width: 768px) {
   .blog-comments .comment-card.reply {
-    margin-left: 85px;
+    margin-left: 65px;
   }
 }
 
@@ -862,7 +864,7 @@ button[type="button"] {
 }
 
 .blog-comments .comment-content p {
-  color: #000000;
+  color: #282828;
   font-size: 15px;
   line-height: 1.65;
   margin-bottom: 20px;
@@ -929,7 +931,7 @@ button[type="button"] {
   }
 
   .blog-comments .comment-header .user-info .meta .name {
-    font-size: 15px;
+    font-size: 10px;
   }
 
   .blog-comments .comment-header .user-info .meta .date {
@@ -961,3 +963,9 @@ button[type="button"] {
 
 
 
+.comment-description {
+  font-size: 13px; /* ou 14px ou 16px selon ton design */
+  color: #333; /* couleur lisible */
+  margin-top: 8px;
+  line-height: 2;
+}

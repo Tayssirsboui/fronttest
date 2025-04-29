@@ -124,4 +124,8 @@ userId!: number ;
     return this.http.put<void>(`${this.baseUrlComment}/${commentId}/like/${userId}`, {});
 
   }
+  deleteCommentsByPostId(postId: number): Observable<void> {
+    return this.http.delete<void>(`${this.baseUrlComment}/post/${postId}`);
+  }
+    
   }

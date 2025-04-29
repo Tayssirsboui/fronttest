@@ -38,6 +38,9 @@ export class BlogComponent implements OnInit {
   selectedFile: File | null = null;
 style: any;
 user: any;
+userName!:string;
+
+userEmail!:string;
 
 showSortOptions = false;
   userData: any;
@@ -72,7 +75,7 @@ showSortOptions = false;
     if (token) {
       const payload = this.decodeTokenPayload(token);
       if (payload) {
-        this.userData = payload;
+        this.userData = payload;  
         this.userId = payload.id || payload.userId || payload._id; // selon ton token
         console.log("Utilisateur connecté :", this.userData);
       }
@@ -82,23 +85,37 @@ showSortOptions = false;
     }
   }
   
-  private decodeTokenPayload(token: string): any {
-    try {
-      const payload = token.split('.')[1]; // prendre la partie payload du JWT
-      const decodedPayload = atob(payload); // décoder base64
-      return JSON.parse(decodedPayload); // convertir en objet JSON
-    } catch (error) {
-      console.error('Failed to decode token payload', error);
-      return null;
+    private decodeTokenPayload(token: string): any {
+      try {
+        const payload = token.split('.')[1]; // prendre la partie payload du JWT
+        const decodedPayload = atob(payload); // décoder base64
+        return JSON.parse(decodedPayload); // convertir en objet JSON
+      } catch (error) {
+        console.error('Failed to decode token payload', error);
+        return null;
+      }
     }
-  }
   loadPosts() {
     this.bs.getPosts().subscribe(data => {
       this.listPosts = data;
       this.totalPosts = data.length;
       this.totalPages = Math.ceil(this.totalPosts / this.postsPerPage);
+   
+      this.listPosts.forEach(post => {
+        if (post.userId) {
+          this.userService.getUserById({ id: post.userId }).subscribe(user => {
+            console.log('User récupéré pour post ID', post.id, ':', user); // <-- Ajoute un log ici
+            post.user = user;
+          }, error => {
+            console.error('Erreur récupération user pour post', post.id, error); // <-- Et un log d'erreur
+          });
+        }
+      });
+
       this.updatePaginatedPosts();
       this.loadCommentsCount();
+    }, error => {
+      console.error('Erreur récupération posts', error);
     });
   }
 

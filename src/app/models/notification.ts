@@ -6,5 +6,6 @@ export class Notification {
     type!: string;
     timestamp?: Date;
     seen?: boolean;
+  read: any;
   }
   

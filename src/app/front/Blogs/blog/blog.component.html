@@ -1,3 +1,23 @@
+
+  <div class="main-banner" id="top">
+    <div class="container">
+      <div class="row">
+        
+        <div class="banner-below-image">
+          <img src="../../../../assets/img/banner-item-02.jpg" width="600" height="auto" alt="Image de Genius" class="below-banner-img">
+          <div class="image-caption" style="color: azure;">
+            Découvrez l'univers de la créativité et de l'innovation !
+        </div>
+        </div>
+       
+        
+      </div>
+    </div>
+  </div>
+
+
+
+
 <div class="section events" id="events">
   <div class="container">
     <div class="row">
@@ -41,12 +61,8 @@
                
                <a  routerLink="/mesPosts"  data-filter=".design"  (mouseout)="this.style.backgroundColor='#4e54c8'">My Posts</a>
              </li>
-             <li>
-               <a href="#!" data-filter=".development">Favoris</a>
-             </li>
-             <li>
-               <a href="#!" data-filter=".wordpress">Wordpress</a>
-             </li>
+           
+           
            </ul>
              
              
@@ -92,9 +108,13 @@
               <ul class="d-flex justify-content-between align-items-start flex-wrap">
                 <li class="main-info">
                   <div class="d-flex align-items-center mb-2">
-                    <img [src]="'assets/img/avatar-profile.png'" class="avatar-profile me-3" />
-                    <span class="category">{{ user?.sub }}</span>
+                    <img  [src]="p.user?.image ? 'http://localhost:5100/users/images/' + p.user.imageUrl : 'assets/img/avatar-profile.png'"  class="avatar-profile me-3" />
+                    <div class="d-flex align-items-center">
+                      <p class="mb-0 me-3" style="color:blueviolet"><strong style="color:rgb(104, 104, 104)">Created By:</strong> {{ p.user?.nom }} {{ p.user?.prenom }}</p>
+                      <p class="mb-0"><strong>Email:</strong> {{ p.user?.email }}</p>
+                    </div>
                   </div>
+                
                   <h4 class="post-title">{{ p.title }}</h4>
                 </li>
               

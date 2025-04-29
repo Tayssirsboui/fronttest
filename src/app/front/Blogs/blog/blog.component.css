@@ -1,3 +1,58 @@
+/* 
+---------------------------------------------
+Banner Style
+--------------------------------------------- 
+*/
+
+.main-banner {
+  background-image: url('../../../../assets/img/banner-bg.jpg');
+  background-position: right bottom;
+  background-repeat: no-repeat;
+  background-size: cover;
+  padding: 170px 0px 120px 0px;
+}
+
+
+.banner-below-image {
+  text-align: center;
+  margin-top: -60px; /* remonte un peu si besoin */
+  margin-bottom: 60px; /* espace avant la section suivante */
+}
+
+.below-banner-img {
+  max-width: 100%; /* l'image ne dépasse pas */
+  height: auto;
+  border-radius: 20px; /* optionnel pour faire des bords arrondis */
+  box-shadow: 0px 8px 20px rgba(0,0,0,0.2); /* jolie ombre portée */
+}
+
+
+
+.main-banner .item {
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: cover;
+  border-radius: 25px;
+  padding: 100px 100px;
+  margin-left: 130px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 /* Floating Gemini Chat Button */
 .event_filter  {
   padding: 15px 20px;
@@ -297,6 +352,7 @@ Events Style
   font-size: 20px;
   font-weight: 500;
   width: 100%;
+
 }
 
 .events .item ul li span {
@@ -418,7 +474,6 @@ Events Style
 .avatar-profile:hover {
   transform: scale(1.05);
   box-shadow: 0 6px 16px rgba(0,0,0,0.25);
-  
 }
 
 .back-button {
