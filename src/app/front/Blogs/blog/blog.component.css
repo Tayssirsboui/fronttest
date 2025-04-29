@@ -1,3 +1,18 @@
+.btn-gradient-primary {
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  color: white;
+  border: none;
+  transition: all 0.3s ease;
+}
+
+.btn-gradient-primary:hover {
+  background: linear-gradient(135deg, #5a67d8, #6b46c1);
+  box-shadow: 0 0 10px rgba(102, 126, 234, 0.4);
+  transform: scale(1.03);
+}
+
+
+
 /* 
 ---------------------------------------------
 Banner Style
@@ -619,8 +634,8 @@ Events Style
 }.add-post-button {
   border-radius: 12px;
   padding: 10px 20px;
-  background-color: #7a6ad8;
-  color: white;
+  background-color: #ffffff;
+  color: #7a6ad8;
   border: none;
   cursor: pointer;
   transition: 0.3s ease;

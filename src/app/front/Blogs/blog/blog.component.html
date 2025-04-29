@@ -9,7 +9,21 @@
             Découvrez l'univers de la créativité et de l'innovation !
         </div>
         </div>
-       
+        <div class="col-lg-12 text-center">
+          <div class="section-heading">
+         
+  
+            
+            <h2>nos Blogs</h2>
+            <button (click)="openModal()"
+            class="add-post-button"
+            data-animation="fadeInLeft" 
+            data-delay="0.7s">
+      ➕ Ajouter un post
+    </button>
+  
+          </div>
+        </div>
         
       </div>
     </div>
@@ -21,21 +35,7 @@
 <div class="section events" id="events">
   <div class="container">
     <div class="row">
-      <div class="col-lg-12 text-center">
-        <div class="section-heading">
-       
-
-          <h6>Schedule</h6>
-          <h2>Upcoming Blogs</h2>
-          <button (click)="openModal()"
-          class="add-post-button"
-          data-animation="fadeInLeft" 
-          data-delay="0.7s">
-    ➕ Ajouter un post
-  </button>
-
-        </div>
-      </div>
+  <hr>
       
       <!-- Barre de recherche et tri - Nouvelle disposition -->
       <div class="col-lg-12 mb-5">
@@ -55,11 +55,11 @@
             <hr>
             <ul class="event_filter">
              <li>
-               <a class="is_active" href="#!" data-filter="*">Show All</a>
+               <a class="is_active" href="#!" data-filter="*">Voir Tous</a>
              </li>
              <li>
                
-               <a  routerLink="/mesPosts"  data-filter=".design"  (mouseout)="this.style.backgroundColor='#4e54c8'">My Posts</a>
+               <a  routerLink="/mesPosts"  data-filter=".design"  (mouseout)="this.style.backgroundColor='#4e54c8'">Mes Posts</a>
              </li>
            
            
@@ -67,31 +67,25 @@
              
              
           
-          
-          <!-- Menu de tri (prend 4 colonnes) -->
-          <div class="sort-container">
-            <div class="dropdown">
-              <!-- Bouton pour afficher/masquer les options de tri -->
-              <button class="btn sort-btn dropdown-toggle" 
-                      type="button" 
-                      data-toggle="dropdown"
-                      aria-expanded="false"
-                      (click)="toggleSortOptions()"> <!-- Ajoutez cet événement de clic -->
-                <i class="fas fa-sort-amount-down-alt mr-2"></i>
-                Trier
-              </button>
-              
-              <!-- Les options de tri ne seront affichées que si showSortOptions est vrai -->
-              <div *ngIf="showSortOptions" class="dropdown-menu dropdown-menu-right">
-                <a class="dropdown-item" (click)="sortByDate('latest')">
-                  <i class="fas fa-arrow-down mr-2"></i> Récents d'abord
-                </a>
-                <a class="dropdown-item" (click)="sortByDate('oldest')">
-                  <i class="fas fa-arrow-up mr-2"></i> Anciens d'abord
-                </a>
-              </div>
-            </div>
-          </div>
+          <!-- Bouton de tri -->
+ <!-- Menu déroulant pour le tri -->
+<div class="sort-container d-flex align-items-center mt-3 mt-md-0">
+  <div class="dropdown">
+    <button class="btn btn-gradient-primary dropdown-toggle px-4 py-2 rounded-pill shadow-sm d-flex align-items-center gap-2"
+            type="button" data-bs-toggle="dropdown" aria-expanded="false">
+      <i class="fas fa-sort"></i>
+      <span>{{ selectedSortLabel }}</span>
+    </button>
+    <ul class="dropdown-menu">
+      <li><a class="dropdown-item" (click)="sortByRecentDate()"><i class="fas fa-clock me-2"></i>Les plus récents</a></li>
+      <li><a class="dropdown-item" (click)="sortByOldestDate()"><i class="fas fa-clock me-2"></i>Les plus anciens</a></li>
+      <li><a class="dropdown-item" (click)="sortByComments()"><i class="fas fa-comments me-2"></i>Les plus commentés</a></li>
+      
+    </ul>
+  </div>
+</div>
+
+         
           
         </div>
       </div>

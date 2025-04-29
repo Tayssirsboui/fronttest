@@ -45,6 +45,10 @@ userEmail!:string;
 showSortOptions = false;
   userData: any;
 
+  sortCriterion: 'date' | 'comments' | 'oldest' = 'date';
+  selectedSortLabel = 'Trier';
+
+
   constructor(
     private fb: FormBuilder,
     private router: Router,
@@ -66,10 +70,16 @@ showSortOptions = false;
     this.toastr.info("Chargement des posts", "Info");
     this.loadPosts();
     this.loadUserData(); 
-   
+    this.scrollToTop();
     
   }
 
+  
+  
+  scrollToTop(): void {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+  
   loadUserData() {
     const token = localStorage.getItem('token');
     if (token) {
@@ -148,7 +158,17 @@ showSortOptions = false;
   }
 
   updatePaginatedPosts() {
-    const filtered = this.filteredPosts;
+    let filtered = this.filteredPosts;
+  
+    // Appliquer le tri selon le critère choisi
+    if (this.sortCriterion === 'date') {
+      filtered = filtered.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+    } else if (this.sortCriterion === 'oldest') {
+      filtered = filtered.sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
+    } else if (this.sortCriterion === 'comments') {
+      filtered = filtered.sort((a, b) => (b.commentsCount || 0) - (a.commentsCount || 0));
+    }
+  
     this.totalPosts = filtered.length;
     this.totalPages = Math.max(1, Math.ceil(this.totalPosts / this.postsPerPage));
     this.currentPage = Math.min(this.currentPage, this.totalPages);
@@ -156,6 +176,7 @@ showSortOptions = false;
     this.paginatedPosts = filtered.slice(startIndex, startIndex + this.postsPerPage);
     this.loadCommentsCount();
   }
+  
 
   goToPage(page: number): void {
     if (page >= 1 && page <= this.totalPages) {
@@ -177,23 +198,25 @@ showSortOptions = false;
       this.updatePaginatedPosts();
     }
   }
-   // Méthode pour basculer l'affichage des options de tri
-   toggleSortOptions() {
-    this.showSortOptions = !this.showSortOptions;
+  
+  sortByRecentDate(): void {
+    this.sortCriterion = 'date'; // <-- AJOUTÉ
+    this.selectedSortLabel = 'Les plus récents';
+    this.updatePaginatedPosts(); // laisse Angular gérer le tri ici
+  } 
+  sortByOldestDate(): void {
+    this.sortCriterion = 'oldest'; // <-- AJOUTÉ
+    this.selectedSortLabel = 'Les plus anciens';
+    this.updatePaginatedPosts(); // laisse Angular gérer le tri ici
   }
+  
+  sortByComments(): void {
+    this.sortCriterion = 'comments'; // <-- AJOUTÉ
+    this.selectedSortLabel = 'Les plus commentés';
+    this.updatePaginatedPosts(); // laisse Angular gérer le tri ici
+  }
+  
 
-  sortByDate(order: string): void {
-    if (!this.listPosts) return; // Sécurité
-  
-    if (order === 'latest') {
-      this.listPosts.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
-    } else if (order === 'oldest') {
-      this.listPosts.sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
-    }
-  
-    // Après tri, il faut mettre à jour la pagination
-    this.updatePaginatedPosts();
-  }
 
   onFileSelected(event: any): void {
     const file = event.target.files[0];
@@ -319,7 +342,7 @@ showSortOptions = false;
       });
     }
   }
-  
+
   goBack() {
     this.location.back();
   }

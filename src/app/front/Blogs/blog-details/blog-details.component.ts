@@ -8,8 +8,10 @@ import { Comment } from 'src/app/models/comment';
 import { ToastrService } from 'ngx-toastr';
 import { postRecommendationService } from 'src/app/services/post-recommendation.service';
 import { UserControllerService } from 'src/app/services/services';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import * as RecordRTC from 'recordrtc';
+import Swal from 'sweetalert2';
+import { Location } from '@angular/common';
 
 
 @Component({
@@ -32,6 +34,8 @@ export class BlogDetailsComponent {
   recorder: any;
   isRecording: boolean = false;
   audioStream: any;
+  transcribedText: string = '';
+  currentUtterance: SpeechSynthesisUtterance | null = null;
 
   constructor(
     private bs: BlogService,
@@ -39,16 +43,48 @@ export class BlogDetailsComponent {
     private Ac: ActivatedRoute,
     private enhancementService: postRecommendationService,
     private route: Router,
-    private fb: FormBuilder, private userService: UserControllerService
+    private fb: FormBuilder, private userService: UserControllerService,private location: Location
   ) {
     this.commentForm = this.fb.group({
       description: ['', [Validators.required]],
+      
       createdBy: ['', Validators.required] // <-- kept this since it's used in template
     });
   }
-
+  scrollToTop(): void {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+  // Fonction pour lire en haute voix
+  readAloud(text: string, lang: 'fr' | 'en' = 'fr'): void {
+    if (!text || typeof text !== 'string' || !text.trim()) {
+      console.warn('Texte invalide ou vide.');
+      return;
+    }
   
+    const speechSynthesis = window.speechSynthesis;
+  
+    // Si une lecture est en cours, on l'arrête
+    if (speechSynthesis.speaking) {
+      speechSynthesis.cancel();
+      this.currentUtterance = null;
+      console.log('Lecture arrêtée.');
+      return;
+    }
+  
+    const utterance = new SpeechSynthesisUtterance(text);
+  
+    // Choisir la langue
+    utterance.lang = lang === 'fr' ? 'fr-FR' : 'en-US';
+    utterance.volume = 1.0; // max = 1
+    utterance.rate = 1;
+    utterance.pitch = 1;
+  
+    this.currentUtterance = utterance;
+  
+    speechSynthesis.speak(utterance);
+  }
   ngOnInit() {
+    this.scrollToTop();
     this.id = +this.Ac.snapshot.paramMap.get('id')!;
     
     // Récupérer le post
@@ -68,46 +104,45 @@ export class BlogDetailsComponent {
     this.loadUserData(); 
     this.refreshComments();
   }
+ 
   startRecording() {
-    navigator.mediaDevices.getUserMedia({ audio: true })
-      .then(stream => {
-        this.recorder = new RecordRTC(stream, {
-          type: 'audio',
-          mimeType: 'audio/webm'
-        });
-  
-        this.recorder.startRecording();
-        this.audioStream = stream;
+    navigator.mediaDevices.getUserMedia({ audio: true }).then(stream => {
+      this.audioStream = stream;
+      this.recorder = new RecordRTC(stream, {
+        type: 'audio',
+        mimeType: 'audio/webm'
       });
+      this.recorder.startRecording();
+      this.isRecording = true;
+    });
   }
+  
+  
   
   stopRecording() {
     this.recorder.stopRecording(() => {
-      const blob = this.recorder.getBlob();
-      const audioURL = URL.createObjectURL(blob);
-      console.log('Audio URL:', audioURL);
-      // Tu peux maintenant envoyer le blob à Hugging Face
+      const audioBlob = this.recorder.getBlob();
+      this.uploadToFlask(audioBlob);  // Call the function to upload audio for transcription
     });
-  
-    this.audioStream.getTracks().forEach((track: { stop: () => any; }) => track.stop());
   }
-  uploadAudio(audioBlob: Blob) {
+  uploadToFlask(audioBlob: Blob) {
     const formData = new FormData();
-    formData.append('audio', audioBlob, 'recording.wav');
+    formData.append('audio', audioBlob, 'audio.webm');  // Important: use same key as in Flask
 
-    this.http.post('http://localhost:5000/transcribe', formData).subscribe(
-      (response: any) => {
-        console.log('Transcription:', response.transcription);
-        // Afficher la transcription dans ton commentaire
-        this.toastr.success('Commentaire transcrit avec succès');
+    this.http.post<any>('http://localhost:5000/transcribe', formData).subscribe({
+      next: (res) => {
+        console.log('Transcription:', res);
+        if (res.transcription) {  // Assuming Flask returns transcribed text under "transcription"
+          // Add the transcribed text to the description
+          this.commentForm.patchValue({ description: res.transcription });
+        }
       },
-      (error) => {
-        console.error('Erreur lors de la transcription:', error);
-        this.toastr.error('Erreur lors de la transcription');
+      error: (err) => {
+        console.error('Erreur transcription:', err);
       }
-    );
+    });
   }
-  
+
   loadUserData() {
     const token = localStorage.getItem('token');
     if (token) {
@@ -189,42 +224,67 @@ this.commentForm.get('description')?.markAsDirty(); // <-- Add this
 
   addComment(): void {
     const trimmedDescription = this.commentForm.value.description?.trim();
-    console.log('Submitting comment:', trimmedDescription);
     if (!trimmedDescription) {
-      alert("Le champ commentaire est vide !");
+      Swal.fire({
+        icon: 'warning',
+        title: 'Champ vide',
+        text: 'Le champ commentaire est vide !',
+      });
       return;
     }
-    if (!trimmedDescription) {
-      alert("Le champ commentaire est vide !");
-      return;
-    }   
-    // ✅ Patch createdBy if it's required
+  
     this.commentForm.patchValue({
       description: trimmedDescription,
-      //createdBy: 'CurrentUserName' // <-- Replace with real username if available
+      createdBy: this.userData?.username || 'Anonymous'
     });
-
+  
     const commentData = {
       ...this.commentForm.value,
-      postId: this.id,  // Use the postId (this.id)
+      postId: this.id,
       userId: this.userId
     };
-    
-
+  
     if (this.editMode && this.selectedCommentId) {
-      this.bs.updateComment(this.selectedCommentId!, this.userId, commentData).subscribe(() => {
-        this.toastr.info('Commentaire modifié avec succès.', 'Info');
-        this.refreshComments();
-        this.resetForm();
+      this.bs.updateComment(this.selectedCommentId!, this.userId, commentData).subscribe({
+        next: () => {
+          Swal.fire({
+            icon: 'success',
+            title: 'Commentaire modifié',
+            text: 'Le commentaire a été modifié avec succès.',
+          });
+          this.refreshComments();
+          this.resetForm();
+        },
+        error: () => {
+          Swal.fire({
+            icon: 'error',
+            title: 'Erreur',
+            text: 'Une erreur est survenue lors de la modification.',
+          });
+        }
       });
     } else {
-      this.bs.addComment(this.id, this.userId, commentData).subscribe(() => {
-        this.toastr.success('Commentaire ajouté avec succès.');
-        this.refreshComments();
-        this.resetForm();
+      this.bs.addComment(this.id, this.userId, commentData).subscribe({
+        next: () => {
+          Swal.fire({
+            icon: 'success',
+            title: 'Commentaire ajouté',
+            text: 'Votre commentaire a été publié avec succès.',
+          });
+          this.refreshComments();
+          this.resetForm();
+        },
+        error: () => {
+          Swal.fire({
+            icon: 'error',
+            title: 'Erreur',
+            text: 'Impossible d\'ajouter le commentaire.',
+          });
+        }
       });
     }
   }
+  
 
   editComment(comment: any) {
     this.editMode = true;
@@ -258,18 +318,32 @@ this.commentForm.get('description')?.markAsDirty(); // <-- Add this
   });}
 
   likeComment(commentId: number): void {
+    // Check if the user has already liked the comment
+    const comment = this.comments.find(c => c.idComment === commentId);
+    
+    if (!comment) return; // Handle the case where the comment is not found
+
+    // If the user has already liked the comment, don't do anything
+    if (comment.likedByUser) {
+        return;
+    }
+
+    // If the user hasn't liked it yet, proceed with liking the comment
     this.bs.likeComment(commentId, this.userId).subscribe({
-      next: () => {
-        const comment = this.comments.find(c => c.idComment === commentId);
-        if (comment && !comment.likedByUser) {
-          comment.likes = (comment.likes || 0) + 1;
-          comment.likedByUser = true; // prevent further increments on front
+        next: () => {
+            // Increment the likes counter
+            comment.likes = (comment.likes || 0) + 1;
+            // Mark the comment as liked by the user
+            comment.likedByUser = true;
+        },
+        error: (err) => {
+            console.error('Error liking comment:', err);
         }
-      },
-      error: (err) => {
-        console.error('Error liking comment:', err);
-      }
     });
-  }
+}
+
+goBack() {
+  this.location.back();
+}
   
 }

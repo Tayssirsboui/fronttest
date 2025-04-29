@@ -1,4 +1,19 @@
 /* Dans votre fichier CSS */
+/* Style du bouton "Lire en haute voix" */
+.btn-read-aloud {
+  background-color: #007bff;
+  padding: 10px 20px;
+  border-radius: 5px;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  font-size: 1.1rem;
+}
+
+.btn-read-aloud:hover {
+  background-color: #0056b3;
+}
+
 @import "ngx-toastr/toastr";
 .fullscreen-loader {
   position: fixed;
