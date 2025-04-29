@@ -115,6 +115,8 @@ import { MatListModule } from '@angular/material/list';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { PdfViewerModule } from 'ng2-pdf-viewer';
 import { AffichageCategorieComponent } from './front/affichage-categorie/affichage-categorie.component';
+import { StatRessourceComponent } from './back/stat-ressource/stat-ressource.component';
+import { AvisRessourceComponent } from './front/avis-ressource/avis-ressource.component';
 
 
 
@@ -188,6 +190,8 @@ import { AffichageCategorieComponent } from './front/affichage-categorie/afficha
     AjoutRessourcesComponent,
     DetailRessourceComponent,
     ConfirmationDialogComponent,
+    StatRessourceComponent,
+    AvisRessourceComponent,
   ],
  
   imports: [
@@ -244,7 +248,8 @@ import { AffichageCategorieComponent } from './front/affichage-categorie/afficha
    ReactiveFormsModule,
    MatListModule,
    MatGridListModule,
-   PdfViewerModule
+   PdfViewerModule,
+   
       
    
   ],

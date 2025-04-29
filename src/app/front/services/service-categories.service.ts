@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Categorie } from 'src/classes-categorie/Categorie';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { catchError, Observable, throwError } from 'rxjs';
 import { FullResources, Ressource } from 'src/classes-categorie/ressource';
 
 @Injectable({
@@ -65,6 +65,20 @@ retirerFavori(idUser: number, idCategorie: number): Observable<void> {
 getFavoris(idUser: number): Observable<Categorie[]> {
   return this.http.get<Categorie[]>(`${this.apiUrl}/api/favoris/utilisateur/${idUser}`);
 }
-
+// Méthode pour liker une catégorie
+likeCategorie(categorieId: number, userId: number): Observable<void> {
+  return this.http.post<void>(
+    `${this.apiUrl}/${categorieId}/like?userId=${userId}`, 
+    {}
+  ).pipe(
+    catchError((error) => {
+      if (error.status === 400) {
+        // L'utilisateur a déjà liké
+        return throwError(() => new Error('Vous avez déjà liké cette catégorie'));
+      }
+      return throwError(() => new Error('Erreur lors du like'));
+    })
+  );
+}
 
 }

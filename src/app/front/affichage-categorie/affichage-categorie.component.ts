@@ -9,6 +9,7 @@ import { AddCategorieComponent } from '../add-categorie/add-categorie.component'
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { PageEvent } from '@angular/material/paginator';
+import { TokenService } from 'src/app/services/token/token.service';
 @Component({
   selector: 'app-affichage-categorie',
   templateUrl: './affichage-categorie.component.html',
@@ -23,9 +24,10 @@ export class AffichageCategorieComponent {
      private rs: CategorieService,
      private router: Router,
      private dialog: MatDialog,
-     private cdRef: ChangeDetectorRef) {}
-
-
+     private cdRef: ChangeDetectorRef,
+    private tk:TokenService) {}
+    role: string = '';
+token= localStorage.getItem('token') as string;
   categories: Categorie[] = [];
 
   private showSuccess(message: string): void {
@@ -45,6 +47,12 @@ export class AffichageCategorieComponent {
       verticalPosition: 'top'
     });
   }
+
+
+  canEdit(): boolean {
+    return  this.role === 'admin';
+  }
+ 
   openModal(categorie?: Categorie) {
    
     const dialogRef = this.dialog.open(AddCategorieComponent, {
@@ -187,6 +195,10 @@ get totalPages(): number {
   }
  
   ngOnInit(): void {
+    this.role=this.decodeTokenPayload(this.token).role;
+    this.idUser=this.decodeTokenPayload(this.token).id;
+   
+    this.scrollToTop();
     this.rs.getcategorie().subscribe(
       (data) => {
         this.categories = data;
@@ -303,7 +315,7 @@ deleteCategorie(categorieId: number): void {
     return text.charAt(0).toUpperCase() + text.slice(1).toLowerCase();
   }
 
-  incrementLike(categorie: any): void {
+  /*incrementLike(categorie: any): void {
     console.log('Catégorie reçue dans incrementLike :', categorie);
 
     // Vérifiez si l'ID de la catégorie est présent
@@ -328,7 +340,7 @@ deleteCategorie(categorieId: number): void {
         alert('Erreur lors de la mise à jour des likes. Veuillez réessayer.');
       }
     });
-  }
+  }*/
   /*setFilter(filter: string): void {
     this.selectedFilter = filter;
     if (filter === '*') {
@@ -430,7 +442,7 @@ closeCard(): void {
 
 //liste favorite 
 //const userId = this.authService.getUserId();//a ajouter pour recuperer
-idUser: number = 1; // ID de l'utilisateur (à adapter selon votre logique)
+idUser: number = 0; // ID de l'utilisateur (à adapter selon votre logique)
 isFavorite = false;
 favoris: Categorie[] = [];
 
@@ -495,6 +507,64 @@ showOnlyFavorites: boolean = false; // Nouvelle propriété pour le mode favoris
   this.cdRef.detectChanges();
 }
 
+
+
+//like 
+
+// Méthode pour vérifier si un utilisateur a déjà aimé une catégorie
+checkIfLiked(categorieId: number): boolean {
+  return this.favoris.some(fav => fav.idCategorie === categorieId);
+}
+toggleLike(categorie: Categorie): void {
+  // Vérifie d'abord localement si l'utilisateur a déjà liké
+  if (this.checkIfLiked(categorie.idCategorie)) {
+    this.showError('Vous avez déjà liké cette catégorie ! ❤️');
+    return;
+  }
+
+  this.rs.likeCategorie(categorie.idCategorie, this.idUser).subscribe({
+    next: () => {
+      // Mise à jour locale si le like est réussi
+      categorie.likes = (categorie.likes || 0) + 1;
+      this.updateCategorieLikeState(categorie, true);
+      this.showSuccess(`Vous avez liké "${categorie.nomCategorie}"`);
+    },
+    error: (err) => {
+      // Cette partie sera exécutée si le backend renvoie une erreur
+      if (err.message.includes('déjà liké')) {
+        this.showError('Vous avez déjà liké cette catégorie ! ❤️');
+      } else {
+        this.showError('Erreur lors de l\'ajout du like');
+      }
+    }
+  });
+}
+
+// Méthode pour mettre à jour l'état du like dans la liste des catégories
+updateCategorieLikeState(categorie: Categorie, liked: boolean): void {
+  // Met à jour l'état du like dans le tableau de favoris local
+  if (liked) {
+    this.favoris.push(categorie);
+  } else {
+    this.favoris = this.favoris.filter(fav => fav.idCategorie !== categorie.idCategorie);
+  }
+}
+
+
+
+//user 
+
+
+private decodeTokenPayload(token: string): any {
+  try {
+    const payload = token.split('.')[1]; // prendre la partie payload du JWT
+    const decodedPayload = atob(payload); // décoder base64
+    return JSON.parse(decodedPayload); // convertir en objet JSON
+  } catch (error) {
+    console.error('Failed to decode token payload', error);
+    return null;
+  }
+}
 
 
 }

@@ -1,3 +1,6 @@
+<head><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+
 <div class="details-container" *ngIf="ressource" [@fadeIn]>
   <!-- Bouton Retour -->
   <button class="btn-back" [routerLink]="['/ressource', ressource.idCategorie]">
@@ -20,7 +23,8 @@
         <mat-icon>menu_book</mat-icon>
         {{ ressource.titre }}
       </h2>
-
+   
+      
       <!-- Badges -->
       <div class="badges">
         <span class="badge" *ngIf="ressource.type">
@@ -59,16 +63,20 @@
 
       <!-- Boutons d'action -->
       <div class="action-buttons">
-        <!-- Boutons admin -->
-        <button class="btn-action btn-edit" (click)="openModal(ressource, ressource.idCategorie)">
-          <mat-icon>edit</mat-icon>
-          Modifier
-        </button>
+<!-- Boutons admin - Seulement visibles/actifs si l'utilisateur est propriétaire -->
+<button class="btn-action btn-edit" 
+        [disabled]="!canEdit()"
+        (click)="openModal(ressource, ressource.idCategorie)">
+  <mat-icon>edit</mat-icon>
+  Modifier
+</button>
 
-        <button class="btn-action btn-delete" (click)="confirmSuppression()" >
-          <mat-icon>delete</mat-icon>
-          Supprimer
-        </button>
+<button class="btn-action btn-delete" 
+        [disabled]="!canEdit()"
+        (click)="confirmSuppression()">
+  <mat-icon>delete</mat-icon>
+  Supprimer
+</button>
 
         <!-- Bouton Acheter -->
         
@@ -135,17 +143,17 @@
         </div>
      </div>
 <!-- Affichage de l'animation de chargement (SVG) pendant la génération -->
-<div *ngIf="mindmapUrl" class="mindmap-container">
+ <div *ngIf="mindmapUrl" class="mindmap-container">
   <h3>🗺️ Mindmap générée</h3>
   <div class="image-frame">
     <img [src]="mindmapUrl" alt="Mindmap"  style="max-width: 100%;"  />
   </div>
-</div>
+ </div>
 
 
 <!-- Affichage de l'animation de chargement (SVG) pendant la génération -->
-<div *ngIf="isGenerating" class="loading-container">
-<svg xmlns="http://www.w3.org/2000/svg" height="200px" width="200px" viewBox="0 0 200 200" class="pencil">
+ <div *ngIf="isGenerating" class="loading-container">
+ <svg xmlns="http://www.w3.org/2000/svg" height="200px" width="200px" viewBox="0 0 200 200" class="pencil">
 	<defs>
 		<clipPath id="pencil-eraser">
 			<rect height="30" width="30" ry="5" rx="5"></rect>
@@ -175,9 +183,9 @@
 			<polygon points="15 0,20 10,10 10" fill="hsl(223,10%,10%)"></polygon>
 		</g>
 	</g>
-</svg>
+ </svg>
   
-</div>  
+ </div>  
     <!-- PDF Viewer -->
     
       <pdf-viewer 
@@ -211,7 +219,13 @@
     {{ paiementEnCours ? 'Traitement...' : 'Acheter (' + (ressource.prix | currency:'TND':'symbol':'1.3-3') + ')' }}
   </button>
 
-</div>
+ </div>
+<br>
+<br>
+ <a >
+  <button style="padding: 10px 20px; background-color: #007BFF; color: white; border:
+   none; border-radius: 5px; cursor: pointer;" [routerLink]="['/avisResource', ressource.id]">
+    Voir les avis
+  </button>
+</a>
 
-
-</div>

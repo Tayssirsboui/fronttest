@@ -45,6 +45,8 @@ import { AffichageCategorieComponent } from './front/affichage-categorie/afficha
 import { RessourcesComponent } from './front/ressources/ressources.component';
 import { DetailRessourceComponent } from './front/detail-ressource/detail-ressource.component';
 
+import { StatRessourceComponent } from './back/stat-ressource/stat-ressource.component';
+import { AvisRessourceComponent } from './front/avis-ressource/avis-ressource.component';
 
 const routes: Routes = [
   {
@@ -69,6 +71,7 @@ const routes: Routes = [
       {path:'participation', component: ListeParticipationsComponent},
       { path: 'projets', component: ListProjetsComponent ,
         canActivate: [AuthGuard]},
+        {path: 'statRessource', component: StatRessourceComponent}
     ]
   },
   {
@@ -120,7 +123,7 @@ const routes: Routes = [
       { path: 'community/:id/create-post', component: CreatePostComponent,canActivate: [AuthGuard] },
       { path: 'detail-ressource/:id', component: DetailRessourceComponent,canActivate: [AuthGuard] },
       { path: 'ressource/:idCategorie', component: RessourcesComponent,canActivate: [AuthGuard]},
-
+      { path: 'avisResource/:id', component: AvisRessourceComponent},
       {
         path: 'profil', component: ProfilComponent,
         canActivate: [AuthGuard]

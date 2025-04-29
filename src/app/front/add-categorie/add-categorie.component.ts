@@ -6,6 +6,7 @@ import { Categorie } from 'src/classes-categorie/Categorie';
 import { CategorieService } from 'src/app/front/services/service-categories.service';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { TokenService } from 'src/app/services/token/token.service';
 @Component({
   selector: 'app-add-categorie', // Sélecteur du composant (utilisé dans le HTML)
   templateUrl: './add-categorie.component.html', // Chemin du fichier HTML associé
@@ -18,16 +19,17 @@ export class AddCategorieComponent implements OnInit {
   isEditMode: boolean = false; // Indique si le composant est utilisé pour modifier une catégorie
   idUser: number = 0; // ID de l'utilisateur (non utilisé dans le code actuel)
   // Injection des dépendances nécessaires via le constructeur
-  constructor(
+  constructor(private tk:TokenService,
     private fb: FormBuilder, // FormBuilder pour créer le formulaire réactif
     private categorieService: CategorieService, // Service pour gérer les catégories (ajout, modification)
     private dialogRef: MatDialogRef<AddCategorieComponent>, 
     private snackBar: MatSnackBar,// Référence à la boîte de dialogue (Material)
     @Inject(MAT_DIALOG_DATA) public data: Categorie | null // Données injectées dans le dialogue (mode édition)
   ) {}
-
+  token= localStorage.getItem('token') as string;
   // Méthode appelée à l’initialisation du composant
   ngOnInit(): void {
+    this.idUser=this.decodeTokenPayload(this.token).id;
     this.isEditMode = !!this.data?.idCategorie; // Détermine si le composant est en mode édition
 
     // Initialisation du formulaire réactif avec validation
@@ -132,4 +134,21 @@ export class AddCategorieComponent implements OnInit {
       });
     }
   }
+
+
+  
+//user 
+
+
+private decodeTokenPayload(token: string): any {
+  try {
+    const payload = token.split('.')[1]; // prendre la partie payload du JWT
+    const decodedPayload = atob(payload); // décoder base64
+    return JSON.parse(decodedPayload); // convertir en objet JSON
+  } catch (error) {
+    console.error('Failed to decode token payload', error);
+    return null;
+  }
+}
+
 }
