@@ -1,0 +1,39 @@
+<h2 mat-dialog-title>Détails du projet</h2>
+
+<div mat-dialog-content class="details-container">
+
+  <h4>Titre : {{ projet.titre }}</h4>
+  <p><strong>Description :</strong> {{ projet.description }}</p>
+
+  <p><strong>Catégorie :</strong> {{ projet.categorie }}</p>
+  <p><strong>Date de création :</strong> {{ projet.dateCreation | date:'dd MMM yyyy' }}</p>
+  <p><strong>Fin prévue :</strong> {{ projet.dateFinPrevue | date:'dd MMM yyyy' }}</p>
+
+  <div *ngIf="projet.competencesRequises?.length">
+    <h5>Compétences requises :</h5>
+    <ul>
+      <li *ngFor="let comp of projet.competencesRequises">{{ comp }}</li>
+    </ul>
+  </div>
+
+  <div *ngIf="projet.taches?.length">
+    <h5>Tâches :</h5>
+    <ul>
+      <li *ngFor="let tache of projet.taches">{{ tache.titre }}</li>
+    </ul>
+  </div>
+
+  <div *ngIf="projet.collaborations?.length">
+    <h5>Collaborations :</h5>
+    <ul>
+      <li *ngFor="let collab of projet.collaborations">
+        Rôle : {{ collab.role }} - Statut : {{ collab.statut }}
+      </li>
+    </ul>
+  </div>
+
+</div>
+
+<div mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close>Fermer</button>
+</div>

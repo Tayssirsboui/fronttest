@@ -32,4 +32,8 @@ export class ProjetService {
   getFullProjet(projetId: number) {
     return this.http.get<Projet>(`http://localhost:8222/projet/with-collaborations/${projetId}`);
   }
+  getProjetWithCollaborations(id: number) {
+    return this.http.get<Projet>(`http://localhost:8222/projet/with-collaborations/${id}`);
+  }
+  
 }

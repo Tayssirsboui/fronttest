@@ -5,6 +5,7 @@ import { AjouterProjetComponent } from '../ajouter-projet/ajouter-projet.compone
 import { AjouterCollaborationComponent } from '../ajouter-collaboration/ajouter-collaboration.component';
 import { Router } from '@angular/router';
 import { ProjetService } from 'src/app/services/projet.service';
+import { ProjetDetailsComponent } from '../projet-details/projet-details.component';
 
 @Component({
   selector: 'app-projets',
@@ -37,13 +38,23 @@ filterBy(category: string) {
   }
 
   // Méthode pour charger les projets depuis le service
- chargerProjets(): void {
-  this.projetService.getProjets().subscribe(data => {
-    this.projets = data;
-    this.categories = Array.from(new Set(data.map(p => p.categorie))).sort();
-    this.applyFilters(); // appliquer filtre + pagination dès le début
-  });
-}
+  chargerProjets(): void {
+    this.projetService.getProjets().subscribe(data => {
+      // 🔥 NE PAS remplacer data directement !!
+      this.projets = data;
+  
+      // 🔥 Charger les collaborations uniquement en plus
+      this.projets.forEach(projet => {
+        this.projetService.getProjetWithCollaborations(projet.id).subscribe(fullProjet => {
+          projet.collaborations = fullProjet.collaborations;
+        });
+      });
+  
+      this.categories = Array.from(new Set(this.projets.map(p => p.categorie))).sort();
+      this.applyFilters();
+    });
+  }
+  
 applyFilters(): void {
   let result = this.projets;
 
@@ -126,11 +137,12 @@ getFilteredData(): Projet[] {
   
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        // 👇 Recharge la liste après ajout
+        // 👉 Recharge TOUTE la liste de projets depuis le backend pour avoir les vraies données
         this.chargerProjets();
       }
     });
   }
+  
   
   
   // openAjouterProjet(): void {
@@ -185,4 +197,13 @@ onModifier(projet: Projet): void {
     }
   }
   
+  ouvrirDetails(projet: Projet) {
+    this.dialog.open(ProjetDetailsComponent, {
+      width: '700px',
+      data: projet
+    });
+  }
+  
+
+
 }

@@ -10,5 +10,5 @@
 
 <div mat-dialog-actions align="end">
   <button mat-stroked-button color="warn" (click)="onCancel()">Annuler</button>
-  <button mat-flat-button color="primary" [disabled]="!collaborationForm.valid" (click)="onSubmit()">Soumettre</button>
+  <button mat-flat-button color="primary" [disabled]="collaborationForm.invalid" (click)="onSubmit()">Soumettre</button>
 </div>

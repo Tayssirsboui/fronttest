@@ -2,7 +2,7 @@ import { Component, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Projet } from 'src/app/models/projet';
 import { ProjetService } from 'src/app/services/projet.service';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms';
 
 @Component({
   selector: 'app-ajouter-projet',
@@ -28,31 +28,50 @@ export class AjouterProjetComponent {
       categorie: [data?.categorie || '', Validators.required],
       dateFinPrevue: [data?.dateFinPrevue || '', Validators.required],
       nombreMaxCollaborateurs: [data?.nombreMaxCollaborateurs || 1, [Validators.required, Validators.min(1)]],
-      competencesRequises: [data?.competencesRequises || [], Validators.required]
+      competencesRequises: [data?.competencesRequises || [], Validators.required],
+      taches: this.fb.array([]) // Ajout du form array pour les taches
     });
+  }
+
+  get taches(): FormArray {
+    return this.projetForm.get('taches') as FormArray;
+  }
+
+  addTache(): void {
+    const tacheForm = this.fb.group({
+      titre: ['', Validators.required],
+      description: ['', Validators.required],
+      estimation: ['', Validators.required],
+      priorite: ['', Validators.required],
+      statut: ['', Validators.required],
+    });
+    this.taches.push(tacheForm);
+  }
+
+  removeTache(index: number): void {
+    this.taches.removeAt(index);
   }
 
   onSubmit(): void {
     const projet = this.projetForm.value;
-  
-    // Convertir la string en tableau si c'est un ajout
+
+    // Convertir la string en tableau si besoin
     if (typeof projet.competencesRequises === 'string') {
       projet.competencesRequises = projet.competencesRequises
         .split(',')
         .map((c: string) => c.trim());
     }
-  
+
     if (!this.isEditMode) {
-      projet.dateCreation = new Date(); // Ajout automatique de la date
+      projet.dateCreation = new Date();
     }
-  
+
     if (this.isEditMode) {
       this.projetService.updateProjet(projet).subscribe(() => this.dialogRef.close(true));
     } else {
       this.projetService.addProjet(projet).subscribe(() => this.dialogRef.close(true));
     }
   }
-  
 
   onCancel(): void {
     this.dialogRef.close(false);

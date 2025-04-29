@@ -21,15 +21,20 @@ export class AjouterCollaborationComponent implements OnInit {
 
   ngOnInit(): void {
     this.isEditMode = !!this.data?.id;
-
+  
     this.collaborationForm = this.fb.group({
       id: [this.data?.id],
       role: [this.data?.role || '', Validators.required],
       statut: [this.data?.statut || 'Non traité'],
       dateDemande: [this.data?.dateDemande || new Date()],
       dateValidation: [this.data?.dateValidation || null],
-      projetId: [this.data?.projetId || '', Validators.required]
+      projetId: [this.data?.projetId || null, Validators.required]  // ✅ forcé depuis le data
     });
+  
+    // 👇 AJOUT TRES IMPORTANT !!
+    if (this.data?.projetId) {
+      this.collaborationForm.patchValue({ projetId: this.data.projetId });
+    }
   }
 
   onSubmit(): void {

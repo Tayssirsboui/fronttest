@@ -115,6 +115,7 @@ import { MatListModule } from '@angular/material/list';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { PdfViewerModule } from 'ng2-pdf-viewer';
 import { AffichageCategorieComponent } from './front/affichage-categorie/affichage-categorie.component';
+import { ProjetDetailsComponent } from './front/Gestion-Projets/projet-details/projet-details.component';
 
 
 
@@ -188,6 +189,7 @@ import { AffichageCategorieComponent } from './front/affichage-categorie/afficha
     AjoutRessourcesComponent,
     DetailRessourceComponent,
     ConfirmationDialogComponent,
+    ProjetDetailsComponent,
   ],
  
   imports: [

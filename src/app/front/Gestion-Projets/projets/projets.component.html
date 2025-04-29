@@ -96,25 +96,25 @@ class="projet-wrapper mb-4"
             <button 
               class="btn btn-sm btn-outline-custom-success" 
               (click)="onCollaborer(projet.id)" 
-              [disabled]="projet.collaborations?.length >= projet.nombreMaxCollaborateurs"
+              [disabled]="getCollaborateursActuels(projet) >= projet.nombreMaxCollaborateurs"
               title="Collaborer">
               🤝 Collaborer
             </button>
 
-          <span *ngIf="projet.collaborations?.length >= projet.nombreMaxCollaborateurs" 
-            class="badge bg-danger ms-2">
-            Complet
-          </span>
+         <span *ngIf="getCollaborateursActuels(projet) >= projet.nombreMaxCollaborateurs" 
+  class="badge bg-danger ms-2">
+  Complet
+</span>
 
           </div>
           
         </div>
   
         <div class="arrow-container">
-          <div class="arrow-circle">
+          <div class="arrow-circle" (click)="ouvrirDetails(projet)" style="cursor: pointer;">
             <span class="arrow">&gt;</span>
           </div>
-        </div>
+        </div>        
       </div>
     </div>
   </div>

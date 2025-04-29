@@ -62,27 +62,31 @@ export class RoadmapModalComponent implements OnInit {
   validerRoadmap(): void {
     const projetId = this.collab.projet.id;
     const projetTitre = this.collab.projet.titre;
-  
+
     this.subtasks.forEach(task => {
       const formattedTask = {
         ...task,
         description: 'Ajoutée depuis IA',
         priorite: this.convertPriorite(task.priorite),
         statut: 'À faire',
-        projetId: projetId, // 🧩 assure le lien
-        projet: { id: projetId, titre: projetTitre } // 💡 mini objet Projet
+        projetId: projetId,
+        projet: { id: projetId, titre: projetTitre }
       };
-  
+
       this.tacheService.addTache(formattedTask, projetId).subscribe();
     });
-  
-    // ✅ Redirection avec délai
+
     setTimeout(() => {
       this.dialogRef.close();
       this.router.navigate(['/kanban', projetId]);
     }, 1000);
   }
-  
+
+  allerAuKanban(): void {
+    const projetId = this.collab.projet.id;
+    this.dialogRef.close();
+    this.router.navigate(['/kanban', projetId]);
+  }
 
   private convertPriorite(p: string): 'Haute' | 'Moyenne' | 'Faible' {
     switch (p.toLowerCase()) {
@@ -93,4 +97,3 @@ export class RoadmapModalComponent implements OnInit {
     }
   }
 }
-
