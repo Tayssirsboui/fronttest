@@ -47,11 +47,19 @@ token= localStorage.getItem('token') as string;
       verticalPosition: 'top'
     });
   }
-
-
-  canEdit(): boolean {
-    return  this.role === 'admin';
+  canEdit(categorie: Categorie): boolean {
+    return this.moi(categorie);
   }
+  
+  moi(categorie: Categorie): boolean {
+
+    return categorie?.idUser?.toString() === this.idUser?.toString();
+
+  }
+
+  // canEdit(): boolean {
+  //   return  this.role === 'admin';
+  // }
  
   openModal(categorie?: Categorie) {
    
@@ -197,7 +205,7 @@ get totalPages(): number {
   ngOnInit(): void {
     this.role=this.decodeTokenPayload(this.token).role;
     this.idUser=this.decodeTokenPayload(this.token).id;
-   
+ 
     this.scrollToTop();
     this.rs.getcategorie().subscribe(
       (data) => {

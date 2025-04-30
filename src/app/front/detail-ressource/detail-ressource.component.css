@@ -808,4 +808,9 @@ button {
   width: 1000px;
   height: 400px;
   object-fit: cover; /* ou 'cover' si tu veux garder les proportions */
+}.btn-action:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+  filter: grayscale(60%);
 }

@@ -314,7 +314,7 @@ async pay(resourceName: string, amount: number , ressourceId: number) {
   this.http.post<any>('http://localhost:5010/api/payment/create-checkout-session', {
     ressourceId: this.id,
     utilisateurId: this.idUser,
-    
+    email: this.decodeTokenPayload(this.token).sub,
     resourceName: resourceName,
     amount: amount * 100, // conversion en centimes
     successUrl: `http://localhost:4200/#/detail-ressource/${this.id}`,

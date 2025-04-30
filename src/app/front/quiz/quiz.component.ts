@@ -340,4 +340,26 @@ export class QuizComponent implements OnInit, OnDestroy {
       this.filteredTests = [...this.tests]; // If no search query, show all quizzes
     }
   }
+  get facebookShareLink(): string {
+    const baseUrl = 'https://www.facebook.com/sharer/sharer.php';
+    const url = encodeURIComponent(this.shareUrl); // Required URL
+    const quote = encodeURIComponent(
+      `🎉 J'ai terminé le quizz "${this.currentTest?.testDTO?.title}" avec un score de ${this.submissionResult?.percentage}% (${this.submissionResult?.correctAnswers} réponses correctes). Testez vos connaissances maintenant !`
+    );
+    return `${baseUrl}?u=${url}&quote=${quote}`;
+  }
+  get twitterShareLink(): string {
+    const quizTitle = this.currentTest?.testDTO?.title || 'un quiz';
+    const score = this.submissionResult?.percentage || 0;
+    const correct = this.submissionResult?.correctAnswers || 0;
+    const baseUrl = 'https://twitter.com/intent/tweet';
+  
+    const text = encodeURIComponent(
+      `🎉 J'ai terminé le quiz "${quizTitle}" avec un score de ${score}% (${correct} bonnes réponses) !`
+    );
+    const url = encodeURIComponent(this.shareUrl); // make sure this is the link to your quiz or result
+  
+    return `${baseUrl}?text=${text}&url=${url}`;
+  }
+  
 }

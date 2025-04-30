@@ -1,88 +1,156 @@
 <!-- Styles -->
 <style>
   .profile-page {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #f9f9f9, #e0e7ff);
+  font-family: 'Segoe UI', sans-serif;
+}
+.form-section {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background: url('assets/img/slider_2.jpg') no-repeat center center/cover;
+  font-family: 'Segoe UI', sans-serif;
+  padding: 1rem;
+  position: relative;
+}
 
-  .profile-img {
-    width: 150px;
-    height: 150px;
-    object-fit: cover;
-    border: 4px solid white;
-    box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2);
-  }
-  .btn-submit {
-      width: 100%;
-      padding: 0.8rem;
-      border: none;
-      background: #6610f2;
-      color: white;
-      font-size: 1rem;
-      border-radius: 8px;
-      cursor: pointer;
-      transition: background 0.3s ease;
-      margin: 10px;
+.overlay-card {
+  background-color: rgba(255, 255, 255, 0.8); /* 🧊 Semi-transparent white */
+  border-radius: 20px;
+  padding: 2rem;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+  max-width: 400px;
+  width: 100%;
+}
+
+.form-section {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      background: url('assets/img/slider_2.jpg') no-repeat center center/cover;
+      font-family: 'Segoe UI', sans-serif;
+      padding: 1rem;
+      position: relative;
     }
+.profile-img {
+  width: 160px;
+  height: 160px;
+  border-radius: 50%; /* ⭕ Makes it circular */
+  object-fit: cover;  /* 📸 Ensures the image fills the container */
+  border: 5px solid #ffffff;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+  transition: transform 0.3s ease-in-out;
+}
 
-  .change-photo-btn {
-    position: absolute;
-    bottom: 0;
-    right: 0;
-    transform: translate(25%, 25%);
-    border-radius: 50%;
-    padding: 0.4rem 0.5rem;
-    background-color: #0a66c2;
-    border: none;
-    color: white;
-    box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.3);
+.profile-img:hover {
+  transform: scale(1.05);
+}
+
+.btn-submit {
+  width: 200px;
+  padding: 0.75rem;
+  border: none;
+  background: #6610f2;
+  color: white;
+  font-size: 1rem;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.2s ease;
+}
+
+.btn-submit:hover {
+  background-color: #520dc2;
+  transform: translateY(-2px);
+}
+
+.change-photo-btn {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  transform: translate(25%, 25%);
+  border-radius: 50%;
+  padding: 0.5rem 0.6rem;
+  background-color: #0a66c2;
+  border: none;
+  color: white;
+  font-size: 1rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+  transition: background-color 0.3s ease;
+}
+
+.change-photo-btn:hover {
+  background-color: #004182;
+}
+
+.btn-outline-primary,
+.btn-outline-secondary {
+  padding: 0.6rem 1.2rem;
+  border-radius: 10px;
+  transition: all 0.3s ease;
+}
+
+.btn-outline-primary:hover,
+.btn-outline-secondary:hover {
+  transform: translateY(-2px);
+}
+
+@media (max-width: 576px) {
+  .profile-img {
+    width: 120px;
+    height: 120px;
   }
 
-  .change-photo-btn:hover {
-    background-color: #004182;
+  .btn-submit {
+    width: 100%;
   }
+
+  .d-flex.gap-3 {
+    flex-direction: column;
+  }
+}
+
 </style>
 
+
 <!-- FontAwesome if not already loaded -->
+<!-- FontAwesome -->
 <link
   rel="stylesheet"
   href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
   crossorigin="anonymous"
-  referrerpolicy="no-referrer" />
+/>
 
-<section class="profile-page vh-100 bg-light">
-  <div class="container py-5">
-    <div class="text-center">
-      <div class="position-relative d-inline-block">
-        <img
-          src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava2-bg.webp"
-          class="rounded-circle img-fluid profile-img"
-          alt="Profile Image" />
+<section class="form-section">
+  <div class="overlay-card text-center">
+    <img
+      [src]="profileImage || defaultImage"
+      class="profile-img mb-3"
+      alt="Profile Image" />
 
-        <button class="btn btn-sm btn-primary change-photo-btn" (click)="onChangePhoto()">
-          <i class="fas fa-camera"></i>
-        </button>
-      </div>
+    <h2>{{ user?.sub }}</h2>
+    <p class="text-muted">{{ user?.role }}</p>
 
-      <h2 class="mt-3">{{ user?.sub }}</h2>
-      <p class="text-muted">{{ user?.role }}</p>
+    <div class="d-flex justify-content-center gap-3 mt-3">
+      <button class="btn btn-outline-primary" (click)="triggerFileInput()">
+        <i class="fas fa-user-edit me-2"></i>Changer la photo
+      </button>
+    </div>
 
-      <div class="d-flex justify-content-center gap-3 mt-3">
-        <button class="btn btn-outline-primary">
-          <i class="fas fa-user-edit me-2"></i>Edit Profile
-        </button>
-        <button class="btn btn-outline-secondary">
-          <i class="fas fa-users me-2"></i>View Connections
-        </button>
-      </div>
-
-      <div class="mt-4">
-        <button (click)="logout()" class=" .btn-submit">
-          Se déconnecter
-        </button>
-      </div>
+    <div class="mt-4">
+      <button class="btn-submit" (click)="logout()">Se déconnecter</button>
     </div>
   </div>
-</section>
 
+  <input
+    #fileInput
+    type="file"
+    accept="image/*"
+    (change)="onFileSelected($event)"
+    style="display: none;" />
+</section>

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { Router } from '@angular/router';
 
 @Component({
@@ -7,7 +7,11 @@ import { Router } from '@angular/router';
   styleUrls: ['./profil.component.css']
 })
 export class ProfilComponent implements OnInit {
+  @ViewChild('fileInput') fileInput!: ElementRef<HTMLInputElement>;
+
   user: any;
+  profileImage: string | ArrayBuffer | null = null;
+  defaultImage = 'https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava6-bg.webp';
 
   constructor(private router: Router) {}
 
@@ -15,8 +19,9 @@ export class ProfilComponent implements OnInit {
     const userData = localStorage.getItem('user');
     if (userData) {
       this.user = JSON.parse(userData);
+      // si image enregistrée dans user : this.profileImage = this.user.image;
     } else {
-      this.router.navigate(['/login']); // Si non connecté, rediriger vers login
+      this.router.navigate(['/login']);
     }
   }
 
@@ -25,25 +30,20 @@ export class ProfilComponent implements OnInit {
     localStorage.removeItem('user');
     this.router.navigate(['/login']);
   }
-  onChangePhoto() {
-    const fileInput = document.createElement('input');
-    fileInput.type = 'file';
-    fileInput.accept = 'image/*';
 
-    fileInput.onchange = (event: any) => {
-      const file = event.target.files[0];
-      if (file) {
-        const reader = new FileReader();
-        reader.onload = (e: any) => {
-          const imgElement = document.querySelector('.profile-img') as HTMLImageElement;
-          if (imgElement) {
-            imgElement.src = e.target.result;
-          }
-        };
-        reader.readAsDataURL(file);
-      }
-    };
+  triggerFileInput(): void {
+    this.fileInput.nativeElement.click();
+  }
 
-    fileInput.click();
+  onFileSelected(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files[0]) {
+      const reader = new FileReader();
+      reader.onload = () => {
+        this.profileImage = reader.result;
+        // Tu peux aussi sauvegarder localement ou l'envoyer au backend ici
+      };
+      reader.readAsDataURL(input.files[0]);
+    }
   }
 }

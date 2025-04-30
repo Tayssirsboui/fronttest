@@ -198,8 +198,13 @@
         />
       </li>
       
-      <li class="item rename"  (click)="openModal(categorie)"   [disabled]="!canEdit()">
-        <span class="label" >Modifier</span>
+    <li class="item rename"
+    [class.disabled]="!canEdit(categorie)"
+    [attr.aria-disabled]="!canEdit(categorie)"
+    (click)="canEdit(categorie) && openModal(categorie)">
+  <span class="label">Modifier</span>
+
+
       
         
         <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-pencil">
@@ -210,10 +215,12 @@
     </ul>
     <div class="separator"></div>
     <ul class="list">
-      <li class="item delete" (mousedown)="startPress(categorie.idCategorie)"
-      [disabled]="!canEdit()"
-      (mouseup)="endPress()" 
-      (mouseleave)="cancelPress()">
+      <li class="item delete"
+      [class.disabled]="!canEdit(categorie)"
+      [attr.aria-disabled]="!canEdit(categorie)"
+      (mousedown)="canEdit(categorie) && startPress(categorie.idCategorie)"
+      (mouseup)="canEdit(categorie) && endPress()"
+      (mouseleave)="canEdit(categorie) && cancelPress()">
     
         <span class="label">Supprimer</span>
         <span class="label action">Appui pour Confirmer</span>

@@ -4525,3 +4525,9 @@ p {
 .icon-cell:hover .lucide-star {
   opacity: 0.8;
 }
+.item.disabled {
+    pointer-events: none;
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+  

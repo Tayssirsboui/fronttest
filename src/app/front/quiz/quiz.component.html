@@ -127,12 +127,18 @@
     </div>
     <div class="modal-footer-custom">
       <p>Partager votre résultat :</p>
-      <a href="https://www.facebook.com/sharer/sharer.php?u={{ shareUrl }}" target="_blank" class="share-btn facebook-btn">
-        <i class="ti ti-facebook"></i> Partager sur Facebook
-      </a>
-      <a href="https://twitter.com/intent/tweet?url={{ shareUrl }}&text=Je%20viens%20de%20terminer%20un%20quiz!%20Score%20: {{ submissionResult.percentage }}%" target="_blank" class="share-btn twitter-btn">
-        <i class="ti ti-twitter"></i> Partager sur Twitter
-      </a>
+      <a 
+  [href]="facebookShareLink"
+  target="_blank"
+  class="share-btn facebook-btn"
+>
+  <i class="ti ti-facebook"></i> Partager sur Facebook
+</a>
+
+<a [href]="twitterShareLink" target="_blank" class="share-btn twitter-btn">
+  <i class="ti ti-twitter"></i> Partager sur Twitter
+</a>
+
       <button class="btn btn-success" (click)="closePopup()">Fermer</button>
     </div>
   </div>
