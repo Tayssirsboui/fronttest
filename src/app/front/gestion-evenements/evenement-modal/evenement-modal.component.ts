@@ -15,7 +15,8 @@ export class EvenementModalComponent implements OnInit {
   imageFile!: File;
   imagePreview: string | null = null;
   generatedImageBlob: Blob | null = null;
-  isGenerating = false; // ✅ barre de chargement
+  isGenerating = false; // ✅ Barre de chargement
+  userId!: number; // ✅ Ajout de l'userId
 
   constructor(
     private dialogRef: MatDialogRef<EvenementModalComponent>,
@@ -35,6 +36,31 @@ export class EvenementModalComponent implements OnInit {
       dateDebut: ['', Validators.required],
       dateFin: ['', Validators.required],
     });
+
+    this.loadUserData(); // ✅ Charger l'user connecté
+  }
+
+  loadUserData(): void {
+    const token = localStorage.getItem('token');
+    if (token) {
+      const payload = this.decodeTokenPayload(token);
+      if (payload) {
+        this.userId = Number(payload.id); // ✅ Stocker l'id utilisateur
+      }
+    } else {
+      console.error('Token non trouvé dans localStorage');
+    }
+  }
+
+  private decodeTokenPayload(token: string): any {
+    try {
+      const payload = token.split('.')[1];
+      const decodedPayload = atob(payload);
+      return JSON.parse(decodedPayload);
+    } catch (error) {
+      console.error('Erreur lors du décodage du token', error);
+      return null;
+    }
   }
 
   onFileSelected(event: any): void {
@@ -66,7 +92,6 @@ export class EvenementModalComponent implements OnInit {
       .subscribe({
         next: (blob: Blob) => {
           this.generatedImageBlob = blob;
-
           const reader = new FileReader();
           reader.onload = () => {
             this.imagePreview = reader.result as string;
@@ -95,8 +120,8 @@ export class EvenementModalComponent implements OnInit {
     formData.append('dateDebut', this.formatDate(this.form.value.dateDebut));
     formData.append('dateFin', this.formatDate(this.form.value.dateFin));
     formData.append('statut', 'NON_TRAITE');
-
     formData.append('dateCreation', new Date().toISOString().slice(0, 16));
+    formData.append('utilisateurId', this.userId.toString()); // ✅ Ajout de l'utilisateur connecté
 
     if (this.generatedImageBlob) {
       formData.append('image', this.generatedImageBlob, 'generated.png');
@@ -106,7 +131,7 @@ export class EvenementModalComponent implements OnInit {
 
     this.evenementService.createWithFormData(formData).subscribe({
       next: (data) => {
-        this.snackBar.open('✅ Demande ajouté avec succès', 'Fermer', {
+        this.snackBar.open('✅ Demande ajoutée avec succès', 'Fermer', {
           duration: 3000,
           horizontalPosition: 'end',
           verticalPosition: 'bottom',

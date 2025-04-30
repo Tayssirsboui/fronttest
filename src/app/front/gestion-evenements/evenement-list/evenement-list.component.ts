@@ -11,7 +11,9 @@ import { EvenementModalComponent } from '../evenement-modal/evenement-modal.comp
 import { ParticipationService } from 'src/app/services/participation.service';
 import { ListeAttenteModalComponent } from '../liste-attente-modal/liste-attente-modal.component';
 import { MatDialog } from '@angular/material/dialog';
-import { StatutEvenement } from 'src/app/models/statut-evenement.enum'; // ✅ import de l'enum
+import { StatutEvenement } from 'src/app/models/statut-evenement.enum';
+import { ReactionService } from 'src/app/services/reaction.service';
+import { ReactionRequest } from 'src/app/models/ReactionRequest';
 
 declare var bootstrap: any;
 
@@ -25,25 +27,56 @@ export class EvenementListComponent implements OnInit {
   evenementsFiltres: Evenement[] = [];
   searchTerm: string = '';
 
+  likesMap = new Map<number, number>();
+  dislikesMap = new Map<number, number>();
+  reactionTypeMap = new Map<number, 'LIKE' | 'DISLIKE' | null>();
+
+  userId!: number;
+
   constructor(
     private evenementService: EvenementService,
     private modalService: NgbModal,
     private router: Router,
     private participationService: ParticipationService,
     private dialog: MatDialog,
+    private reactionService: ReactionService
   ) {}
 
   ngOnInit(): void {
+    this.loadUserData();
+
     this.evenementService.getAll().subscribe({
       next: data => {
-        this.evenements = data.filter(e => e.statut === StatutEvenement.APPROUVE); // ✅ seulement les approuvés
+        this.evenements = data.filter(e => e.statut === StatutEvenement.APPROUVE);
         this.evenementsFiltres = [...this.evenements];
+        this.chargerReactions();
         AOS.init({ duration: 1000, once: true });
         const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
         tooltipTriggerList.forEach(el => new bootstrap.Tooltip(el));
       },
       error: err => console.error('Erreur de chargement', err)
     });
+  }
+
+  loadUserData() {
+    const token = localStorage.getItem('token');
+    if (token) {
+      const payload = this.decodeTokenPayload(token);
+      if (payload) {
+        this.userId = Number(payload.id);
+      }
+    }
+  }
+
+  private decodeTokenPayload(token: string): any {
+    try {
+      const payload = token.split('.')[1];
+      const decodedPayload = atob(payload);
+      return JSON.parse(decodedPayload);
+    } catch (error) {
+      console.error('Erreur lors du décodage du token', error);
+      return null;
+    }
   }
 
   ouvrirDetail(e: Evenement) {
@@ -139,6 +172,37 @@ export class EvenementListComponent implements OnInit {
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
         this.ngOnInit();
+      }
+    });
+  }
+
+  chargerReactions(): void {
+    this.evenements.forEach(e => {
+      this.reactionService.compterReactions(e.id).subscribe(data => {
+        this.likesMap.set(e.id, data.likes);
+        this.dislikesMap.set(e.id, data.dislikes);
+      });
+
+      this.reactionService.getReactionType(this.userId, e.id).subscribe(type => {
+        this.reactionTypeMap.set(e.id, type === 'LIKE' || type === 'DISLIKE' ? type : null);
+      });
+    });
+  }
+
+  envoyerReaction(type: 'LIKE' | 'DISLIKE', evenementId: number): void {
+    const reaction: ReactionRequest = {
+      utilisateurId: this.userId,
+      evenementId: evenementId,
+      type: type
+    };
+
+    this.reactionService.ajouterReaction(reaction).subscribe({
+      next: () => {
+        this.reactionTypeMap.set(evenementId, type);
+        this.chargerReactions(); // met à jour tous les compteurs
+      },
+      error: err => {
+        console.error('Erreur réaction:', err);
       }
     });
   }

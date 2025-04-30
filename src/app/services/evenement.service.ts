@@ -69,5 +69,16 @@ export class EvenementService {
     window.open(url, '_blank');
   }
 
+  getEvenementsCreesParUtilisateur(userId: number): Observable<Evenement[]> {
+    return this.http.get<Evenement[]>(`${this.apiUrl}/evenements-crees-utilisateur/${userId}`);
+  }
+  
+  supprimerEvenement(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/remove-evenement/${id}`);
+  }
+  getReactions(evenementId: number): Observable<{ likes: number; dislikes: number }> {
+    return this.http.get<{ likes: number; dislikes: number }>(`http://localhost:8222/evenements/reaction/count/${evenementId}`);
+  }
+  
 }
 

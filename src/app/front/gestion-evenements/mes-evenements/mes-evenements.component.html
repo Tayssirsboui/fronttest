@@ -1,0 +1,64 @@
+
+
+<!-- Barre de recherche -->
+<div class="search-wrapper mb-4">
+    <input type="text" [(ngModel)]="searchTerm" (input)="applyFilters()" class="form-control custom-search" placeholder="Rechercher un événement...">
+  </div>
+  
+  <!-- Filtres de statut -->
+  <div class="status-filter mb-5 d-flex flex-wrap gap-2 justify-content-center">
+    <button *ngFor="let s of statuts"
+            class="btn custom-badge"
+            [ngClass]="{ 'selected': selectedStatut === s }"
+            (click)="selectedStatut = s; applyFilters()">
+      {{ s }}
+    </button>
+  </div>
+  
+  <!-- Liste des événements -->
+  <div class="services section" id="services">
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-lg-4 col-md-6 mb-5" *ngFor="let evenement of paginatedEvenements">
+          <div class="service-item">
+            <div class="main-content">
+              <h4 class="text-center fw-bold">{{ evenement.titre }}</h4>
+              <p class="text-center">
+                <strong>Statut:</strong>
+                <span class="badge"
+                  [ngClass]="{
+                    'bg-secondary': evenement.statut === 'NON_TRAITE',
+                    'bg-success': evenement.statut === 'APPROUVE',
+                    'bg-danger': evenement.statut === 'REJETE'
+                  }">
+                  {{ evenement.statut }}
+                </span><br>
+                <strong>Date Création:</strong> {{ evenement.dateCreation | date:'dd MMM yyyy' }}<br>
+                <strong>Lieu:</strong> {{ evenement.lieu }}
+              </p>
+  
+              <div class="main-button d-flex gap-2 justify-content-center mt-3">
+                <!-- Modifier/Supprimer si NON_TRAITE -->
+                <ng-container *ngIf="evenement.statut === 'NON_TRAITE'">
+                    <button class="btn btn-sm btn-outline-info" (click)="onModifier(evenement)">
+                        ✏️ Modifier
+                      </button>                      
+                  <button class="btn btn-sm btn-outline-danger" (click)="onSupprimer(evenement.id)">
+                    🗑️ Supprimer
+                  </button>
+                </ng-container>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Pagination centrée -->
+  <div class="pagination-controls d-flex justify-content-center align-items-center gap-3 mt-4">
+    <button class="btn btn-outline-primary" [disabled]="currentPage === 1" (click)="prevPage()">Précédent</button>
+    <span class="fw-medium">Page {{ currentPage }} / {{ totalPages }}</span>
+    <button class="btn btn-outline-primary" [disabled]="currentPage === totalPages" (click)="nextPage()">Suivant</button>
+  </div>
+  

@@ -19,7 +19,21 @@
     <div id="navbar-collapse" class="navbar-collapse collapse" >
       <ul class="nav navbar-nav navbar-right">
         <li><a routerLink="/">Home</a></li>
-        <li><a routerLink="/evenement">Events</a></li>
+      
+        <!-- 🟰 Dropdown Events ici -->
+        <li class="dropdown">
+          <a routerLink="/evenement" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+            Events
+          </a>
+          <ul class="dropdown-menu">
+            <!-- Sous-menu : Mes participations -->
+            <li><a routerLink="/calendrier">Mes participations</a></li>
+            <li><a routerLink="/mes-evenements">Mes Événements</a></li>
+          </ul>
+        </li>
+        
+        
+        
         <li><a class="active" routerLink="blogs">Blogs</a></li>
         <li routerLinkActive="active">
           <a routerLink="quiz">Quizzes</a>

@@ -137,3 +137,56 @@
   cursor: not-allowed;
   pointer-events: none;
 }
+
+  /* 🔍 BARRE DE RECHERCHE */
+  .search-wrapper {
+    display: flex;
+    justify-content: center;
+    margin-top: 30px;       /* espace après navbar */
+    margin-bottom: 10px;    /* rapproché des filtres */
+  }
+  .search-wrapper input {
+    width: 60%;
+    height: 45px;
+    font-size: 16px;
+    border-radius: 30px;
+    padding: 10px 20px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+    border: 1px solid #ddd;
+    outline: none;
+    transition: border-color 0.3s;
+  }
+  
+  .search-wrapper input:focus {
+    border-color: #a78bfa;
+  }
+
+  .custom-sort-select {
+    width: 250px;
+    height: 45px;
+    border-radius: 30px;
+    font-size: 15px;
+    padding: 8px 20px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+    border: 1px solid #ddd;
+    outline: none;
+    background-color: white;
+    transition: border-color 0.3s;
+  }
+  
+  .custom-sort-select:focus {
+    border-color: #a78bfa;
+  }
+  
+  .card {
+    min-height: 540px;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .reaction-buttons button {
+    min-width: 60px;
+    font-weight: bold;
+    border-radius: 20px;
+  }
+  

@@ -37,4 +37,13 @@ export class ParticipationService {
   getParticipationDetailsByEvenement(evenementId: number): Observable<ParticipationDetails[]> {
     return this.http.get<ParticipationDetails[]>(`${this.apiUrl}/evenement/${evenementId}/participations-details`);
   }
+
+  getEvenementsParUtilisateur(utilisateurId: number): Observable<Evenement[]> {
+    return this.http.get<Evenement[]>(`${this.apiUrl}/evenements-par-utilisateur/${utilisateurId}`);
+  }
+
+  getParticipationsOfUser(userId: number): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/participations-utilisateur/${userId}`);
+  }
+  
 }

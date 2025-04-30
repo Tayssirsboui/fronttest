@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Evenement } from 'src/app/models/evenement.model';
 import { ListeAttenteService } from 'src/app/services/liste-attente.service.ts.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-liste-attente-modal',
@@ -35,12 +36,24 @@ export class ListeAttenteModalComponent implements OnInit {
 
     this.listeAttenteService.inscrire(dto).subscribe({
       next: () => {
-        alert("✅ Vous avez été inscrit à la liste d'attente !");
-        this.dialogRef.close();
+        Swal.fire({
+          icon: 'success',
+          title: 'Inscription réussie',
+          text: '✅ Vous avez été inscrit à la liste d\'attente !',
+          timer: 2000,
+          timerProgressBar: true,
+          confirmButtonText: 'OK',
+        }).then(() => {
+          this.dialogRef.close();
+        });
       },
       error: () => {
-        alert("❌ Une erreur est survenue.");
+        Swal.fire({
+          icon: 'error',
+          title: 'Erreur',
+          text: '❌ Une erreur est survenue.',
+          confirmButtonText: 'Fermer',
+        });
       }
-    });
-  }
-}
+    });      
+  }}

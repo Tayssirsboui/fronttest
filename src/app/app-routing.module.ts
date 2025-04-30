@@ -44,6 +44,7 @@ import { CreateCommunityComponent } from './front/forum/pages/create-community/c
 import { AffichageCategorieComponent } from './front/affichage-categorie/affichage-categorie.component';
 import { RessourcesComponent } from './front/ressources/ressources.component';
 import { DetailRessourceComponent } from './front/detail-ressource/detail-ressource.component';
+import { MesEvenementsComponent } from './front/gestion-evenements/mes-evenements/mes-evenements.component';
 
 
 const routes: Routes = [
@@ -68,7 +69,7 @@ const routes: Routes = [
     children: [
       { path: '', component: HomeComponent },
       { path: 'cam', component: WebcamComponent },
-
+      { path: 'mes-evenements', component: MesEvenementsComponent },
       { path: 'courses', component: CoursesComponent },
       { path: 'about', component: AboutComponent },
       { path: 'quiz', component: QuizComponent },

@@ -4,6 +4,7 @@ import { Evenement } from 'src/app/models/evenement.model';
 import { ParticipationService } from 'src/app/services/participation.service';
 import { StatutParticipation } from 'src/app/models/statut-participation.enum';
 import Swal from 'sweetalert2';
+import { Router } from '@angular/router'; // ✅ Import du Router
 
 @Component({
   selector: 'app-participation-modal',
@@ -16,7 +17,8 @@ export class ParticipationModalComponent {
   constructor(
     public dialogRef: MatDialogRef<ParticipationModalComponent>,
     @Inject(MAT_DIALOG_DATA) public evenement: Evenement,
-    private participationService: ParticipationService
+    private participationService: ParticipationService,
+    private router: Router // ✅ Injection du Router
   ) {}
 
   ngOnInit() {
@@ -28,15 +30,15 @@ export class ParticipationModalComponent {
       Swal.fire('Erreur', 'Utilisateur non connecté.', 'error');
       return;
     }
-  
+
     const participation = {
       evenementId: this.evenement.id,
       utilisateurId: this.userId,
-      nomUtilisateur: this.userData.fullName,      // ✅ Utiliser fullName pour nom complet
-      emailUtilisateur: this.userData.sub,          // ✅ Utiliser "sub" pour l'email
+      nomUtilisateur: this.userData.fullName,
+      emailUtilisateur: this.userData.sub,
       statut: StatutParticipation.EN_ATTENTE
     };
-  
+
     this.participationService.ajouter(participation).subscribe({
       next: updatedEvent => {
         Swal.fire({
@@ -44,7 +46,10 @@ export class ParticipationModalComponent {
           text: 'Vous êtes inscrit avec succès !',
           icon: 'success',
           timer: 2000
-        }).then(() => this.dialogRef.close(updatedEvent));
+        }).then(() => {
+          this.dialogRef.close(updatedEvent);
+          this.router.navigate(['/evenement']); // ✅ Redirection après succès
+        });
       },
       error: (error) => {
         if (error.status === 409) {
@@ -55,9 +60,10 @@ export class ParticipationModalComponent {
             text: message || "Vous avez déjà participé à cet événement.",
             confirmButtonColor: '#d33'
           }).then(() => {
-            window.location.reload();
+            this.dialogRef.close(); // ✅ Fermer la modale
+            this.router.navigate(['/evenement']); // ✅ Redirection propre
           });
-          
+
         } else {
           Swal.fire({
             icon: 'error',
@@ -67,10 +73,8 @@ export class ParticipationModalComponent {
           });
         }
       }
-      
-    });      
+    });
   }
-  
 
   loadUserData() {
     const token = localStorage.getItem('token');
@@ -87,7 +91,6 @@ export class ParticipationModalComponent {
       Swal.fire('Erreur', 'Utilisateur non connecté', 'error');
     }
   }
-  
 
   private decodeTokenPayload(token: string): any {
     try {
