@@ -2,6 +2,7 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { CollaborationService } from 'src/app/services/collaboration.service';
+import { AuthentificationService } from 'src/app/services/services';
 
 @Component({
   selector: 'app-ajouter-collaboration',
@@ -15,6 +16,7 @@ export class AjouterCollaborationComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private collaborationService: CollaborationService,
+    private authService: AuthentificationService,   // ✅ ajoute-le ici
     private dialogRef: MatDialogRef<AjouterCollaborationComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {}
@@ -41,6 +43,12 @@ export class AjouterCollaborationComponent implements OnInit {
     if (this.collaborationForm.invalid) return;
 
     const collab = this.collaborationForm.value;
+
+    const token = localStorage.getItem('token');
+    if (token) {
+      const decoded = this.authService.decodeToken(token);
+      collab.userId = decoded?.id;
+    }
 
     if (this.isEditMode) {
       this.collaborationService.updateCollaboration(collab).subscribe(() => {

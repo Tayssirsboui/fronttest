@@ -3,6 +3,7 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Projet } from 'src/app/models/projet';
 import { ProjetService } from 'src/app/services/projet.service';
 import { FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms';
+import { AuthentificationService } from 'src/app/services/services';
 
 @Component({
   selector: 'app-ajouter-projet',
@@ -16,6 +17,7 @@ export class AjouterProjetComponent {
   constructor(
     private fb: FormBuilder,
     private projetService: ProjetService,
+    private authService: AuthentificationService,
     public dialogRef: MatDialogRef<AjouterProjetComponent>,
     @Inject(MAT_DIALOG_DATA) public data: Projet
   ) {
@@ -29,8 +31,10 @@ export class AjouterProjetComponent {
       dateFinPrevue: [data?.dateFinPrevue || '', Validators.required],
       nombreMaxCollaborateurs: [data?.nombreMaxCollaborateurs || 1, [Validators.required, Validators.min(1)]],
       competencesRequises: [data?.competencesRequises || [], Validators.required],
-      taches: this.fb.array([]) // Ajout du form array pour les taches
+      taches: this.fb.array([]),
+      dateCreation: [data?.dateCreation || null] // <<<<<< AJOUT ici
     });
+    
   }
 
   get taches(): FormArray {
@@ -55,22 +59,31 @@ export class AjouterProjetComponent {
   onSubmit(): void {
     const projet = this.projetForm.value;
 
-    // Convertir la string en tableau si besoin
-    if (typeof projet.competencesRequises === 'string') {
-      projet.competencesRequises = projet.competencesRequises
-        .split(',')
-        .map((c: string) => c.trim());
-    }
+// Convertir compétences string -> array
+if (typeof projet.competencesRequises === 'string') {
+  projet.competencesRequises = projet.competencesRequises
+    .split(',')
+    .map((c: string) => c.trim());
+}
 
-    if (!this.isEditMode) {
-      projet.dateCreation = new Date();
-    }
+// Ajout du userId connecté
+const token = localStorage.getItem('token');
+if (token) {
+  const decoded = this.authService.decodeToken(token);
+  projet.userId = decoded?.id;
+}
 
-    if (this.isEditMode) {
-      this.projetService.updateProjet(projet).subscribe(() => this.dialogRef.close(true));
-    } else {
-      this.projetService.addProjet(projet).subscribe(() => this.dialogRef.close(true));
-    }
+// Date création auto si ajout
+if (!this.isEditMode) {
+  projet.dateCreation = new Date();
+}
+
+if (this.isEditMode) {
+  this.projetService.updateProjet(projet).subscribe(() => this.dialogRef.close(true));
+} else {
+  this.projetService.addProjet(projet).subscribe(() => this.dialogRef.close(true));
+}
+
   }
 
   onCancel(): void {

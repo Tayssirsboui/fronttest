@@ -87,26 +87,44 @@ class="projet-wrapper mb-4"
           </div>
   
           <div class="projet-actions d-flex justify-content-end mt-3 gap-2">
-            <button class="btn btn-sm btn-outline-custom-secondary" (click)="openModal(projet)" title="Modifier">
+
+            <!-- Modifier projet : visible seulement si Entrepreneur -->
+            <button 
+              *ngIf="userRole === 'Entrepreneur'" 
+              class="btn btn-sm btn-outline-custom-secondary" 
+              (click)="openModal(projet)" 
+              title="Modifier">
               ✏️
             </button>
-            <button class="btn btn-sm btn-outline-custom-danger" (click)="supprimerProjet(projet.id)" title="Supprimer">
+          
+            <!-- Supprimer projet : visible seulement si Entrepreneur -->
+            <button 
+              *ngIf="userRole === 'Entrepreneur'" 
+              class="btn btn-sm btn-outline-custom-danger" 
+              (click)="supprimerProjet(projet.id)" 
+              title="Supprimer">
               🗑️
             </button>
+          
+            <!-- Collaborer : visible seulement si Student -->
             <button 
+              *ngIf="userRole === 'Student'" 
               class="btn btn-sm btn-outline-custom-success" 
               (click)="onCollaborer(projet.id)" 
               [disabled]="getCollaborateursActuels(projet) >= projet.nombreMaxCollaborateurs"
               title="Collaborer">
               🤝 Collaborer
             </button>
-
-         <span *ngIf="getCollaborateursActuels(projet) >= projet.nombreMaxCollaborateurs" 
-  class="badge bg-danger ms-2">
-  Complet
-</span>
-
+          
+            <!-- Badge "Complet" si nombre de collaborateurs atteint -->
+            <span 
+              *ngIf="getCollaborateursActuels(projet) >= projet.nombreMaxCollaborateurs" 
+              class="badge bg-danger ms-2">
+              Complet
+            </span>
+          
           </div>
+          
           
         </div>
   
