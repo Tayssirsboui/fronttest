@@ -10,10 +10,9 @@ import { Router } from '@angular/router';
   styleUrls: ['./list-projets.component.css']
 })
 export class ListProjetsComponent {
-
   projets: Projet[] = [];
   projetsFiltres: Projet[] = [];
-  selectedProjet!: Projet; // ✅ to hold selected project for modal
+  selectedProjet!: Projet;
 
   searchTerm: string = '';
   selectedCategory: string = '';
@@ -21,6 +20,39 @@ export class ListProjetsComponent {
   currentPage: number = 1;
   itemsPerPage: number = 6;
   totalPages: number = 1;
+
+  // 📊 Statistiques
+  totalTaches: number = 0;
+  tachesTerminees: number = 0;
+  pourcentageTerminees: number = 0;
+  tachesAFaire: number = 0;
+  tachesEnCours: number = 0;
+  prioriteHaute: number = 0;
+  prioriteMoyenne: number = 0;
+  prioriteFaible: number = 0;
+  totalCollaborateurs: number = 0;
+
+  // 🧁 Graphiques
+  chartStatutLabels = ['À faire', 'En cours', 'Terminé'];
+  chartStatutData: number[] = [];
+
+  chartPrioriteLabels = ['Haute', 'Moyenne', 'Faible'];
+  chartPrioriteData: number[] = [];
+
+  chartOptions = {
+    responsive: true,
+    plugins: {
+      legend: {
+        position: 'bottom'
+      }
+    }
+  };
+
+  chartColors = [
+    {
+      backgroundColor: ['#6c757d', '#ffc107', '#198754']
+    }
+  ];
 
   @ViewChild('detailsModal') detailsModal!: TemplateRef<any>;
 
@@ -44,7 +76,6 @@ export class ListProjetsComponent {
 
   applyFilters(): void {
     let result = this.projets;
-
     if (this.searchTerm) {
       result = result.filter(p =>
         p.titre.toLowerCase().includes(this.searchTerm.toLowerCase())
@@ -80,7 +111,6 @@ export class ListProjetsComponent {
 
   getFilteredData(): Projet[] {
     let result = this.projets;
-
     if (this.searchTerm) {
       result = result.filter(p =>
         p.titre.toLowerCase().includes(this.searchTerm.toLowerCase())
@@ -111,14 +141,37 @@ export class ListProjetsComponent {
   }
 
   ouvrirDetails(projet: Projet) {
-    // 👉 Important: reload full project with taches and collaborations
     this.projetService.getFullProjet(projet.id).subscribe(fullProjet => {
       this.selectedProjet = fullProjet;
+      this.calculerStatistiques(fullProjet);
       this.dialog.open(this.detailsModal, {
         width: '700px',
         data: this.selectedProjet
       });
     });
+  }
+
+  calculerStatistiques(projet: Projet): void {
+    const taches = projet.taches || [];
+    const collaborations = projet.collaborations || [];
+
+    this.totalTaches = taches.length;
+    this.tachesTerminees = taches.filter(t => t.statut === 'Terminé').length;
+    this.pourcentageTerminees = this.totalTaches > 0
+      ? Math.round((this.tachesTerminees / this.totalTaches) * 100)
+      : 0;
+
+    this.tachesAFaire = taches.filter(t => t.statut === 'À faire').length;
+    this.tachesEnCours = taches.filter(t => t.statut === 'En cours').length;
+
+    this.prioriteHaute = taches.filter(t => t.priorite === 'Haute').length;
+    this.prioriteMoyenne = taches.filter(t => t.priorite === 'Moyenne').length;
+    this.prioriteFaible = taches.filter(t => t.priorite === 'Faible').length;
+
+    this.totalCollaborateurs = collaborations.length;
+
+    this.chartStatutData = [this.tachesAFaire, this.tachesEnCours, this.tachesTerminees];
+    this.chartPrioriteData = [this.prioriteHaute, this.prioriteMoyenne, this.prioriteFaible];
   }
 
   supprimerProjet(id: number): void {

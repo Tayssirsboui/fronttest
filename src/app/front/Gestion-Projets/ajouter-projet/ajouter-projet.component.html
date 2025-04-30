@@ -1,6 +1,9 @@
 <h2 mat-dialog-title>{{ isEditMode ? 'Modifier un projet' : 'Ajouter un projet' }}</h2>
+
 <div mat-dialog-content>
   <form [formGroup]="projetForm">
+
+    <!-- Champs du projet -->
     <mat-form-field appearance="outline" class="w-100 mb-3">
       <mat-label>Titre</mat-label>
       <input matInput formControlName="titre">
@@ -18,7 +21,9 @@
 
     <mat-form-field appearance="outline" class="w-100 mb-3">
       <mat-label>Date fin prévue</mat-label>
-      <input matInput type="date" formControlName="dateFinPrevue">
+      <input matInput [matDatepicker]="picker" formControlName="dateFinPrevue">
+      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-datepicker #picker></mat-datepicker>
     </mat-form-field>
 
     <mat-form-field appearance="outline" class="w-100 mb-3">
@@ -30,6 +35,58 @@
       <mat-label>Compétences requises (séparées par virgules)</mat-label>
       <input matInput formControlName="competencesRequises">
     </mat-form-field>
+
+    <!-- Section des tâches -->
+    <div class="mb-3">
+      <h4 class="mt-4">Tâches du projet</h4>
+      <div formArrayName="taches">
+        <div *ngFor="let tache of taches.controls; let i = index" [formGroupName]="i" class="task-card">
+
+          <mat-form-field appearance="outline" class="w-100 mb-2">
+            <mat-label>Titre de la tâche</mat-label>
+            <input matInput formControlName="titre">
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="w-100 mb-2">
+            <mat-label>Description</mat-label>
+            <textarea matInput formControlName="description" rows="2"></textarea>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="w-100 mb-2">
+            <mat-label>Estimation</mat-label>
+            <input matInput formControlName="estimation">
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="w-100 mb-2">
+            <mat-label>Priorité</mat-label>
+            <mat-select formControlName="priorite">
+              <mat-option value="Haute">Haute</mat-option>
+              <mat-option value="Moyenne">Moyenne</mat-option>
+              <mat-option value="Faible">Faible</mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="w-100 mb-3">
+            <mat-label>Statut</mat-label>
+            <mat-select formControlName="statut">
+              <mat-option value="À faire">À faire</mat-option>
+              <mat-option value="En cours">En cours</mat-option>
+              <mat-option value="Terminé">Terminé</mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <button mat-icon-button color="warn" (click)="removeTache(i)" type="button">
+            <mat-icon>delete</mat-icon>
+          </button>
+          <hr>
+        </div>
+      </div>
+
+      <button mat-stroked-button color="primary" (click)="addTache()" type="button">
+        Ajouter une tâche
+      </button>
+    </div>
+
   </form>
 </div>
 

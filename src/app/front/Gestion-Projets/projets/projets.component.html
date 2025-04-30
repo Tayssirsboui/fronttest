@@ -26,7 +26,7 @@
               <div class="text-uppercase probootstrap-uppercase">Nos Projets</div>
               <h3>Découvrez et Collaborez sur des Projets Innovants</h3>
               <p>Bienvenue dans l’espace dédié à nos projets. Vous y trouverez une variété d’initiatives éducatives, technologiques et communautaires portées par nos étudiants et partenaires. N’hésitez pas à explorer, contribuer ou même proposer votre propre projet !</p>
-              <p><button class="btn btn-primary" (click)="openModal()">➕ Ajouter un projet</button></p>
+           
             </div>
             
             <div class="probootstrap-image probootstrap-animate" style="background-image: url(../../../assets/img/slider_4.jpg)">
@@ -37,6 +37,14 @@
       </div>
     </div>
   </section>
+
+  
+  <button 
+              *ngIf="userRole === 'Entrepreneur'" 
+              class="btn btn-primary" 
+              (click)="openModal()">
+              ➕ Ajouter un projet
+            </button>
  <div class="container mt-4">
     <div class="d-flex justify-content-between align-items-center flex-wrap mb-3">
       <input
@@ -87,34 +95,52 @@ class="projet-wrapper mb-4"
           </div>
   
           <div class="projet-actions d-flex justify-content-end mt-3 gap-2">
-            <button class="btn btn-sm btn-outline-custom-secondary" (click)="openModal(projet)" title="Modifier">
+
+            <!-- Modifier projet : visible seulement si Entrepreneur -->
+            <button 
+              *ngIf="userRole === 'Entrepreneur'" 
+              class="btn btn-sm btn-outline-custom-secondary" 
+              (click)="openModal(projet)" 
+              title="Modifier">
               ✏️
             </button>
-            <button class="btn btn-sm btn-outline-custom-danger" (click)="supprimerProjet(projet.id)" title="Supprimer">
+          
+            <!-- Supprimer projet : visible seulement si Entrepreneur -->
+            <button 
+              *ngIf="userRole === 'Entrepreneur'" 
+              class="btn btn-sm btn-outline-custom-danger" 
+              (click)="supprimerProjet(projet.id)" 
+              title="Supprimer">
               🗑️
             </button>
+          
+            <!-- Collaborer : visible seulement si Student -->
             <button 
+              *ngIf="userRole === 'Student'" 
               class="btn btn-sm btn-outline-custom-success" 
               (click)="onCollaborer(projet.id)" 
-              [disabled]="projet.collaborations?.length >= projet.nombreMaxCollaborateurs"
+              [disabled]="getCollaborateursActuels(projet) >= projet.nombreMaxCollaborateurs"
               title="Collaborer">
               🤝 Collaborer
             </button>
-
-          <span *ngIf="projet.collaborations?.length >= projet.nombreMaxCollaborateurs" 
-            class="badge bg-danger ms-2">
-            Complet
-          </span>
-
+          
+            <!-- Badge "Complet" si nombre de collaborateurs atteint -->
+            <span 
+              *ngIf="getCollaborateursActuels(projet) >= projet.nombreMaxCollaborateurs" 
+              class="badge bg-danger ms-2">
+              Complet
+            </span>
+          
           </div>
+          
           
         </div>
   
         <div class="arrow-container">
-          <div class="arrow-circle">
+          <div class="arrow-circle" (click)="ouvrirDetails(projet)" style="cursor: pointer;">
             <span class="arrow">&gt;</span>
           </div>
-        </div>
+        </div>        
       </div>
     </div>
   </div>

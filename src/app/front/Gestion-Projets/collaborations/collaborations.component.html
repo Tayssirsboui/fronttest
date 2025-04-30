@@ -36,12 +36,11 @@
       </div>
     </div>
   </section>
-<!-- Barre de recherche -->
+<!-- Recherche et filtres (pas de changement ici) -->
 <div class="search-wrapper mb-3">
   <input type="text" [(ngModel)]="searchTerm" (input)="applyFilters()" class="form-control custom-search" placeholder="Rechercher une collaboration...">
 </div>
 
-<!-- Filtres statut -->
 <div class="status-filter mb-4 d-flex flex-wrap gap-2 justify-content-center">
   <button *ngFor="let s of statuts"
           class="btn custom-badge"
@@ -51,53 +50,64 @@
   </button>
 </div>
 
+<!-- Liste des collaborations -->
+<div class="services section" id="services">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-4 col-md-6" *ngFor="let collab of paginatedCollaborations">
+        <div class="service-item">
+          <div class="icon">
+            <img src="assets/img/deal.png" alt="collaboration icon">
+          </div>
+          <div class="main-content">
+            <h4>{{ collab.role }}</h4>
+            <p>
+              <strong>Statut:</strong>
+              <span class="badge"
+                [ngClass]="{
+                  'bg-secondary': collab.statut === 'Non traité',
+                  'bg-success': collab.statut === 'Accepté',
+                  'bg-danger': collab.statut === 'Refusé'
+                }">
+                {{ collab.statut }}
+              </span><br>
+              <strong>Date demande:</strong> {{ collab.dateDemande | date:'dd MMM yyyy' }}<br>
+              <strong>Projet:</strong> {{ collab.projet?.titre || '---' }}
+            </p>
 
-  
-  <div class="services section" id="services">
-    <div class="container">
-      <div class="row">
-        <div class="col-lg-4 col-md-6" *ngFor="let collab of paginatedCollaborations">
-          <div class="service-item">
-            <div class="icon">
-              <img src="assets/img/deal.png" alt="collaboration icon">
-            </div>
-            <div class="main-content">
-              <h4>{{ collab.role }}</h4>
-              <p>
-                <strong>Statut:</strong>
-                <span class="badge"
-                  [ngClass]="{
-                    'bg-secondary': collab.statut === 'Non traité',
-                    'bg-success': collab.statut === 'Accepté',
-                    'bg-danger': collab.statut === 'Refusé'
-                  }">
-                  {{ collab.statut }}
-                </span><br>
-                <strong>Date demande:</strong> {{ collab.dateDemande | date:'dd MMM yyyy' }}<br>
-                <strong>Projet:</strong> {{ collab.projet?.titre || '---' }}
-              </p>
-              <div class="main-button d-flex gap-2 justify-content-center mt-3">
-                <button *ngIf="collab.statut === 'Non traité'" class="btn btn-sm btn-outline-success" (click)="onAccepter(collab.id)">✔️ Accepter</button>
-                <button *ngIf="collab.statut === 'Non traité'" class="btn btn-sm btn-outline-warning" (click)="onModifier(collab)">✏️ Modifier</button>
-                <button *ngIf="collab.statut === 'Non traité'" class="btn btn-sm btn-outline-danger" (click)="onAnnuler(collab.id)">🗑️ Annuler</button>
-              </div>
-              <!-- Ajoute ce bouton dans chaque carte de collaboration-->
-<button *ngIf="collab.statut === 'Accepté'" class="btn btn-sm btn-outline-info" (click)="openRoadmapModal(collab)">
-  👁️ Voir détails
-</button> 
+            <div class="main-button d-flex gap-2 justify-content-center mt-3">
+
+              <!-- 🎯 Si c'est un étudiant (STUDENT) et statut Non Traité -->
+              <ng-container *ngIf="userRole === 'Student' && collab.statut === 'Non traité'">
+                <button class="btn btn-sm btn-outline-warning" (click)="onModifier(collab)">✏️ Modifier</button>
+                <button class="btn btn-sm btn-outline-danger" (click)="onAnnuler(collab.id)">🗑️ Annuler</button>
+              </ng-container>
+
+              <!-- 🎯 Si c'est un entrepreneur (ENTREPRENEUR) et statut Non Traité -->
+              <ng-container *ngIf="userRole === 'Entrepreneur' && collab.statut === 'Non traité'">
+                <button class="btn btn-sm btn-outline-success" (click)="onAccepter(collab.id)">✔️ Accepter</button>
+              </ng-container>
+
+              <!-- 🎯 Voir Roadmap (pour tous mais après acceptation) -->
+              <button 
+                *ngIf="collab.statut === 'Accepté'" 
+                class="btn btn-sm btn-outline-info" 
+                (click)="openRoadmapModal(collab)">
+                👁️ Voir détails
+              </button>
 
             </div>
+
           </div>
         </div>
       </div>
     </div>
-    
   </div>
- <!-- Pagination -->
+</div>
+
+<!-- Pagination -->
 <div class="pagination-controls d-flex justify-content-center mt-4 gap-3">
   <button class="btn btn-outline-primary" [disabled]="currentPage === 1" (click)="prevPage()">Précédent</button>
   <span>Page {{ currentPage }} / {{ totalPages }}</span>
   <button class="btn btn-outline-primary" [disabled]="currentPage === totalPages" (click)="nextPage()">Suivant</button>
 </div>
-
-  

@@ -5,6 +5,9 @@ import { ColumnsModel } from '@syncfusion/ej2-angular-kanban';
 import { Tache } from 'src/app/models/tache';
 import { TacheService } from 'src/app/services/tache.service';
 import { ActivatedRoute } from '@angular/router';
+import Swal from 'sweetalert2'; 
+import jsPDF from 'jspdf';
+import autoTable from 'jspdf-autotable';
 
 @Component({
   selector: 'app-dashboard-kanban',
@@ -79,7 +82,6 @@ export class DashboardKanbanComponent implements OnInit {
     });
     this.dialog.open(this.addTaskDialog);
   }
-
   submitTask() {
     if (this.taskForm.valid) {
       const newTask: Tache = this.taskForm.value;
@@ -87,6 +89,11 @@ export class DashboardKanbanComponent implements OnInit {
         next: () => {
           this.dialog.closeAll();
           this.loadTaches();
+          Swal.fire({
+            icon: 'success',
+            title: 'Tâche ajoutée !',
+            text: 'La tâche a été ajoutée avec succès.'
+          });
         },
         error: (err) => {
           console.error('Erreur lors de l’ajout de tâche:', err);
@@ -94,6 +101,7 @@ export class DashboardKanbanComponent implements OnInit {
       });
     }
   }
+  
 
   openEditTaskDialog(task: Tache) {
     this.currentEditingTask = task;
@@ -120,6 +128,11 @@ export class DashboardKanbanComponent implements OnInit {
           this.dialog.closeAll();
           this.loadTaches();
           this.currentEditingTask = null;
+          Swal.fire({
+            icon: 'success',
+            title: 'Modifiée !',
+            text: 'La tâche a été modifiée avec succès.'
+          });
         },
         error: (err) => {
           console.error('Erreur de modification :', err);
@@ -127,10 +140,31 @@ export class DashboardKanbanComponent implements OnInit {
       });
     }
   }
+  
 
   deleteTask(id?: number) {
     if (!id) return;
-    this.tacheService.deleteTache(id).subscribe(() => this.loadTaches());
+  
+    Swal.fire({
+      title: "Supprimer la tâche ?",
+      text: "Cette action est irréversible.",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#3085d6",
+      confirmButtonText: "Oui, supprimer !"
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.tacheService.deleteTache(id).subscribe(() => {
+          this.loadTaches();
+          Swal.fire({
+            title: "Supprimée !",
+            text: "La tâche a été supprimée.",
+            icon: "success"
+          });
+        });
+      }
+    });
   }
 
   onKanbanAction(args: any): void {
@@ -161,4 +195,28 @@ export class DashboardKanbanComponent implements OnInit {
       default: return '';
     }
   }
+  exportToPDF(): void {
+    const doc = new jsPDF();
+  
+    doc.setFontSize(16);
+    doc.text('Liste des Tâches', 14, 15);
+  
+    const taskData = this.dataSource.map((tache, index) => [
+      index + 1,
+      tache.titre,
+      tache.description,
+      tache.estimation || '-',
+      tache.priorite,
+      tache.statut
+    ]);
+  
+    autoTable(doc, {
+      startY: 20,
+      head: [['#', 'Titre', 'Description', 'Estimation', 'Priorité', 'Statut']],
+      body: taskData
+    });
+  
+    doc.save('liste-taches.pdf');
+  }
+  
 }

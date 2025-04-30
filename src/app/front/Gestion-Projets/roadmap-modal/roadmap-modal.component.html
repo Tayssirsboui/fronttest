@@ -1,4 +1,3 @@
-<!-- roadmap-modal.component.html -->
 <h2 mat-dialog-title>Roadmap du projet</h2>
 <mat-dialog-content>
   <div *ngIf="loading" class="text-center">
@@ -20,7 +19,12 @@
       </ul>
     </div>
 
-    <button mat-raised-button color="primary" (click)="genererRoadmap()">Générer Roadmap</button>
+    <!-- Bouton Générer Roadmap -->
+    <div class="d-flex justify-content-center mb-4">
+      <button mat-raised-button color="primary" (click)="genererRoadmap()">
+        Générer ma Roadmap
+      </button>
+    </div>
 
     <!-- Sous-tâches proposées -->
     <div *ngIf="subtasks.length">
@@ -43,7 +47,14 @@
   </div>
 </mat-dialog-content>
 
-<mat-dialog-actions align="end">
-  <button mat-button mat-dialog-close>Annuler</button>
-  <button mat-raised-button color="accent" (click)="validerRoadmap()" [disabled]="!subtasks.length">Valider et envoyer au Kanban</button>
+<mat-dialog-actions align="end" class="d-flex gap-2">
+  <button mat-stroked-button color="warn" mat-dialog-close>Annuler</button>
+
+  <button mat-raised-button color="accent" (click)="validerRoadmap()" [disabled]="!subtasks.length">
+    Valider la Roadmap
+  </button>
+
+  <button mat-flat-button color="accent" (click)="allerAuKanban()">
+    Voir Kanban
+  </button>
 </mat-dialog-actions>

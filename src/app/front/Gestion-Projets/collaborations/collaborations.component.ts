@@ -6,6 +6,9 @@ import { AjouterCollaborationComponent } from '../ajouter-collaboration/ajouter-
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { RoadmapModalComponent } from '../roadmap-modal/roadmap-modal.component';
 import { ProjetService } from 'src/app/services/projet.service';
+import { AuthentificationService } from 'src/app/services/services';
+import { Projet } from 'src/app/models/projet';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-collaborations',
@@ -25,21 +28,50 @@ export class CollaborationsComponent implements OnInit {
   itemsPerPage: number = 6;
   totalPages: number = 1;
 
+  userId!: number;
+  userRole!: string;
+
   constructor(
     private collaborationService: CollaborationService,
     private dialog: MatDialog,
     private snackBar: MatSnackBar,
-    private projetService: ProjetService // Assurez-vous d'importer le service ProjetService
-
+    private projetService: ProjetService,
+    private authService: AuthentificationService
   ) {}
 
   ngOnInit(): void {
+    const token = localStorage.getItem('token');
+    if (token) {
+      const decoded = this.authService.decodeToken(token);
+      this.userId = decoded?.id;
+      this.userRole = decoded?.role;
+    }
     this.loadCollaborations();
   }
 
   loadCollaborations(): void {
-    this.collaborationService.getCollaborations().subscribe(data => {
-      this.collaborations = data;
+    this.collaborationService.getCollaborations().subscribe(async (data) => {
+      const validCollaborations: Collaboration[] = [];
+
+      for (const collab of data) {
+        try {
+          const projet = await this.projetService.getProjetById(collab.projetId).toPromise();
+          if (projet) {
+            collab.projet = projet as Projet;
+      
+            if (
+              (this.userRole === 'Student' && collab.userId === this.userId) ||
+              (this.userRole === 'Entrepreneur' && projet.userId === this.userId)
+            ) {
+              validCollaborations.push(collab);
+            }
+          }
+        } catch (err) {
+          console.error("❌ Erreur lors du chargement du projet pour collaboration ID", collab.id, err);
+        }
+      }
+      
+      this.collaborations = validCollaborations;
       this.applyFilters();
     });
   }
@@ -79,46 +111,71 @@ export class CollaborationsComponent implements OnInit {
   }
 
   onAnnuler(collabId: number): void {
-    if (confirm("Êtes-vous sûr de vouloir annuler cette collaboration ?")) {
-      this.collaborationService.deleteCollaboration(collabId).subscribe(() => {
-        this.loadCollaborations();
-      });
-    }
+    Swal.fire({
+      title: "Êtes-vous sûr ?",
+      text: "Cette action est irréversible !",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Oui, annuler !"
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.collaborationService.deleteCollaboration(collabId).subscribe(() => {
+          this.loadCollaborations();
+          Swal.fire({
+            title: "Annulée !",
+            text: "La collaboration a été annulée.",
+            icon: "success"
+          });
+        });
+      }
+    });
   }
+  
 
   onModifier(collab: Collaboration): void {
     const dialogRef = this.dialog.open(AjouterCollaborationComponent, {
       width: '500px',
       data: collab
     });
-
+  
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
         this.loadCollaborations();
+        Swal.fire({
+          icon: 'success',
+          title: 'Modifiée !',
+          text: 'La collaboration a été mise à jour avec succès.',
+          confirmButtonColor: "#3085d6"
+        });
       }
     });
   }
+  
+
   onAccepter(collabId: number): void {
     this.collaborationService.accepterCollaboration(collabId).subscribe(() => {
       this.loadCollaborations();
-      this.snackBar.open('Collaboration acceptée !', 'Fermer', {
-        duration: 3000,
-        verticalPosition: 'top',   // au lieu de bottom
-        horizontalPosition: 'center',
-        panelClass: ['success-snackbar']
+      Swal.fire({
+        icon: 'success',
+        title: 'Acceptée !',
+        text: 'La collaboration a été acceptée.',
+        confirmButtonColor: "#3085d6"
       });
-      
     });
   }
+  
+
   openRoadmapModal(collab: Collaboration): void {
     if (!collab.projetId) {
       console.error("Aucun projetId trouvé dans la collaboration.");
       return;
     }
-  
+
     this.projetService.getProjetById(collab.projetId).subscribe({
       next: (projet) => {
-        collab.projet = projet; // injecte le projet dans l'objet collab
+        collab.projet = projet;
         this.dialog.open(RoadmapModalComponent, {
           width: '700px',
           data: collab
@@ -129,6 +186,4 @@ export class CollaborationsComponent implements OnInit {
       }
     });
   }
-  
-  
 }

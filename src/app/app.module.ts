@@ -117,6 +117,7 @@ import { PdfViewerModule } from 'ng2-pdf-viewer';
 import { AffichageCategorieComponent } from './front/affichage-categorie/affichage-categorie.component';
 import { StatRessourceComponent } from './back/stat-ressource/stat-ressource.component';
 import { AvisRessourceComponent } from './front/avis-ressource/avis-ressource.component';
+import { ProjetDetailsComponent } from './front/Gestion-Projets/projet-details/projet-details.component';
 
 
 
@@ -192,6 +193,7 @@ import { AvisRessourceComponent } from './front/avis-ressource/avis-ressource.co
     ConfirmationDialogComponent,
     StatRessourceComponent,
     AvisRessourceComponent,
+    ProjetDetailsComponent,
   ],
  
   imports: [
@@ -202,6 +204,8 @@ import { AvisRessourceComponent } from './front/avis-ressource/avis-ressource.co
   AppRoutingModule,
   FormsModule,
   WebcamModule,
+  NgChartsModule,
+
   CodeInputModule,
   NgbModule,
   CommonModule,

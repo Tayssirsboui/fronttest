@@ -14,6 +14,10 @@ export class Projet {
   collaborations?: Collaboration[];
   taches: Tache[] = []; // ✅ Ajout de cette ligne
 
+  // 🆕 Ajouter :
+  userId!: number;  // <-- Ajoute ici l'id du créateur du projet
+
+
  // ➡️ Ajout :
  get nombreActuelCollaborateurs(): number {
   return this.collaborations?.length || 0;
