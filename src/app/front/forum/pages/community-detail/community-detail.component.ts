@@ -3,6 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { CommunityService } from 'src/app/services/community.service';
 import { PostService } from 'src/app/services/post.service';
 import { CommunityWithPostsDTO } from 'src/app/models/community.model';
+import Swal from 'sweetalert2';
 
 
 @Component({
@@ -22,6 +23,14 @@ postsPerPage: number = 5;
 sortOrder: 'asc' | 'desc' = 'desc'; // Ajouté : ordre de tri par défaut (plus récents d'abord)
   userData: any;
   userId: any;
+  userCommunities: any[] = [];
+  isLoading: boolean = false; // Pour gérer le chargement
+  generatedPost: string | null = null; // Pour stocker le message généré
+  showConfirmation: boolean = false; // Pour afficher la fenêtre de confirmation
+  fullName: string = '';
+  userImage: string = '';
+  
+
 
 
   constructor(
@@ -35,7 +44,17 @@ sortOrder: 'asc' | 'desc' = 'desc'; // Ajouté : ordre de tri par défaut (plus 
   ngOnInit(): void {
     // Récupère l'ID de la communauté depuis les paramètres d'URL
     this.communityId = Number(this.route.snapshot.paramMap.get('id'));
-    this.loadUserData();    
+    this.loadUserData();  
+    if (this.userId) {
+      this.communityService.getCommunitiesByUser(this.userId).subscribe({
+        next: (userCommunities) => {
+          this.userCommunities = userCommunities;
+        },
+        error: (err) => {
+          console.error('Erreur lors du chargement des communautés de l\'utilisateur', err);
+        }
+      });
+    }  
     // Appel au service pour récupérer les détails de la communauté
     this.communityService.getCommunityWithPosts(this.communityId).subscribe(
       data => {
@@ -78,6 +97,8 @@ sortOrder: 'asc' | 'desc' = 'desc'; // Ajouté : ordre de tri par défaut (plus 
       if (payload) {
         this.userData = payload;
         this.userId = payload.id || payload.userId || payload._id; // selon ton token
+        this.fullName = payload.name || payload.fullName || '';      // ✅ Ajout du nom
+        this.userImage = payload.image || payload.profileImage || ''; // ✅ Ajout de l'image
         console.log("Utilisateur connecté :", this.userData);
       }
     } else {
@@ -90,7 +111,7 @@ sortOrder: 'asc' | 'desc' = 'desc'; // Ajouté : ordre de tri par défaut (plus 
   const post = {
     content: this.newPostContent,
     communityId: this.communityId,
-    userName: user.name,
+    fullName: user.name,
     userImage: user.image
     
   };
@@ -132,23 +153,69 @@ sortOrder: 'asc' | 'desc' = 'desc'; // Ajouté : ordre de tri par défaut (plus 
     });
   }
   generatePost(communityId: number) {
+    this.isLoading = true; // Début du chargement
+    this.generatedPost = null; // Réinitialiser le message généré
+    this.showConfirmation = false; // Réinitialiser l'état de confirmation
+    
+    // Appel au service pour générer le post
     this.postService.generatePost(communityId).subscribe({
-      next: () => {
-        this.loadData(); // Recharge les données pour afficher le nouveau post
-      },
-      error: (err) => console.error('Erreur lors de la génération du post', err)
-    });
-  }
-  reportPost(postId: number): void {
-    this.postService.reportPost(postId).subscribe({
-      next: () => {
-        alert('Post signalé avec succès');
+      next: (data) => {
+        this.isLoading = false; // Fin du chargement
+        this.generatedPost = data.message; // Assurez-vous que 'data' contient le message généré
+        this.showConfirmation = true; // Afficher la fenêtre de confirmation
       },
       error: (err) => {
-        console.error('Erreur lors du signalement du post', err);
+        this.isLoading = false; // Fin du chargement
+        console.error('Erreur lors de la génération du post', err);
       }
     });
   }
+
+  addGeneratedPost() {
+    if (this.generatedPost && this.communityId) {
+      const post = {
+        content: this.generatedPost,
+        communityId: this.communityId,
+        fullName: this.userData?.name,
+        userImage: this.userData?.image
+      };
+
+      this.postService.createPost(this.communityId, post, this.userId).subscribe({
+        next: () => {
+          this.generatedPost = null; // Réinitialiser le message généré après ajout
+          this.showConfirmation = false; // Fermer la confirmation
+          this.loadData(); // Recharger les données après l'ajout
+        },
+        error: (err) => {
+          console.error('Erreur lors de l\'ajout du post', err);
+        }
+      });
+    }
+  }
+
+  reportPost(postId: number): void {
+    this.postService.reportPost(postId).subscribe({
+      next: () => {
+        Swal.fire({
+          icon: 'success',
+          title: 'Post signalé',
+          text: 'Le post a été signalé avec succès.',
+          timer: 2000,
+          showConfirmButton: false
+        });
+      },
+      error: (err) => {
+        console.error('Erreur lors du signalement du post', err);
+        Swal.fire({
+          icon: 'error',
+          title: 'Erreur',
+          text: 'Une erreur est survenue lors du signalement.',
+          confirmButtonText: 'OK'
+        });
+      }
+    });
+  }
+  
   toggleSortOrder(value: string) {
     this.sortOrder = value === 'asc' ? 'asc' : 'desc';
   }
@@ -163,7 +230,42 @@ sortOrder: 'asc' | 'desc' = 'desc'; // Ajouté : ordre de tri par défaut (plus 
       return this.sortOrder === 'asc' ? dateA - dateB : dateB - dateA;
     });
   }
+  loadUserCommunities() {
+    if (this.userId) {
+      this.communityService.getCommunitiesByUser(this.userId).subscribe({
+        next: (communities) => {
+          this.userCommunities = communities;
+        },
+        error: (err) => {
+          console.error('Erreur lors du chargement des communautés de l’utilisateur', err);
+        }
+      });
+    }
+  }
+  upvote(postId: number): void {
+    this.postService.upvote(postId, this.userId).subscribe({
+      next: () => {
+        const post = this.communityDetails?.posts.find(p => p.id === postId);
+        if (post) post.upvotes += 1;
+      },
+      error: err => {
+        console.error('Erreur lors du upvote', err);
+      }
+    });
+  }
   
+  
+  downvote(postId: number): void {
+    this.postService.downvote(postId, this.userId).subscribe({
+      next: () => {
+        const post = this.communityDetails?.posts.find(p => p.id === postId);
+        if (post) post.downvotes += 1;
+      },
+      error: err => {
+        console.error('Erreur lors du downvote', err);
+      }
+    });
+  }
   
 }
 

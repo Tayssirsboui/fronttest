@@ -25,6 +25,13 @@ export class PostService {
   getReportedPosts() {
     return this.http.get<any[]>('http://localhost:5600/api/communities/posts/reported');
   }
+  upvote(postId: number, userId: number): Observable<any> {
+    return this.http.post(`http://localhost:5600/api/communities/${postId}/upvote`, { userId });
+  }
+  
+  downvote(postId: number, userId: number): Observable<any> {
+    return this.http.post(`http://localhost:5600/api/communities/${postId}/downvote`, { userId });
+  }
   
   
   

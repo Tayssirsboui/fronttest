@@ -1,11 +1,9 @@
-
-
 <div class="probootstrap-page-wrapper">
-  <section >
+  <section>
     <div class="container">
       <div class="row">
-        <div >
-          <h1>Gestion des Communautés</h1>
+        <div>
+          <h1 class="title">Gestion des Communautés</h1>
         </div>
       </div>
     </div>
@@ -14,7 +12,6 @@
   <!-- Barre sticky -->
   <div class="header">
     <div class="header-content">
-      <!-- Champ recherche centré -->
       <input
         type="text"
         [(ngModel)]="searchTerm"
@@ -22,12 +19,14 @@
         placeholder="Rechercher une communauté"
         class="search-input"
       />
-      <button (click)="goToReportedPosts()" class="btn btn-warning reported-posts-btn">
-        Voir les posts signalés
-      </button>
-      <button class="btn btn-outline-success" (click)="downloadPageAsPDF($event)">Download as PDF</button>
-
-      <!-- Bouton "Créer une communauté" -->
+      <div class="header-buttons">
+        <button (click)="goToReportedPosts()" class="btn btn-warning reported-posts-btn">
+          Voir les posts signalés
+        </button>
+        <button class="btn btn-outline-success" (click)="downloadPageAsPDF($event)">
+          Télécharger en PDF
+        </button>
+      </div>
     </div>
   </div>
 
@@ -36,19 +35,18 @@
     <div class="grid">
       <div *ngFor="let c of filteredCommunities" class="community-item">
         <div class="community-card">
-          <figure class="community-img">
+          <div class="community-img">
             <img *ngIf="c.imageUrl" [src]="c.imageUrl" alt="Image de la communauté" class="img-responsive" />
             <div *ngIf="!c.imageUrl" class="community-img-placeholder">
               Pas d’image
             </div>
-          </figure>
+          </div>
           <div class="community-text">
             <h3>{{ c.name }}</h3>
-            <p>{{ c.description.length > 15 ? (c.description.substring(0, 29) + '...') : c.description }}</p>
+            <p>{{ c.description.length > 50 ? (c.description.substring(0, 50) + '...') : c.description }}</p>
           </div>
-          <!-- Actions admin -->
           <div class="community-actions">
-            <button (click)="editCommunity(c.id)" class="btn btn-primary">Modifier</button>
+            <!--<button (click)="editCommunity(c.id)" class="btn btn-primary">Modifier</button>-->
             <button (click)="deleteCommunity(c.id)" class="btn btn-danger">Supprimer</button>
           </div>
         </div>

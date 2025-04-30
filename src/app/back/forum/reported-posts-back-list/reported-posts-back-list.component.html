@@ -1,8 +1,8 @@
 <div class="probootstrap-page-wrapper">
-    <section class="probootstrap-section probootstrap-section-colored">
+    <section>
       <div class="container">
         <div class="row">
-          <div class="col-md-12 text-left section-heading probootstrap-animate">
+          <div>
             <h1>Gestion des Posts Signalés</h1>
           </div>
         </div>
@@ -21,17 +21,17 @@
       </div>
     </div>
   
-    <div class="container post-container">
+    <div class="container content-container">
       <div class="grid">
-        <div *ngFor="let p of filteredPosts" class="post-item">
-          <div class="post-card">
-            <div class="post-header">
+        <div *ngFor="let p of filteredPosts" class="card-item">
+          <div class="card">
+            <div class="card-body">
               <p class="post-content">{{ p.content.length > 100 ? (p.content.substring(0, 97) + '...') : p.content }}</p>
             </div>
-            <div *ngIf="p.imageUrl" class="post-image-wrapper">
-              <img [src]="p.imageUrl" alt="Image du post" class="post-image" />
+            <div *ngIf="p.imageUrl" class="card-image">
+              <img [src]="p.imageUrl" alt="Image du post" />
             </div>
-            <div class="post-actions">
+            <div class="card-actions">
               <button (click)="deletePost(p.id)" class="btn btn-danger">Supprimer</button>
             </div>
           </div>
@@ -39,11 +39,11 @@
       </div>
   
       <div class="pagination">
-        <button (click)="prevPage()" [disabled]="currentPage === 1" class="page-btn prev-btn">
+        <button (click)="prevPage()" [disabled]="currentPage === 1" class="page-btn">
           &lt; Précédent
         </button>
         <span class="page-number">{{ currentPage }} / {{ totalPages() }}</span>
-        <button (click)="nextPage()" [disabled]="currentPage === totalPages()" class="page-btn next-btn">
+        <button (click)="nextPage()" [disabled]="currentPage === totalPages()" class="page-btn">
           Suivant &gt;
         </button>
       </div>

@@ -17,6 +17,8 @@ export class CreateCommunityComponent {
   };
   userData: any;
   userId: any;
+  userName: string = '';
+userImage: string = '';
 
   constructor(private communityService: CommunityService, private router: Router) {}
   ngOnInit(): void {
@@ -55,6 +57,8 @@ export class CreateCommunityComponent {
       if (payload) {
         this.userData = payload;
         this.userId = payload.id || payload.userId || payload._id; // selon ton token
+        this.userName = payload.name || payload.username || '';      // ✅ Ajout du nom
+      this.userImage = payload.image || payload.profileImage || ''; // ✅ Ajout de l'image
         console.log("Utilisateur connecté :", this.userData);
       }
     } else {

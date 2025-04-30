@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ConfirmationService } from 'src/app/services/confirmation.service';
 import { PostService } from 'src/app/services/post.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-reported-posts-back-list',
@@ -54,19 +55,31 @@ export class ReportedPostsBackListComponent implements OnInit {
   }
 
   deletePost(id: number) {
-    this.confirmationService.confirm({
-      message: 'Êtes-vous sûr de vouloir supprimer ce post signalé ?',
-      accept: () => {
-        this.postService.deletePost(id).subscribe({
-          next: () => {
-            this.posts = this.posts.filter(p => p.id !== id);
-            this.updateFilteredPosts();
-          },
-          error: (err) => console.error('Erreur lors de la suppression du post', err)
+    this.postService.deletePost(id).subscribe({
+      next: () => {
+        this.posts = this.posts.filter(p => p.id !== id);
+        this.updateFilteredPosts();
+  
+        Swal.fire({
+          icon: 'success',
+          title: 'Post supprimé',
+          text: 'Le post signalé a été supprimé avec succès.',
+          timer: 2000,
+          showConfirmButton: false
+        });
+      },
+      error: (err) => {
+        console.error('Erreur lors de la suppression du post', err);
+        Swal.fire({
+          icon: 'error',
+          title: 'Erreur',
+          text: 'La suppression du post a échoué.',
+          confirmButtonText: 'OK'
         });
       }
     });
   }
+  
 
   nextPage(): void {
     if (this.currentPage < this.totalPages()) {

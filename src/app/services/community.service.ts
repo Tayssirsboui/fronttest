@@ -41,5 +41,23 @@ export class CommunityService {
   deleteCommunity(id: number): Observable<any> {
     return this.http.delete(`${this.apiUrl}/${id}`);
   }
+  getCommunitiesByUser(userId: number) {
+    return this.http.get<CommunityWithPostsDTO[]>(`${this.apiUrl}/user/${userId}/created`);
+  }
+  getFavorites(userId: number): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/favoris/user/${userId}`);
+  }
+  
+  toggleFavorite(communityId: number, userId: number): Observable<any> {
+    return this.http.post(`${this.apiUrl}/favoris/add?userId=${userId}&communityId=${communityId}`, {});
+  }
+  upvote(postId: number, userId: number): Observable<any> {
+    return this.http.post(`http://localhost:5600/api/communities/${postId}/upvote`, { userId });
+  }
+  
+  downvote(postId: number, userId: number): Observable<any> {
+    return this.http.post(`http://localhost:5600/api/communities/${postId}/downvote`, { userId });
+  }
+  
   
 }

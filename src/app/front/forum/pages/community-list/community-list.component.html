@@ -1,81 +1,70 @@
-<div class="probootstrap-search" id="probootstrap-search">
-  <a href="#" class="probootstrap-close js-probootstrap-close"><i class="icon-cross"></i></a>
-  <form action="#">
-    <input type="search" name="s" id="search" placeholder="Search a keyword and hit enter...">
-  </form>
-</div>
-
 <div class="probootstrap-page-wrapper">
   
-<section class="probootstrap-section probootstrap-section-colored">
-    <div class="container">
-      <div class="row">
-        <div class="col-md-12 text-left section-heading probootstrap-animate">
-          <h1>Nos Communautés</h1>
-        </div>
-      </div>
+
+  <!-- Barre sticky -->
+  <div class="header">
+    <div class="header-content">
+      <!-- Champ recherche centré -->
+      <input
+        type="text"
+        [(ngModel)]="searchTerm"
+        (input)="onSearchChange()"
+        placeholder="Rechercher une communauté"
+        class="search-input"
+      />
+
+      <!-- Bouton +Create -->
+      <button (click)="createCommunity()" class="create-btn">+ Create</button>
     </div>
-</section>
-
-<!-- Barre sticky -->
-<div class="header">
-  <div class="header-content">
-
-    <!-- Champ recherche centré -->
-    <input
-      type="text"
-      [(ngModel)]="searchTerm"
-      (input)="onSearchChange()"
-      placeholder="Rechercher une communauté"
-      class="search-input"
-    />
-
-    <!-- Bouton +Create -->
-    <button
-      (click)="createCommunity()"
-      class="create-btn"
-    >
-      + Create
-    </button>
   </div>
-</div>
 
-<!-- Grille des communautés -->
-<div class="container">
-  <div class="grid">
-    <div
-      *ngFor="let c of filteredCommunities"
-      class="community-item"
-      (click)="goToCommunity(c.id)"
-    >
-      <div class="community-card">
-        <figure class="community-img">
-          <img
-            *ngIf="c.imageUrl"
-            [src]="c.imageUrl"
-            alt="Image de la communauté"
-            class="img-responsive"
-          />
-          <div *ngIf="!c.imageUrl" class="community-img-placeholder">
-            Pas d’image
+  <!-- Conteneur de la grille avec les favoris à gauche et les communautés à droite -->
+  <div class="left-sidebar">
+    <div class="row">
+      <!-- Barre des favoris à gauche -->
+      <div class="col-md-3 favorite-communities">
+        <h3>Mes Favoris</h3>
+        <div *ngFor="let fav of favoriteCommunities" class="favorite-community-item">
+          <div class="community-card" (click)="goToCommunity(fav.id)">
+            <figure class="community-img">
+              <img *ngIf="fav.imageUrl" [src]="fav.imageUrl" alt="Image de la communauté" class="img-responsive" />
+              <div *ngIf="!fav.imageUrl" class="community-img-placeholder">
+                Pas d’image
+              </div>
+            </figure>
+            <div class="community-text">
+              <h3>c/{{ fav.name }}</h3>
+            </div>
           </div>
-        </figure>
-        <div class="community-text">
-          <h3>c/{{ c.name }}</h3>
-          <p>
-            {{ c.description.length > 15 ? (c.description.substring(0, 29) + '...') : c.description }}
-          </p>
+        </div>
+      </div>
+
+      <!-- Ligne de séparation -->
+      <div class="col-md-1 separator"></div>
+
+      <!-- Grille des communautés -->
+       <div class="main-column">
+      <div class="col-md-8 grid">
+        <div *ngFor="let c of filteredCommunities" class="community-item" (click)="goToCommunity(c.id)">
+          <div class="community-card">
+            <button class="favorite-btn" (click)="toggleFavorite(c.id, $event)" title="Ajouter aux favoris">★</button>
+            <figure class="community-img">
+              <img *ngIf="c.imageUrl" [src]="c.imageUrl" alt="Image de la communauté" class="img-responsive" />
+              <div *ngIf="!c.imageUrl" class="community-img-placeholder">Pas d’image</div>
+            </figure>
+            <div class="community-text">
+              <h3>c/{{ c.name }}</h3>
+              <p>{{ c.description.length > 15 ? (c.description.substring(0, 29) + '...') : c.description }}</p>
+            </div>
+          </div>
+        </div>
+        <div class="pagination">
+          <button (click)="prevPage()" [disabled]="currentPage === 1" class="page-btn prev-btn">&lt; Précédent</button>
+          <span>{{ currentPage }} / {{ totalPages() }}</span>
+          <button (click)="nextPage()" [disabled]="currentPage === totalPages()" class="page-btn next-btn">Suivant &gt;</button>
         </div>
       </div>
     </div>
-  </div>
-  <div class="pagination">
-    <button (click)="prevPage()" [disabled]="currentPage === 1" class="page-btn prev-btn">
-      &lt; Précédent
-    </button>
-    <span>{{ currentPage }} / {{ totalPages() }}</span>
-    <button (click)="nextPage()" [disabled]="currentPage === totalPages()" class="page-btn next-btn">
-      Suivant &gt;
-    </button>
+    </div>
   </div>
 </div>
