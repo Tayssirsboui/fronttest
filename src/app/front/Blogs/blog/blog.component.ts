@@ -9,6 +9,8 @@ import { Post } from 'src/app/models/post';
 import { ToastrService } from 'ngx-toastr';
 import * as bootstrap from 'bootstrap';
 import Swal from 'sweetalert2';
+import { UserService } from 'src/app/services/user.service';
+import { UserControllerService } from 'src/app/services/services';
 
 @Component({
   selector: 'app-blog',
@@ -35,14 +37,25 @@ export class BlogComponent implements OnInit {
   recommendedPosts: any[] = [];
   selectedFile: File | null = null;
 style: any;
+user: any;
+userName!:string;
+
+userEmail!:string;
+
 showSortOptions = false;
+  userData: any;
+
+  sortCriterion: 'date' | 'comments' | 'oldest' = 'date';
+  selectedSortLabel = 'Trier';
+
 
   constructor(
     private fb: FormBuilder,
     private router: Router,
     private location: Location,
     private bs: BlogService,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    private userService: UserControllerService,
   ) {
     this.postForm = this.fb.group({
       title: ['', [Validators.required, Validators.minLength(3)]],
@@ -56,15 +69,63 @@ showSortOptions = false;
   ngOnInit() {
     this.toastr.info("Chargement des posts", "Info");
     this.loadPosts();
+    this.loadUserData(); 
+    this.scrollToTop();
+    
   }
 
+  
+  
+  scrollToTop(): void {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+  
+  loadUserData() {
+    const token = localStorage.getItem('token');
+    if (token) {
+      const payload = this.decodeTokenPayload(token);
+      if (payload) {
+        this.userData = payload;  
+        this.userId = payload.id || payload.userId || payload._id; // selon ton token
+        console.log("Utilisateur connecté :", this.userData);
+      }
+    } else {
+      console.error('Token non trouvé dans localStorage');
+      this.toastr.error('Utilisateur non connecté', 'Erreur');
+    }
+  }
+  
+    private decodeTokenPayload(token: string): any {
+      try {
+        const payload = token.split('.')[1]; // prendre la partie payload du JWT
+        const decodedPayload = atob(payload); // décoder base64
+        return JSON.parse(decodedPayload); // convertir en objet JSON
+      } catch (error) {
+        console.error('Failed to decode token payload', error);
+        return null;
+      }
+    }
   loadPosts() {
     this.bs.getPosts().subscribe(data => {
       this.listPosts = data;
       this.totalPosts = data.length;
       this.totalPages = Math.ceil(this.totalPosts / this.postsPerPage);
+   
+      this.listPosts.forEach(post => {
+        if (post.userId) {
+          this.userService.getUserById({ id: post.userId }).subscribe(user => {
+            console.log('User récupéré pour post ID', post.id, ':', user); // <-- Ajoute un log ici
+            post.user = user;
+          }, error => {
+            console.error('Erreur récupération user pour post', post.id, error); // <-- Et un log d'erreur
+          });
+        }
+      });
+
       this.updatePaginatedPosts();
       this.loadCommentsCount();
+    }, error => {
+      console.error('Erreur récupération posts', error);
     });
   }
 
@@ -97,7 +158,17 @@ showSortOptions = false;
   }
 
   updatePaginatedPosts() {
-    const filtered = this.filteredPosts;
+    let filtered = this.filteredPosts;
+  
+    // Appliquer le tri selon le critère choisi
+    if (this.sortCriterion === 'date') {
+      filtered = filtered.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+    } else if (this.sortCriterion === 'oldest') {
+      filtered = filtered.sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
+    } else if (this.sortCriterion === 'comments') {
+      filtered = filtered.sort((a, b) => (b.commentsCount || 0) - (a.commentsCount || 0));
+    }
+  
     this.totalPosts = filtered.length;
     this.totalPages = Math.max(1, Math.ceil(this.totalPosts / this.postsPerPage));
     this.currentPage = Math.min(this.currentPage, this.totalPages);
@@ -105,6 +176,7 @@ showSortOptions = false;
     this.paginatedPosts = filtered.slice(startIndex, startIndex + this.postsPerPage);
     this.loadCommentsCount();
   }
+  
 
   goToPage(page: number): void {
     if (page >= 1 && page <= this.totalPages) {
@@ -126,23 +198,25 @@ showSortOptions = false;
       this.updatePaginatedPosts();
     }
   }
-   // Méthode pour basculer l'affichage des options de tri
-   toggleSortOptions() {
-    this.showSortOptions = !this.showSortOptions;
+  
+  sortByRecentDate(): void {
+    this.sortCriterion = 'date'; // <-- AJOUTÉ
+    this.selectedSortLabel = 'Les plus récents';
+    this.updatePaginatedPosts(); // laisse Angular gérer le tri ici
+  } 
+  sortByOldestDate(): void {
+    this.sortCriterion = 'oldest'; // <-- AJOUTÉ
+    this.selectedSortLabel = 'Les plus anciens';
+    this.updatePaginatedPosts(); // laisse Angular gérer le tri ici
   }
+  
+  sortByComments(): void {
+    this.sortCriterion = 'comments'; // <-- AJOUTÉ
+    this.selectedSortLabel = 'Les plus commentés';
+    this.updatePaginatedPosts(); // laisse Angular gérer le tri ici
+  }
+  
 
-  sortByDate(order: string): void {
-    if (!this.listPosts) return; // Sécurité
-  
-    if (order === 'latest') {
-      this.listPosts.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
-    } else if (order === 'oldest') {
-      this.listPosts.sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
-    }
-  
-    // Après tri, il faut mettre à jour la pagination
-    this.updatePaginatedPosts();
-  }
 
   onFileSelected(event: any): void {
     const file = event.target.files[0];
@@ -160,8 +234,15 @@ showSortOptions = false;
       });
     });
   }
+
   addPosts() {
     const formData = new FormData();
+   
+      if (!this.userId) {
+        this.toastr.error("Utilisateur non connecté.", "Erreur");
+        return;
+      }
+
     formData.append('title', this.postForm.value.title);
     formData.append('description', this.postForm.value.content);
     //formData.append('createdBy', this.postForm.value.createdBy);
@@ -178,16 +259,19 @@ showSortOptions = false;
         Swal.fire({
           icon: 'success',
           title: 'Succès',
-          text: 'Le post a été ajouté avec succès !',
+          text: 'The post has been successfully added! 📢',
           confirmButtonText: 'OK',
           timer: 2000,
           timerProgressBar: true,
+          allowOutsideClick: false, // (optionnel) empêcher de cliquer dehors pour fermer
+           allowEscapeKey: false,    
         }).then(() => {
           this.loadPosts();
           this.postForm.reset();
           this.selectedFile = null;
-          this.toastr.success('Le post a été ajouté avec succès', 'Succès');
-        this.router.navigate(['/blogs']);
+          this.closeModal(); 
+          this.toastr.success('The post has been successfully added!', 'Succès');
+        this.router.navigate(['blogs']);
         });
       },
       error: (err) => {
@@ -198,6 +282,7 @@ showSortOptions = false;
   }
   
   
+
 
 
 
@@ -257,7 +342,7 @@ showSortOptions = false;
       });
     }
   }
-  
+
   goBack() {
     this.location.back();
   }

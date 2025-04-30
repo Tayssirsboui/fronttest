@@ -31,7 +31,10 @@
                     <li class="main-info">
                       <div class="d-flex align-items-center mb-2">
                         <img src="assets/img/avatar-profile.png" class="avatar-profile me-3" />
-                        <span class="category">{{ p.createdBy }}</span>
+                      <p class="mb-0 me-3" style="color:blueviolet"><strong style="color:rgb(104, 104, 104)">Created By:</strong> {{ p.user?.nom }} {{ p.user?.prenom }}</p>
+
+                        <p class="mb-0"><strong>Email:</strong> {{ p.user?.email }}</p>
+
                       </div>
                       <h4 class="post-title">{{ p.title }}</h4>
                     </li>

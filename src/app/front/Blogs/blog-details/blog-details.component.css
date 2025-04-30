@@ -1,4 +1,29 @@
 /* Dans votre fichier CSS */
+/* Style du bouton "Lire en haute voix" */
+.btn-read-aloud {
+  background-color: #f2f4f6;
+  padding: 10px 20px;
+  border-radius: 5px;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  font-size: 1.1rem;
+}
+
+.btn-read-aloud:hover {
+  background-color: #ffffff;
+}
+.btn-delete {
+  color: red;
+  background: transparent;
+  border: none;
+  font-size: 1.2rem;
+  cursor: pointer;
+}
+
+.btn-delete:hover {
+  color: darkred;
+}
 @import "ngx-toastr/toastr";
 .fullscreen-loader {
   position: fixed;
@@ -281,7 +306,9 @@ button[type="button"] {
 --------------------------------------------------------------*/
 .blog-details {
   max-width: 1000px;
-  margin: 0 auto;
+  justify-content:center ;
+  margin-left:193px ;
+ 
 }
 
 .blog-details .hero-img {
@@ -818,7 +845,7 @@ button[type="button"] {
 
 @media (min-width: 768px) {
   .blog-comments .comment-card.reply {
-    margin-left: 85px;
+    margin-left: 65px;
   }
 }
 
@@ -862,7 +889,7 @@ button[type="button"] {
 }
 
 .blog-comments .comment-content p {
-  color: #000000;
+  color: #282828;
   font-size: 15px;
   line-height: 1.65;
   margin-bottom: 20px;
@@ -929,7 +956,7 @@ button[type="button"] {
   }
 
   .blog-comments .comment-header .user-info .meta .name {
-    font-size: 15px;
+    font-size: 10px;
   }
 
   .blog-comments .comment-header .user-info .meta .date {
@@ -961,3 +988,136 @@ button[type="button"] {
 
 
 
+.comment-description {
+  font-size: 13px; /* ou 14px ou 16px selon ton design */
+  color: #333; /* couleur lisible */
+  margin-top: 8px;
+  line-height: 2;
+}
+/* Style des commentaires */
+.comment-card {
+  position: relative;
+  background-color: #fff;
+  border-radius: 12px;
+  padding: 25px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 15px rgba(14, 13, 13, 0.164);
+  transition: all 0.3s ease;
+  display: flex;
+  justify-content: space-between;
+}
+
+.comment-main {
+  flex-grow: 1;
+}
+
+.comment-header {
+  margin-bottom: 15px;
+}
+
+.comment-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 15px;
+}
+
+.left-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.right-actions {
+  margin-left: auto;
+}
+
+/* Bouton Lire en haute voix */
+.btn-read-aloud {
+  background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+  color: white;
+  border: none;
+  border-radius: 20px;
+  padding: 8px 15px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.btn-read-aloud:hover {
+  background: linear-gradient(135deg, #2575fc 0%, #6a11cb 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.btn-read-aloud i {
+  font-size: 16px;
+}
+
+/* Bouton Like */
+.action-btn.like-btn {
+  background: #f8f9fa;
+  color: #495057;
+  border: 1px solid #dee2e6;
+  padding: 6px 12px;
+  border-radius: 20px;
+}
+
+.action-btn.like-btn.active {
+  background: #28a745;
+  color: white;
+  border-color: #28a745;
+}
+
+.action-btn.like-btn:hover:not(.active) {
+  background: #e9ecef;
+}
+
+/* Boutons édition/suppression */
+.btn-edit, .btn-delete {
+  background: transparent;
+  border: none;
+  font-size: 1.2rem;
+  cursor: pointer;
+  padding: 5px;
+}
+
+.btn-edit {
+  color: #ff7700;
+}
+
+.btn-edit:hover {
+  color: #e65c00;
+}
+
+.btn-delete {
+  color: #dc3545;
+}
+
+.btn-delete:hover {
+  color: #bd2130;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .comment-card {
+    flex-direction: column;
+  }
+  
+  .comment-actions {
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .right-actions {
+    margin-left: 0;
+    width: 100%;
+  }
+  
+  .btn-read-aloud {
+    width: 100%;
+    justify-content: center;
+  }
+}

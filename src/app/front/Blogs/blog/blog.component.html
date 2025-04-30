@@ -1,21 +1,41 @@
+
+  <div class="main-banner" id="top">
+    <div class="container">
+      <div class="row">
+        
+        <div class="banner-below-image">
+          <img src="../../../../assets/img/banner-item-02.jpg" width="600" height="auto" alt="Image de Genius" class="below-banner-img">
+          <div class="image-caption" style="color: azure;">
+            Découvrez l'univers de la créativité et de l'innovation !
+        </div>
+        </div>
+        <div class="col-lg-12 text-center">
+          <div class="section-heading">
+         
+  
+            
+            <h2>nos Blogs</h2>
+            <button (click)="openModal()"
+            class="add-post-button"
+            data-animation="fadeInLeft" 
+            data-delay="0.7s">
+      ➕ Ajouter un post
+    </button>
+  
+          </div>
+        </div>
+        
+      </div>
+    </div>
+  </div>
+
+
+
+
 <div class="section events" id="events">
   <div class="container">
     <div class="row">
-      <div class="col-lg-12 text-center">
-        <div class="section-heading">
-       
-
-          <h6>Schedule</h6>
-          <h2>Upcoming Blogs</h2>
-          <button (click)="openModal()"
-          class="add-post-button"
-          data-animation="fadeInLeft" 
-          data-delay="0.7s">
-    ➕ Ajouter un post
-  </button>
-
-        </div>
-      </div>
+  <hr>
       
       <!-- Barre de recherche et tri - Nouvelle disposition -->
       <div class="col-lg-12 mb-5">
@@ -32,41 +52,40 @@
             </button>
             
            
-                 
-                 <button routerLink="/mesPosts" 
-                 class="btn btn-primary my-posts-button d-flex align-items-center gap-2"
-                 style="background-color: #4e54c8; border: none; border-radius: 25px; padding: 10px 20px; box-shadow: 0 4px 10px rgba(0,0,0,0.15); transition: background-color 0.3s ease;"
-                 (mouseover)="this.style.backgroundColor='#5f67e0'"
-                 (mouseout)="this.style.backgroundColor='#4e54c8'">
-           <i class="fas fa-user"></i>
-           Mes posts
-         </button>
+            <hr>
+            <ul class="event_filter">
+             <li>
+               <a class="is_active" href="#!" data-filter="*">Voir Tous</a>
+             </li>
+             <li>
+               
+               <a  routerLink="/mesPosts"  data-filter=".design"  (mouseout)="this.style.backgroundColor='#4e54c8'">Mes Posts</a>
+             </li>
+           
+           
+           </ul>
+             
+             
           
-          
-          <!-- Menu de tri (prend 4 colonnes) -->
-          <div class="sort-container">
-            <div class="dropdown">
-              <!-- Bouton pour afficher/masquer les options de tri -->
-              <button class="btn sort-btn dropdown-toggle" 
-                      type="button" 
-                      data-toggle="dropdown"
-                      aria-expanded="false"
-                      (click)="toggleSortOptions()"> <!-- Ajoutez cet événement de clic -->
-                <i class="fas fa-sort-amount-down-alt mr-2"></i>
-                Trier
-              </button>
-              
-              <!-- Les options de tri ne seront affichées que si showSortOptions est vrai -->
-              <div *ngIf="showSortOptions" class="dropdown-menu dropdown-menu-right">
-                <a class="dropdown-item" (click)="sortByDate('latest')">
-                  <i class="fas fa-arrow-down mr-2"></i> Récents d'abord
-                </a>
-                <a class="dropdown-item" (click)="sortByDate('oldest')">
-                  <i class="fas fa-arrow-up mr-2"></i> Anciens d'abord
-                </a>
-              </div>
-            </div>
-          </div>
+          <!-- Bouton de tri -->
+ <!-- Menu déroulant pour le tri -->
+<div class="sort-container d-flex align-items-center mt-3 mt-md-0">
+  <div class="dropdown">
+    <button class="btn btn-gradient-primary dropdown-toggle px-4 py-2 rounded-pill shadow-sm d-flex align-items-center gap-2"
+            type="button" data-bs-toggle="dropdown" aria-expanded="false">
+      <i class="fas fa-sort"></i>
+      <span>{{ selectedSortLabel }}</span>
+    </button>
+    <ul class="dropdown-menu">
+      <li><a class="dropdown-item" (click)="sortByRecentDate()"><i class="fas fa-clock me-2"></i>Les plus récents</a></li>
+      <li><a class="dropdown-item" (click)="sortByOldestDate()"><i class="fas fa-clock me-2"></i>Les plus anciens</a></li>
+      <li><a class="dropdown-item" (click)="sortByComments()"><i class="fas fa-comments me-2"></i>Les plus commentés</a></li>
+      
+    </ul>
+  </div>
+</div>
+
+         
           
         </div>
       </div>
@@ -83,9 +102,13 @@
               <ul class="d-flex justify-content-between align-items-start flex-wrap">
                 <li class="main-info">
                   <div class="d-flex align-items-center mb-2">
-                    <img [src]="'assets/img/avatar-profile.png'" class="avatar-profile me-3" />
-                    <span class="category">{{ p.createdBy }}</span>
+                    <img  [src]="p.user?.image ? 'http://localhost:5100/users/images/' + p.user.imageUrl : 'assets/img/avatar-profile.png'"  class="avatar-profile me-3" />
+                    <div class="d-flex align-items-center">
+                      <p class="mb-0 me-3" style="color:blueviolet"><strong style="color:rgb(104, 104, 104)">Created By:</strong> {{ p.user?.nom }} {{ p.user?.prenom }}</p>
+                      <p class="mb-0"><strong>Email:</strong> {{ p.user?.email }}</p>
+                    </div>
                   </div>
+                
                   <h4 class="post-title">{{ p.title }}</h4>
                 </li>
               
