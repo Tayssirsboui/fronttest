@@ -1,0 +1,52 @@
+<div class="probootstrap-page-wrapper">
+    <section>
+      <div class="container">
+        <div class="row">
+          <div>
+            <h1>Gestion des Posts Signalés</h1>
+          </div>
+        </div>
+      </div>
+    </section>
+  
+    <div class="header">
+      <div class="header-content">
+        <input
+          type="text"
+          [(ngModel)]="searchTerm"
+          (input)="onSearchChange()"
+          placeholder="Rechercher un post"
+          class="search-input"
+        />
+      </div>
+    </div>
+  
+    <div class="container content-container">
+      <div class="grid">
+        <div *ngFor="let p of filteredPosts" class="card-item">
+          <div class="card">
+            <div class="card-body">
+              <p class="post-content">{{ p.content.length > 100 ? (p.content.substring(0, 97) + '...') : p.content }}</p>
+            </div>
+            <div *ngIf="p.imageUrl" class="card-image">
+              <img [src]="p.imageUrl" alt="Image du post" />
+            </div>
+            <div class="card-actions">
+              <button (click)="deletePost(p.id)" class="btn btn-danger">Supprimer</button>
+            </div>
+          </div>
+        </div>
+      </div>
+  
+      <div class="pagination">
+        <button (click)="prevPage()" [disabled]="currentPage === 1" class="page-btn">
+          &lt; Précédent
+        </button>
+        <span class="page-number">{{ currentPage }} / {{ totalPages() }}</span>
+        <button (click)="nextPage()" [disabled]="currentPage === totalPages()" class="page-btn">
+          Suivant &gt;
+        </button>
+      </div>
+    </div>
+  </div>
+  

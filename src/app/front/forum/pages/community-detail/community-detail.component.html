@@ -1,21 +1,38 @@
 <div *ngIf="communityDetails" class="community-container">
+  <!-- Colonne fixe à gauche : Mes communautés -->
+
+
   <!-- Colonne principale (Posts) -->
   <div class="main-column">
     <div class="community-header">
       <img *ngIf="communityDetails.imageUrl" [src]="communityDetails.imageUrl" alt="Image de la communauté" />
       <h2>c/{{ communityDetails.name }}</h2>
     </div>
-
+    <div style="text-align: right; margin-bottom: 10px;">
+      <select (change)="toggleSortOrder($event.target.value)" style="padding: 4px 8px; font-size: 14px;">
+        <option value="desc" [selected]="sortOrder === 'desc'">Plus récent</option>
+        <option value="asc" [selected]="sortOrder === 'asc'">Plus ancien</option>
+      </select>
+    </div>
+    
+    
     <!-- Liste des posts -->
     <div class="post-list">
-      <div *ngFor="let post of communityDetails.posts" class="post-card">
+      <div *ngFor="let post of sortedPosts" class="post-card">
+        <div class="post-header">
+          <h3>{{ post.title }}</h3>
+          <button class="report-button" (click)="reportPost(post.id)">
+            Signaler
+          </button>
+          
+        </div>
         <div class="post-author">
-          <img src="https://img.freepik.com/photos-gratuite/jeune-belle-fille-posant-dans-veste-cuir-noire-parc_1153-8104.jpg?semt=ais_hybrid&w=740" alt="Alice" />
-          <div>
-            <div class="name">Alice</div>
+          <img src="https://img.freepik.com/photos-gratuite/jeune-belle-fille-posant-dans-veste-cuir-noire-parc_1153-8104.jpg?semt=ais_hybrid&w=740" alt="Alice" />          <div>
+            <div class="name">{{ fullName }}</div>
             <div class="date">Posté le {{ post.createdAt | date: 'dd/MM/yyyy à HH:mm' }}</div>
           </div>
         </div>
+        
         <p>{{ post.content }}</p>
         <img *ngIf="post.imageUrl" [src]="post.imageUrl" alt="Image du post" />
         <div *ngIf="post.videoUrl" class="video-container">
@@ -30,6 +47,7 @@
 
 
         </div>
+       
        <!-- <button (click)="deletePost(post.id)">🗑️ Supprimer</button>-->
       </div>
     </div>
@@ -42,9 +60,15 @@
   <!-- Colonne latérale -->
   <div class="sidebar-column">
     <div class="panel">
-      <button (click)="join()" class="btn btn-green">Join Community</button>
-      <button *ngIf="communityDetails?.id" (click)="goToCreatePost()" class="btn btn-blue">Créer un post</button>
+      <button *ngIf="communityDetails?.id" (click)="goToCreatePost()" class="btn btn-green">Créer un post</button>
       <button (click)="generatePost(communityId)" class="btn btn-purple">🤖 Générer un post</button>
+      <!-- Affichage du message de chargement -->
+<div *ngIf="isLoading" class="loading-overlay">
+  <p>Chargement du post généré...</p>
+</div>
+
+<!-- Fenêtre de confirmation du message généré -->
+
 
     </div>
 

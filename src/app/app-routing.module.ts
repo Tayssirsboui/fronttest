@@ -45,6 +45,9 @@ import { AffichageCategorieComponent } from './front/affichage-categorie/afficha
 import { RessourcesComponent } from './front/ressources/ressources.component';
 import { DetailRessourceComponent } from './front/detail-ressource/detail-ressource.component';
 import { MesEvenementsComponent } from './front/gestion-evenements/mes-evenements/mes-evenements.component';
+import { CommunityBackListComponent } from './back/forum/community-back-list/community-back-list.component';
+import { ReportedPostsBackListComponent } from './back/forum/reported-posts-back-list/reported-posts-back-list.component';
+
 
 import { StatRessourceComponent } from './back/stat-ressource/stat-ressource.component';
 import { AvisRessourceComponent } from './front/avis-ressource/avis-ressource.component';
@@ -72,7 +75,10 @@ const routes: Routes = [
       {path:'participation', component: ListeParticipationsComponent},
       { path: 'projets', component: ListProjetsComponent ,
         canActivate: [AuthGuard]},
-        {path: 'statRessource', component: StatRessourceComponent}
+        {path: 'statRessource', component: StatRessourceComponent},
+        { path: 'community', component: CommunityBackListComponent },
+        { path: 'admin/reported-posts', component: ReportedPostsBackListComponent },
+        { path: 'admin/edit-community/:id', component: CreateCommunityComponent },  // <= ajoute cette ligne
     ]
   },
   {
