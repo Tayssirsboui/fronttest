@@ -81,7 +81,15 @@ userId!: number ;
      addComment(postId: number, userId: number, comment: any): Observable<Comment> {
       return this.http.post<Comment>(`${this.baseUrlComment}/${postId}/${userId}`, comment);
     }
+    deletePost(postId: number, title: string, firstName: string, email: string): Observable<any> {
+      const params = new HttpParams()
+        .set('title', title)
+        .set('firstName', firstName)
+        .set('email', email);
     
+      return this.http.delete(`${this.baseUrlPost}/${postId}`, { params });
+    }
+  
     
     updateComment(commentId: number, userId: number, commentData: any): Observable<Comment> {
       return this.http.put<Comment>(`${this.baseUrlComment}/${commentId}/user/${userId}`, commentData);
@@ -127,5 +135,5 @@ userId!: number ;
   deleteCommentsByPostId(postId: number): Observable<void> {
     return this.http.delete<void>(`${this.baseUrlComment}/post/${postId}`);
   }
-    
+
   }

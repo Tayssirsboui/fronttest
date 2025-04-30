@@ -51,6 +51,13 @@ export class BlogDetailsComponent {
       createdBy: ['', Validators.required] // <-- kept this since it's used in template
     });
   }
+  scrollToCommentForm(): void {
+  const element = document.getElementById('addCommentForm');
+  if (element) {
+    element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+}
+
   scrollToTop(): void {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
@@ -82,6 +89,31 @@ export class BlogDetailsComponent {
     this.currentUtterance = utterance;
   
     speechSynthesis.speak(utterance);
+  }
+  deleteComment(idComment: number): void {
+    Swal.fire({
+      title: 'Êtes-vous sûr ?',
+      text: 'Ce commentaire sera définitivement supprimé.',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Oui, supprimer',
+      cancelButtonText: 'Annuler',
+      confirmButtonColor: '#d33',
+      cancelButtonColor: '#3085d6'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.bs.deleteComment(idComment).subscribe({
+          next: () => {
+            this.comments = this.comments.filter(c => c.idComment !== idComment);
+            this.toastr.success('Commentaire supprimé avec succès');
+          },
+          error: err => {
+            console.error('Erreur de suppression du commentaire:', err);
+            this.toastr.error('Échec de la suppression du commentaire');
+          }
+        });
+      }
+    });
   }
   ngOnInit() {
     this.scrollToTop();
@@ -245,6 +277,8 @@ this.commentForm.get('description')?.markAsDirty(); // <-- Add this
     };
   
     if (this.editMode && this.selectedCommentId) {
+    this.scrollToCommentForm();
+
       this.bs.updateComment(this.selectedCommentId!, this.userId, commentData).subscribe({
         next: () => {
           Swal.fire({

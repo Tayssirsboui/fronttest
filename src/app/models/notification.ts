@@ -3,6 +3,7 @@ export class Notification {
     message!: string;
     receiverId!: number;
     projetId!: number;
+    senderId!:number;
     type!: string;
     timestamp?: Date;
     seen?: boolean;

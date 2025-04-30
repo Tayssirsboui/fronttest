@@ -13,4 +13,5 @@ export class Post {
     similarity?: number;
     allowComments?: boolean;
     user?: User;
+  
  }

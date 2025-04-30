@@ -8,6 +8,7 @@ import { Comment } from 'src/app/models/comment';
 import { ChartConfiguration, ChartOptions } from 'chart.js';
 import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
+import { UserControllerService } from 'src/app/services/services';
 
 @Component({
   selector: 'app-blog-admin',
@@ -29,12 +30,16 @@ export class BlogAdminComponent implements OnInit {
   post: Post | null = null;
   showModal: boolean = false;
   noCommentsPopup: boolean = false;
+  userData: any;
+  userId: any;
+  userNames: any;
+  userEmail: any;
   constructor(
     private blogService: BlogService,
     private fb: FormBuilder,
     private toastr: ToastrService,
     private router: Router,
-    private Ac: ActivatedRoute
+    private Ac: ActivatedRoute, private userService: UserControllerService
   ) {
     this.searchForm = this.fb.group({
       searchQuery: ['']
@@ -202,42 +207,126 @@ closeStatsModal(): void {
   
 
   // Delete post
-  deletePost(postId: number): void {
+  // deletePost(postId: number): void {
+  //   if (confirm('Are you sure you want to delete this post?')) {
+  //     this.blogService.DeletePost(postId).subscribe({
+  //       next: () => {
+  //         this.toastr.success('Post deleted successfully', 'Success');
+  //         this.loadPosts();
+  //       },
+  //       error: (err) => {
+  //         this.toastr.error('Failed to delete post', 'Error');
+  //       }
+  //     });
+  //   }
+  // }
+  deletePost(post: any): void {
     if (confirm('Are you sure you want to delete this post?')) {
-      this.blogService.DeletePost(postId).subscribe({
+      const { id, title, userId } = post;
+      const author = this.userNames.get(userId) || '';
+      const email = this.userEmail.get(userId) || '';
+  
+      // Mise à jour de l'état local
+      this.posts = this.posts.filter(p => p.id !== id);
+   
+  
+      // Appel au backend
+      this.blogService.deletePost(id, title, author, email).subscribe({
         next: () => {
-          this.toastr.success('Post deleted successfully', 'Success');
-          this.loadPosts();
+          this.toastr.success('Post deleted and email sent', 'Success');
         },
-        error: (err) => {
+        error: err => {
+          console.error('Failed to delete post:', err);
           this.toastr.error('Failed to delete post', 'Error');
         }
       });
     }
   }
+  
 
   ngOnInit(): void {
     this.loadPosts();
+    this.loadUserData(); 
   }
+  loadUserData() {
+    const token = localStorage.getItem('token');
+    if (token) {
+      const payload = this.decodeTokenPayload(token);
+      if (payload) {
+        this.userData = payload;  
+        this.userId = payload.id || payload.userId || payload._id; // selon ton token
+        console.log("Utilisateur connecté :", this.userData);
+      }
+    } else {
+      console.error('Token non trouvé dans localStorage');
+      this.toastr.error('Utilisateur non connecté', 'Erreur');
+    }
+  }
+  
+    private decodeTokenPayload(token: string): any {
+      try {
+        const payload = token.split('.')[1]; // prendre la partie payload du JWT
+        const decodedPayload = atob(payload); // décoder base64
+        return JSON.parse(decodedPayload); // convertir en objet JSON
+      } catch (error) {
+        console.error('Failed to decode token payload', error);
+        return null;
+      }
+    }
+  // loadPosts(): void {
+  //   this.isLoading = true;
+  //   this.blogService.getPosts().subscribe({
+  //     next: (posts: Post[]) => {
+  //       this.posts = posts;
+  //       this.totalPosts = posts.length;
+  //       this.sortPostsByDate(); // <-- ici
+  //       this.isLoading = false;
+  //       this.posts.forEach(post => {
+  //         if (post.userId) {
+  //           this.userService.getUserById({ id: post.userId }).subscribe(user => {
+  //             console.log('User récupéré pour post ID', post.id, ':', user); // <-- Ajoute un log ici
+  //             post.user = user;
+  //           }, error => {
+  //             console.error('Erreur récupération user pour post', post.id, error); // <-- Et un log d'erreur
+  //           });
+  //         }
+  //       });
+  //  } })
 
+  // }
   loadPosts(): void {
     this.isLoading = true;
+  
     this.blogService.getPosts().subscribe({
       next: (posts: Post[]) => {
         this.posts = posts;
         this.totalPosts = posts.length;
-        this.sortPostsByDate(); // <-- ici
+        this.sortPostsByDate(); // Sort if needed
         this.isLoading = false;
-      },      
-      error: () => {
+  
+        // Fetch user data for each post
+        this.posts.forEach(post => {
+          if (post.userId) {
+            this.userService.getUserById({ id: post.userId }).subscribe({
+              next: user => {
+                post.user = user;
+            
+              },
+              error: err => {
+                console.error(`Error fetching user for post ID ${post.id}:`, err);
+                //post.user = { name: 'Unknown User' }; // Fallback
+              }
+            });
+          }
+        });
+      },
+      error: err => {
         this.toastr.error('Failed to load posts', 'Error');
         this.isLoading = false;
       }
     });
   }
-
-
-
+  
   get totalPages(): number {
     return Math.ceil(this.totalPosts / this.itemsPerPage);
   }
