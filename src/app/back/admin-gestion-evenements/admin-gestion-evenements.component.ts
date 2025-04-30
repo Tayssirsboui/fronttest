@@ -18,6 +18,10 @@ export class AdminGestionEvenementsComponent implements OnInit {
   totalPages: number = 0;
   pageIndexInput: number = 1;
 
+  // ✅ Maps pour stocker les réactions
+  likesMap = new Map<number, number>();
+  dislikesMap = new Map<number, number>();
+
   constructor(
     private evenementService: EvenementService,
     private snackBar: MatSnackBar,
@@ -42,10 +46,20 @@ export class AdminGestionEvenementsComponent implements OnInit {
     });
   }
 
-  // 🔄 Charger les événements approuvés
+  // 🔄 Charger les événements approuvés + likes/dislikes
   chargerEvenementsApprouves(): void {
     this.evenementService.getApprouves().subscribe({
-      next: data => this.evenementsApprouves = data,
+      next: data => {
+        this.evenementsApprouves = data;
+
+        // Charger les likes/dislikes pour chaque événement
+        for (let e of data) {
+          this.evenementService.getReactions(e.id).subscribe(reactions => {
+            this.likesMap.set(e.id, reactions.likes);
+            this.dislikesMap.set(e.id, reactions.dislikes);
+          });
+        }
+      },
       error: err => console.error('Erreur chargement approuvés', err)
     });
   }

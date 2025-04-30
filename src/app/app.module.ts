@@ -118,6 +118,7 @@ import { AffichageCategorieComponent } from './front/affichage-categorie/afficha
 import { StatRessourceComponent } from './back/stat-ressource/stat-ressource.component';
 import { AvisRessourceComponent } from './front/avis-ressource/avis-ressource.component';
 import { ProjetDetailsComponent } from './front/Gestion-Projets/projet-details/projet-details.component';
+import { MesEvenementsComponent } from './front/gestion-evenements/mes-evenements/mes-evenements.component';
 
 
 
@@ -194,6 +195,7 @@ import { ProjetDetailsComponent } from './front/Gestion-Projets/projet-details/p
     StatRessourceComponent,
     AvisRessourceComponent,
     ProjetDetailsComponent,
+    MesEvenementsComponent,
   ],
  
   imports: [

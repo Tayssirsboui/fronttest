@@ -1,0 +1,148 @@
+/* 🌐 SECTION PRINCIPALE */
+.services.section {
+    margin-top: 0;
+  }
+  
+  /* 🔍 BARRE DE RECHERCHE */
+  .search-wrapper {
+    display: flex;
+    justify-content: center;
+    margin-top: 30px;       /* espace après navbar */
+    margin-bottom: 10px;    /* rapproché des filtres */
+  }
+  
+  .search-wrapper input {
+    width: 60%;
+    height: 45px;
+    font-size: 16px;
+    border-radius: 30px;
+    padding: 10px 20px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+    border: 1px solid #ddd;
+    outline: none;
+    transition: border-color 0.3s;
+  }
+  
+  .search-wrapper input:focus {
+    border-color: #a78bfa;
+  }
+  
+  /* 🎯 FILTRES DE STATUT */
+  .status-filter {
+    max-width: 75%;
+    margin: 0 auto 10px;
+    background-color: #f4f3fd;
+    border-radius: 30px;
+    padding: 8px 20px;
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    font-size: 14px;
+    flex-wrap: wrap;
+  }
+  
+  .status-filter .btn {
+    border: none;
+    background: transparent;
+    font-weight: 500;
+    color: #4b5563;
+    padding: 6px 14px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border-radius: 20px;
+  }
+  
+  .status-filter .btn:hover,
+  .status-filter .btn.selected {
+    background-color: #a78bfa;
+    color: white;
+  }
+  
+  /* 🧩 CARTE ÉVÉNEMENT */
+  .services .service-item {
+    position: relative;
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-end;
+    transition: transform 0.3s ease;
+  }
+  
+  .services .service-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.05);
+  }
+  
+  .services .service-item .main-content {
+    border-radius: 25px;
+    padding: 40px 30px 30px 30px;
+    background-color: #f9f8ff;
+    transition: all 0.4s ease;
+    width: 100%;
+    min-height: 240px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 10px;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.04);
+  }
+  
+  .services .service-item h4 {
+    font-size: 22px;
+    font-weight: 600;
+    margin-bottom: 10px;
+    line-height: 30px;
+    text-align: center;
+  }
+  
+  .services .service-item p {
+    color: #4a4a4a;
+    margin-bottom: 10px;
+    font-size: 15px;
+    line-height: 24px;
+    text-align: center;
+  }
+  
+  .services .service-item .main-button {
+    margin-top: auto;
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+  }
+  
+  .services .service-item .main-button .btn-sm {
+    padding: 4px 10px;
+    font-size: 13px;
+    line-height: 1.4;
+    border-radius: 8px;
+  }
+  
+  /* 🔖 BADGES */
+  .badge {
+    font-size: 13px;
+    padding: 4px 8px;
+    border-radius: 10px;
+    font-weight: 500;
+  }
+  
+  /* 🔢 PAGINATION CENTRÉE */
+  .pagination-controls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+    margin-top: 30px;
+  }
+  
+  .pagination-controls .btn {
+    border-radius: 20px;
+    min-width: 100px;
+  }
+  
+  .pagination-controls span {
+    font-weight: 500;
+    font-size: 15px;
+  }
+  

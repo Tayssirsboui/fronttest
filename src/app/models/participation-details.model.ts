@@ -1,7 +1,7 @@
 export interface ParticipationDetails {
   evenementId: number;
-  statut: string;
   utilisateurId: number;
-  nomUtilisateur: string;
+  nomUtilisateur: string;    // correspond à ton fullName
   emailUtilisateur: string;
+  statut: string;
 }

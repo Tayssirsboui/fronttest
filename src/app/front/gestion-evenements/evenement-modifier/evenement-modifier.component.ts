@@ -1,8 +1,9 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Evenement } from 'src/app/models/evenement.model';
 import { EvenementService } from 'src/app/services/evenement.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-evenement-modifier',
@@ -10,16 +11,15 @@ import { EvenementService } from 'src/app/services/evenement.service';
   styleUrls: ['./evenement-modifier.component.css']
 })
 export class EvenementModifierComponent implements OnInit {
-  @Input() data!: Evenement;
   form!: FormGroup;
-
   imageFile!: File;
   imagePreview: string | null = null;
 
   constructor(
     private fb: FormBuilder,
-    public activeModal: NgbActiveModal,
-    private evenementService: EvenementService
+    private evenementService: EvenementService,
+    public dialogRef: MatDialogRef<EvenementModifierComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: Evenement
   ) {}
 
   ngOnInit(): void {
@@ -34,13 +34,11 @@ export class EvenementModifierComponent implements OnInit {
       nbMaxParticipants: [this.data.nbMaxParticipants, Validators.required]
     });
 
-    // Si l'événement a déjà une image
     if (this.data.image) {
       this.imagePreview = 'http://localhost:8222/' + this.data.image;
     }
   }
 
-  // Format pour input type="datetime-local"
   formatDateForInput(date: string | Date): string {
     const d = new Date(date);
     const pad = (n: number) => n.toString().padStart(2, '0');
@@ -51,7 +49,6 @@ export class EvenementModifierComponent implements OnInit {
     const file: File = event.target.files[0];
     if (file) {
       this.imageFile = file;
-
       const reader = new FileReader();
       reader.onload = () => {
         this.imagePreview = reader.result as string;
@@ -62,24 +59,37 @@ export class EvenementModifierComponent implements OnInit {
 
   submit(): void {
     if (this.form.invalid) return;
-
+  
     const formData = new FormData();
     Object.entries(this.form.value).forEach(([key, value]) => {
       formData.append(key, value as string);
     });
-
+  
     if (this.imageFile) {
       formData.append('image', this.imageFile);
     }
-
+  
     this.evenementService.updateWithFormData(formData).subscribe({
       next: () => {
-        this.activeModal.close(true); // Fermer avec succès
+        Swal.fire({
+          icon: 'success',
+          title: 'Événement modifié',
+          text: 'Les informations ont été mises à jour avec succès.',
+          timer: 2000,
+          showConfirmButton: false
+        });
+  
+        this.dialogRef.close(true);  // ferme le modal avec succès
       },
       error: err => {
         console.error('Erreur lors de la modification', err);
-        alert('Une erreur est survenue lors de la modification.');
+        Swal.fire({
+          icon: 'error',
+          title: 'Erreur',
+          text: 'Une erreur est survenue lors de la modification.'
+        });
       }
     });
   }
+  
 }
