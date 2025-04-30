@@ -1,6 +1,10 @@
 <div class="header-bar">
   <mat-progress-bar mode="determinate" [value]="progressValue"></mat-progress-bar>
-  <button mat-raised-button color="primary" (click)="openAddTaskDialog()">➕ Ajouter une tâche</button>
+
+  <div style="display: flex; gap: 10px; margin-top: 10px;">
+    <button mat-raised-button color="primary" (click)="openAddTaskDialog()">➕ Ajouter une tâche</button>
+    <button mat-raised-button color="accent" (click)="exportToPDF()">📄 Exporter en PDF</button>
+  </div>
 </div>
 
 <ejs-kanban

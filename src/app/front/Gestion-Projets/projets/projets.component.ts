@@ -7,6 +7,7 @@ import { Router } from '@angular/router';
 import { ProjetService } from 'src/app/services/projet.service';
 import { ProjetDetailsComponent } from '../projet-details/projet-details.component';
 import { AuthentificationService } from 'src/app/services/services';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-projets',
@@ -160,36 +161,64 @@ export class ProjetsComponent {
       width: '600px',
       data: projet || {}
     });
-
+  
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
         this.projetService.getProjets().subscribe(data => {
           this.projets = data;
+          Swal.fire({
+            title: "Ajouté !",
+            text: "Le projet a été ajouté avec succès.",
+            icon: "success"
+          });
         });
       }
     });
   }
+  
 
   onModifier(projet: Projet): void {
     const dialogRef = this.dialog.open(AjouterProjetComponent, {
       width: '600px',
       data: projet
     });
-
+  
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
         this.ngOnInit();
+        Swal.fire({
+          title: "Modifié !",
+          text: "Le projet a été mis à jour avec succès.",
+          icon: "success"
+        });
       }
     });
   }
+  
 
   supprimerProjet(id: number): void {
-    if (confirm("Êtes-vous sûr de vouloir supprimer ce projet ?")) {
-      this.projetService.deleteProjet(id).subscribe(() => {
-        this.chargerProjets();
-      });
-    }
+    Swal.fire({
+      title: "Êtes-vous sûr ?",
+      text: "Cette action est irréversible !",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Oui, supprimer !"
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.projetService.deleteProjet(id).subscribe(() => {
+          this.chargerProjets();
+          Swal.fire({
+            title: "Supprimé !",
+            text: "Le projet a été supprimé.",
+            icon: "success"
+          });
+        });
+      }
+    });
   }
+  
 
   ouvrirDetails(projet: Projet) {
     this.dialog.open(ProjetDetailsComponent, {

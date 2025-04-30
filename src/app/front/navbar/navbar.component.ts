@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Notification } from 'src/app/models/notification';
 import { NotificationService } from 'src/app/services/notification.service';
 import { Router } from '@angular/router';
+import { AuthentificationService } from 'src/app/services/services/authentification.service';
 
 
 @Component({
@@ -16,9 +17,9 @@ export class NavbarComponent implements OnInit {
   notifications: Notification[] = [];
   unreadCount: number = 0;
   showDropdown: boolean = false;
-  currentUserId: number = 1; // 🔥 TEMPORARY STATIC ID! (later replace with logged-in user ID)
+  currentUserId!: number ; // 🔥 dynamic ID! 
 
-  constructor(private notificationService: NotificationService,private router: Router) {}
+  constructor(private notificationService: NotificationService,private authService: AuthentificationService,private router: Router) {}
 
   isLoggedIn(): boolean {
     return !!localStorage.getItem('user'); // or check your auth service
@@ -33,21 +34,22 @@ export class NavbarComponent implements OnInit {
   }
  
   ngOnInit(): void {
-    this.fetchNotifications();
-    
+    const token = localStorage.getItem('token');
+    if (token) {
+      const decoded = this.authService.decodeToken(token);
+      this.currentUserId = decoded?.id;
+      this.fetchNotifications();
+    }
   }
 
   fetchNotifications(): void {
     this.notificationService.getNotificationsByUser(this.currentUserId).subscribe({
       next: (data) => {
-        this.notifications = data;
-        this.unreadCount = data.length;
-      this.updateUnreadCount();
-      // 🧠 Sort notifications by newest first
-    this.notifications.sort((a, b) => 
-      new Date(b.timestamp!).getTime() - new Date(a.timestamp!).getTime()
-    );
-      // You can improve later with a read/unread system
+        this.notifications = data || [];
+        this.notifications.sort((a, b) => 
+          new Date(b.timestamp!).getTime() - new Date(a.timestamp!).getTime()
+        );
+        this.updateUnreadCount();
       },
       error: (err) => {
         console.error('Error fetching notifications', err);

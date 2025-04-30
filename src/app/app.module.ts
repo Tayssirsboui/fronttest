@@ -200,6 +200,8 @@ import { ProjetDetailsComponent } from './front/Gestion-Projets/projet-details/p
   AppRoutingModule,
   FormsModule,
   WebcamModule,
+  NgChartsModule,
+
   CodeInputModule,
   NgbModule,
   CommonModule,

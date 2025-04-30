@@ -52,7 +52,64 @@
       </div>
     
       <hr />
-    
+      <hr />
+
+      <h5 class="mb-2">📊 Statistiques du projet</h5>
+      <div class="row text-start mb-3">
+        <div class="col-6 mb-2">
+          <strong>Total tâches :</strong> {{ totalTaches }}
+        </div>
+        <div class="col-6 mb-2">
+          <strong>% terminées :</strong> {{ pourcentageTerminees }}%
+        </div>
+        <div class="col-6 mb-2">
+          <strong>Statuts :</strong>
+          <ul class="small mb-0">
+            <li>À faire : {{ tachesAFaire }}</li>
+            <li>En cours : {{ tachesEnCours }}</li>
+            <li>Terminées : {{ tachesTerminees }}</li>
+          </ul>
+        </div>
+        <div class="col-6 mb-2">
+          <strong>Collaborateurs :</strong> {{ totalCollaborateurs }}
+        </div>
+        <div class="col-12 mb-2">
+          <strong>Priorités :</strong>
+          <ul class="small mb-0">
+            <li>Haute : {{ prioriteHaute }}</li>
+            <li>Moyenne : {{ prioriteMoyenne }}</li>
+            <li>Faible : {{ prioriteFaible }}</li>
+          </ul>
+        </div>
+      </div>
+      
+      <hr />
+      
+      <h5 class="mb-2">📈 Graphiques</h5>
+      <div class="row text-center justify-content-center">
+        <div class="col-md-6 mb-4">
+          <h6 class="text-muted">Par Statut</h6>
+          <canvas
+            baseChart
+            [data]="{ labels: chartStatutLabels, datasets: [{ data: chartStatutData, backgroundColor: chartColors[0].backgroundColor }] }"
+            [type]="'doughnut'"
+            [options]="chartOptions"
+            style="max-width: 300px;"
+          ></canvas>
+        </div>
+      
+        <div class="col-md-6 mb-4">
+          <h6 class="text-muted">Par Priorité</h6>
+          <canvas
+            baseChart
+            [data]="{ labels: chartPrioriteLabels, datasets: [{ data: chartPrioriteData, backgroundColor: ['#dc3545', '#ffc107', '#0dcaf0'] }] }"
+            [type]="'doughnut'"
+            [options]="chartOptions"
+            style="max-width: 300px;"
+          ></canvas>
+        </div>
+      </div>
+      
       <div class="section">
         <h5 class="mb-2"><i class="bi bi-check2-square text-success"></i> Tâches</h5>
 

@@ -26,7 +26,7 @@
               <div class="text-uppercase probootstrap-uppercase">Nos Projets</div>
               <h3>Découvrez et Collaborez sur des Projets Innovants</h3>
               <p>Bienvenue dans l’espace dédié à nos projets. Vous y trouverez une variété d’initiatives éducatives, technologiques et communautaires portées par nos étudiants et partenaires. N’hésitez pas à explorer, contribuer ou même proposer votre propre projet !</p>
-              <p><button class="btn btn-primary" (click)="openModal()">➕ Ajouter un projet</button></p>
+           
             </div>
             
             <div class="probootstrap-image probootstrap-animate" style="background-image: url(../../../assets/img/slider_4.jpg)">
@@ -37,6 +37,14 @@
       </div>
     </div>
   </section>
+
+  
+  <button 
+              *ngIf="userRole === 'Entrepreneur'" 
+              class="btn btn-primary" 
+              (click)="openModal()">
+              ➕ Ajouter un projet
+            </button>
  <div class="container mt-4">
     <div class="d-flex justify-content-between align-items-center flex-wrap mb-3">
       <input
