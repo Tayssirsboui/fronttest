@@ -30,32 +30,7 @@ export class NavbarComponent implements OnInit {
     }
   }
 
-  private decodeTokenPayload(token: string): any {
-    try {
-      const payload = token.split('.')[1];
-      const decodedPayload = atob(payload);
-      return JSON.parse(decodedPayload);
-    } catch (error) {
-      console.error('Failed to decode token payload', error);
-      return null;
-    }
-  }
-
-  loadUserData() {
-    const token = localStorage.getItem('token');
-    if (token) {
-      const payload = this.decodeTokenPayload(token);
-      if (payload) {
-        this.userData = payload;
-        this.userId = payload.id || payload.userId || payload._id;
-        console.log('Utilisateur connecté :', this.userData);
-      }
-    } else {
-      console.error('Token non trouvé dans localStorage');
-      this.toastr?.error('Utilisateur non connecté', 'Erreur');
-    }
-  }
-
+  
   ngOnInit(): void {
     const token = localStorage.getItem('token');
     if (token) {
@@ -66,7 +41,7 @@ export class NavbarComponent implements OnInit {
   }
 
   fetchNotifications(): void {
-    this.notificationService.getNotificationsByUser(this.userId).subscribe({
+    this.notificationService.getNotificationsByUser(this.currentUserId).subscribe({
       next: (data) => {
         this.notifications = data || [];
         this.notifications.sort((a, b) => 
@@ -75,14 +50,12 @@ export class NavbarComponent implements OnInit {
         this.updateUnreadCount();
       },
       error: (err) => {
-        console.error('Erreur lors du chargement des notifications', err);
-      },
+        console.error('Error fetching notifications', err);
+      }
     });
   }
 
-  updateUnreadCount(): void {
-    this.unreadCount = this.notifications.filter((n) => !n.seen).length; // ✅ Correction ici
-  }
+ 
 
   toggleDropdown(): void {
     this.showDropdown = !this.showDropdown;
@@ -107,6 +80,9 @@ export class NavbarComponent implements OnInit {
     }
   }
 
+  updateUnreadCount(): void {
+    this.unreadCount = this.notifications.filter(notif => !notif.seen).length;
+  }
   onNotificationClick(notif: Notification) {
     if (!notif.seen && notif.id) {
       this.notificationService.markAsSeen(notif.id).subscribe(() => {
