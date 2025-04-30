@@ -4,7 +4,6 @@ export class Notification {
     receiverId!: number;
     senderId!: number; 
     projetId!: number;
-    senderId!:number;
     type!: string;
     timestamp?: Date;
     seen?: boolean;

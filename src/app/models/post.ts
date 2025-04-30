@@ -12,5 +12,6 @@ export class Post {
     commentsCount!: number; // Ajoutez cette propriété pour stocker le nombre de commentaires
     similarity?: number;
     allowComments?: boolean;
-    
+    user?: User;
+  
  }

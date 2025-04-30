@@ -9,7 +9,6 @@ import { ToastrService } from 'ngx-toastr';
 import { postRecommendationService } from 'src/app/services/post-recommendation.service';
 import { UserControllerService } from 'src/app/services/services';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import * as RecordRTC from 'recordrtc';
 import Swal from 'sweetalert2';
 import { Location } from '@angular/common';
 
@@ -137,17 +136,7 @@ export class BlogDetailsComponent {
     this.refreshComments();
   }
  
-  startRecording() {
-    navigator.mediaDevices.getUserMedia({ audio: true }).then(stream => {
-      this.audioStream = stream;
-      this.recorder = new RecordRTC(stream, {
-        type: 'audio',
-        mimeType: 'audio/webm'
-      });
-      this.recorder.startRecording();
-      this.isRecording = true;
-    });
-  }
+  
   
   
   
